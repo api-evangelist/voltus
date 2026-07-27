@@ -1,0 +1,73 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the Voltus API
+  version: 1.0.0
+extends: openapi/voltus-openapi.yml
+x-generated: '2026-07-27'
+x-method: generated
+x-note: >-
+  Our enhancements to the harvested Voltus contract. The base document in
+  openapi/ is kept as Voltus published it (operation objects extracted verbatim
+  from the portal build); everything we add or correct lives here. Applying this
+  overlay adds the sandbox server, the observed rate-limit signalling, the
+  documented sandbox credential, links to our derived artifacts, and the
+  deprecation flag Voltus announced in its changelog but never marked in the spec.
+actions:
+  - target: $.info
+    update:
+      x-apievangelist-slug: voltus
+      x-apievangelist-artifacts:
+        authentication: authentication/voltus-authentication.yml
+        conventions: conventions/voltus-conventions.yml
+        errors: errors/voltus-problem-types.yml
+        lifecycle: lifecycle/voltus-lifecycle.yml
+        rate_limits: rate-limits/voltus-rate-limits.yml
+        sandbox: sandbox/voltus-sandbox.yml
+        webhooks: asyncapi/voltus-webhooks.yml
+        data_model: data-model/voltus-data-model.yml
+        agentic_access: agentic-access/voltus-agentic-access.yml
+      x-spec-provenance: >-
+        Extracted from https://api.voltus.co/docs (docusaurus-plugin-openapi-docs
+        build chunks) on 2026-07-27. Voltus serves no downloadable spec.
+      contact:
+        name: Voltus API Support
+        email: api-support@voltus.co
+        url: https://api.voltus.co/docs/
+  - target: $.servers
+    update:
+      - url: https://sandbox.voltus.co
+        description: >-
+          Public sandbox. Documented at
+          https://api.voltus.co/docs/concepts/public-credentials - use header
+          "X-Voltus-API-Key: secret". Static fixtures; POST telemetry returns 200
+          but does not persist.
+  - target: $.components.securitySchemes['X-Voltus-API-Key']
+    update:
+      description: >-
+        Account-scoped static API key issued by a Voltus account manager. The
+        public sandbox key is "secret" and works only against sandbox.voltus.co.
+        Bearer authorization was removed in the 2022-04-15 version.
+      x-sandbox-value: secret
+  - target: $.paths['/2022-04-15/dispatches'].get
+    update:
+      x-rate-limit-headers: [x-ratelimit-limit, x-ratelimit-remaining, x-ratelimit-reset]
+      x-webhook-alternative: 'Register a webhook for dispatch.create / dispatch.update instead of polling - see asyncapi/voltus-webhooks.yml'
+  - target: $.paths['/2022-04-15/dispatches'].post
+    update:
+      x-agentic-access:
+        action-class: acting
+        consequence: safety-critical
+        escalation:
+          human-in-the-loop: required
+      x-note: >-
+        Creates a real (test) dispatch that instructs enrolled sites to curtail.
+        Times must be in the future and within the next 72 hours.
+  - target: $.paths['/2022-04-15/webhooks/{id}'].delete
+    update:
+      x-irreversible: true
+  - target: $.paths['/2022-04-15/telemetry/kw'].get
+    update:
+      x-limits:
+        max_sites_per_request: 10
+        max_interval_days: 90
+        max_data_points_per_site: 10000

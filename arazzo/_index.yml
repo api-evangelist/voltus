@@ -1,0 +1,21 @@
+generated: '2026-07-27'
+method: generated
+source: openapi/voltus-openapi.yml
+note: >-
+  Native Arazzo workflows over Voltus's own operations. Every operationId is
+  verified verbatim against openapi/voltus-openapi.yml. Inputs default to the
+  public sandbox credential so a fork runs immediately against
+  https://sandbox.voltus.co.
+workflows:
+  - file: voltus-poll-dispatches-and-curtail.yml
+    workflowId: poll-dispatches-and-curtail
+    title: Poll Voltus dispatches and curtail enrolled sites
+    summary: List sites, poll dispatches, read one dispatch in detail - the core demand-response loop.
+  - file: voltus-register-webhook-and-verify.yml
+    workflowId: register-webhook-and-verify
+    title: Register a Voltus dispatch webhook and verify it
+    summary: Create a webhook for dispatch.create / dispatch.update, confirm it, then delete it.
+  - file: voltus-report-and-read-telemetry.yml
+    workflowId: report-and-read-telemetry
+    title: Report Voltus telemetry and read it back
+    summary: Post interval telemetry and controllable load for a site, then read interval kW back.

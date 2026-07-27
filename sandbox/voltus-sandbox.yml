@@ -1,0 +1,96 @@
+generated: '2026-07-27'
+method: searched
+source: https://api.voltus.co/docs/concepts/public-credentials
+docs:
+  - https://api.voltus.co/docs/concepts/public-credentials
+  - https://api.voltus.co/docs/tutorials/get-sandbox-dispatches
+  - https://api.voltus.co/docs/tutorials/create-a-dispatch-integration
+  - https://api.voltus.co/docs/tutorials/test-your-dispatch-integration
+  - https://api.voltus.co/docs/tutorials/openadr
+description: >-
+  Voltus runs a genuinely anonymous sandbox. The credentials are published in
+  the docs and work: host https://sandbox.voltus.co with header
+  "X-Voltus-API-Key: secret" returns real HTTP 200 fixtures for sites,
+  dispatches and webhooks with no account, no signup and no agreement -
+  verified live on 2026-07-27. A second, keyed tier (a Voltus-issued sandbox
+  key) unlocks self-serve dispatch simulations through a POST scenarios
+  endpoint, which is how partners run the required integration test suite
+  before production access is granted.
+tiers:
+  - name: public sandbox
+    host: https://sandbox.voltus.co
+    base_path: /2022-04-15
+    auth:
+      header: X-Voltus-API-Key
+      value: secret
+      published: true
+      published_at: https://api.voltus.co/docs/concepts/public-credentials
+    self_serve: true
+    account_required: false
+    behaviour: >-
+      Static example responses per endpoint. POST /telemetry and
+      POST /telemetry/controllable-load answer 200 OK but do not persist data.
+    verified:
+      - {request: 'GET /2022-04-15/sites', status: 200, date: '2026-07-27'}
+      - {request: 'GET /2022-04-15/dispatches', status: 200, date: '2026-07-27'}
+      - {request: 'GET /2022-04-15/webhooks', status: 200, date: '2026-07-27'}
+      - {request: 'GET /2022-04-15/telemetry/kw', status: 200, date: '2026-07-27', note: 'returns {"data":null} - no fixture telemetry'}
+  - name: keyed sandbox (dispatch simulations)
+    host: https://sandbox.voltus.co
+    base_path: /2022-04-15
+    auth:
+      header: X-Voltus-API-Key
+      value: <SANDBOX_API_KEY issued by Voltus>
+      published: false
+    self_serve: true
+    account_required: true
+    behaviour: >-
+      Partner schedules live dispatch scenarios against their own sandbox sites.
+      Scenarios are created with POST /2022-04-15/scenarios; posting a new
+      scenario overwrites the previous one, and a scenario is "cancelled" by
+      posting one with notification_time set a year in the past.
+    endpoints:
+      - {method: POST, path: /2022-04-15/scenarios, host: https://sandbox.voltus.co, probed: '2026-07-27', probe_status: 405, probe_note: 'GET returns 405 Method Not Allowed - the path exists and is POST-only. Not present in the published API reference.'}
+  - name: OpenADR sandbox VTN
+    host: https://openadr-sandbox.voltus.co
+    endpoint: https://openadr-sandbox.voltus.co/vtn/YOUR_VEN_ID/OpenADR2/Simple/EiEvent
+    auth: mutual TLS (Voltus-signed client certificate, obtained by emailing a CSR to api-support@voltus.co)
+    self_serve: false
+    behaviour: >-
+      Emulates production. The same self-serve dispatch scenarios drive the VTN,
+      so a VEN can be tested end-to-end before production registration.
+    source: https://api.voltus.co/docs/tutorials/openadr
+test_fixtures:
+  sites:
+    - {id: asdf, name: 'Site 1', customer_location_id: '1'}
+    - {id: lkjh, name: 'Site 2', customer_location_id: '2'}
+  dispatch:
+    program: 'MISO - Operating Reserves'
+    program_id: 42
+    market: MISO
+    program_type: ancillary_services
+    timezone: US/Central
+  notebook_defaults:
+    site_id: kd1k
+    site_name: My Site
+    customer_location_id: example-location-id
+    source: https://github.com/voltusdev/voltus-api-examples/blob/main/test-your-dispatch-integration/test-your-dispatch-integration.py
+scenario_catalog:
+  source: https://api.voltus.co/docs/tutorials/test-your-dispatch-integration
+  tool: >-
+    Marimo reactive notebook, embedded in the docs and runnable in molab or
+    locally (uvx marimo edit test-your-dispatch-integration.py --sandbox).
+  scenarios:
+    - {name: 'Integration Test 1. Basic Dispatch', description: 'Start and end times provided up front.'}
+    - {name: 'Integration Test 2. Ancillary Services Dispatch', description: 'End time omitted at creation, then added ~10 minutes later as an update; includes a sample optional metadata object.'}
+    - {name: 'Integration Test 3. Two Dispatches', description: 'Non-abutting and overlapping dispatches (minutes_between_dispatches).'}
+    - {name: 'Integration Test 4. Cancelled Dispatch', description: 'Uses cancel_time so the dispatch arrives with authorized=false.'}
+  setpoint_variants: >-
+    A second, setpoint-oriented suite (12 tests) covers briefly missing setpoints
+    at start, no setpoints at all, abutting dispatches, and incomplete setpoints
+    at start/end.
+promotion_path: >-
+  Pass every sandbox scenario, then run a production integration test
+  (self-scheduled POST /2022-04-15/dispatches test dispatch), then Voltus
+  schedules a per-site production dispatch verification. Production keys are
+  issued by Voltus, per-site, after a signed Letter of Authorization.

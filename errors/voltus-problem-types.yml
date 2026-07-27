@@ -1,0 +1,66 @@
+generated: '2026-07-27'
+method: derived
+source: openapi/voltus-openapi.yml
+docs: https://api.voltus.co/docs/openapi/voltus-api-reference
+format: custom
+envelope:
+  media_type: application/json
+  schema:
+    message: A human-readable message providing more details about the error.
+    type: >-
+      The error type. These types always match the name of the HTTP status code
+      used in the response.
+description: >-
+  Voltus uses conventional HTTP response codes plus a two-field JSON envelope; it
+  does not implement RFC 9457 problem+json. Every one of the ten published
+  operations declares the same seven responses, so the error surface is uniform
+  across the API. Titles below are the response descriptions verbatim from the
+  spec; the observed examples were captured live.
+problems:
+  - status: 400
+    type: Bad Request
+    title: 'Bad Request: Bad Request response.'
+    observed: '{"message":"\"X-Voltus-API-Key\" is missing from header","type":"Bad Request"}'
+    remediation: Send the X-Voltus-API-Key header and a well-formed body; check required fields and RFC 3339 time alignment.
+    applies_to: all operations
+  - status: 403
+    type: Unauthorized
+    title: 'Unauthorized: Forbidden response.'
+    observed: '{"message":"Permission denied","type":"Unauthorized"}'
+    remediation: >-
+      The key is not entitled to this account or site. Production keys are
+      scoped to specific sites by Voltus; the public sandbox key never reaches
+      production (it returns 401 Permission denied on api.voltus.co).
+    applies_to: all operations
+  - status: 404
+    type: Not Found
+    title: 'Not Found: Not Found response.'
+    remediation: Check the dispatch or webhook id, and that the resource belongs to your account.
+    applies_to: all operations
+  - status: 413
+    type: Content Too Large
+    title: 'Content Too Large: Request Entity Too Large response.'
+    remediation: >-
+      Split the payload. Telemetry posts and GET /telemetry/kw are the realistic
+      triggers - the documented ceiling is 10 sites, 90 days and 10,000 data
+      points per site per request.
+    applies_to: all operations
+  - status: 429
+    type: Too Many Requests
+    title: 'Too Many Requests: Too Many Requests response.'
+    remediation: Back off using x-ratelimit-remaining / x-ratelimit-reset. Observed limits are 301 (production) and 101 (sandbox).
+    applies_to: all operations
+  - status: 500
+    type: Internal Server Error
+    title: 'Internal Server Error: Internal Server Error response.'
+    remediation: Retry with backoff; contact api-support@voltus.co if it persists.
+    applies_to: all operations
+notes:
+  - >-
+    The 403 response is labelled "Unauthorized" in both the description and the
+    envelope `type`, while live production actually answers 401 for a wrong key
+    (verified 2026-07-27). Treat 401 and 403 as the same authorization failure.
+  - >-
+    There is no machine-readable error code registry, no error `code` field and
+    no documented error catalogue page - the envelope `type` string is the only
+    programmatic discriminator, and it duplicates the HTTP status phrase.

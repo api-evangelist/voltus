@@ -1,0 +1,11 @@
+{
+  "webhooks": [
+    {
+      "url": "https://your-cool-api.com/callback",
+      "events": [ { "name": "dispatch.update" }, { "name": "dispatch.create" } ],
+      "id": "asd8f"
+    }
+  ],
+  "page": 0,
+  "perPage": 0
+}

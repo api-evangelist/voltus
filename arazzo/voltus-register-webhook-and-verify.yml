@@ -1,0 +1,67 @@
+arazzo: 1.0.1
+info:
+  title: Register a Voltus dispatch webhook and verify it
+  version: 1.0.0
+  description: >-
+    Move from polling to push: register an HTTPS callback for dispatch.create and
+    dispatch.update, confirm it is listed, then remove it. Delete is permanent.
+sourceDescriptions:
+  - name: voltus
+    url: ../openapi/voltus-openapi.yml
+    type: openapi
+workflows:
+  - workflowId: register-webhook-and-verify
+    summary: Create a webhook, list webhooks to confirm registration, then delete it.
+    inputs:
+      type: object
+      required: [apiKey, callbackUrl]
+      properties:
+        apiKey:
+          type: string
+          default: secret
+        callbackUrl:
+          type: string
+          description: Your publicly reachable HTTPS listener.
+          default: https://example.com/listeners/voltus
+    steps:
+      - stepId: create-webhook
+        description: Subscribe the listener to both dispatch events.
+        operationId: 'voltus#post-webhook'
+        parameters:
+          - name: X-Voltus-API-Key
+            in: header
+            value: $inputs.apiKey
+        requestBody:
+          contentType: application/json
+          payload:
+            url: $inputs.callbackUrl
+            events:
+              - name: dispatch.create
+              - name: dispatch.update
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          webhookId: $response.body#/id
+      - stepId: list-webhooks
+        description: Confirm the registration.
+        operationId: 'voltus#get-webhooks'
+        parameters:
+          - name: X-Voltus-API-Key
+            in: header
+            value: $inputs.apiKey
+        successCriteria:
+          - condition: $statusCode == 200
+      - stepId: delete-webhook
+        description: Remove the webhook. This cannot be undone.
+        operationId: 'voltus#delete-webhook'
+        parameters:
+          - name: id
+            in: path
+            value: $steps.create-webhook.outputs.webhookId
+          - name: X-Voltus-API-Key
+            in: header
+            value: $inputs.apiKey
+        successCriteria:
+          - condition: $statusCode == 200
+    outputs:
+      webhookId: $steps.create-webhook.outputs.webhookId

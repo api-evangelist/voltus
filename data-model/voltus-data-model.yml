@@ -1,0 +1,76 @@
+generated: '2026-07-27'
+method: derived
+source: openapi/voltus-openapi.yml
+description: >-
+  Entity-relationship graph derived from the harvested OpenAPI schemas and the
+  id-reference fields they carry. Voltus's model is small and physical: an
+  account holds Sites, Sites hold Meters, a Program in a wholesale market issues
+  Dispatches that target Sites with a curtailment commitment, Telemetry flows
+  per Meter/Site, and Webhooks announce dispatch changes.
+entities:
+  - name: Site
+    description: A facility enrolled with Voltus under the calling account.
+    id_field: id
+    id_type: opaque string (e.g. "xv1w4")
+    fields: [id, name, customer_location_id, meters]
+    source_operations: ['voltus#get-sites']
+    note: customer_location_id is the partner's own identifier for the site (e.g. a store number) and is the field OpenADR uses as resourceID.
+  - name: Meter
+    description: A metering point attached to a site.
+    id_field: id
+    fields: [id, name, asset_type]
+    enums: {asset_type: [load, battery, generator, poi]}
+    source_operations: ['voltus#get-sites']
+  - name: Program
+    description: A wholesale demand-response / ancillary-services programme in an ISO/RTO market.
+    id_field: id
+    id_type: integer (stable)
+    fields: [id, name, market, program_type, timezone]
+    examples: {name: 'MISO - Operating Reserves', market: MISO, program_type: ancillary_services}
+    source_operations: ['voltus#get-dispatches', 'voltus#get-dispatch']
+  - name: Dispatch
+    description: A grid event instructing enrolled sites to curtail.
+    id_field: id
+    fields: [id, authorized, test, start_time, end_time, creation_time, modification_number, metadata, program, sites]
+    source_operations: ['voltus#get-dispatches', 'voltus#get-dispatch', 'voltus#post-dispatch']
+  - name: DispatchSite
+    description: The per-site line item inside a dispatch - what that site must deliver.
+    fields: [id, name, customer_location_id, commitment, drop_by]
+    source_operations: ['voltus#get-dispatches', 'voltus#get-dispatch']
+    note: drop_by is deprecated in favour of commitment (2023-12-13) but is still returned.
+  - name: Telemetry
+    description: An interval energy reading submitted to Voltus for a meter/site.
+    fields: [site_id, meter_id, timestamp, interval_seconds, value, units, kW]
+    source_operations: ['voltus#post-telemetry']
+  - name: ControllableLoadKwReading
+    description: Aggregate kW controlled by the partner integration at a site - typically lower than metered load.
+    fields: [site_id, timestamp, interval_seconds, value, units]
+    source_operations: ['voltus#post-controllable-load']
+  - name: TelemetryKwData
+    description: Interval readings read back out of Voltus, nested sites -> meters -> readings.
+    fields: [sites, site_id, meters]
+    source_operations: ['voltus#get-telemetry-kw']
+  - name: Webhook
+    description: A registered HTTPS callback for dispatch events.
+    id_field: id
+    fields: [id, url, events]
+    source_operations: ['voltus#get-webhooks', 'voltus#post-webhook', 'voltus#delete-webhook']
+  - name: WebhookEvent
+    description: An event subscription on a webhook.
+    fields: [name]
+    enums: {name: [dispatch.create, dispatch.update]}
+relationships:
+  - {from: Site, to: Meter, type: has_many, via: meters}
+  - {from: Dispatch, to: Program, type: belongs_to, via: program}
+  - {from: Dispatch, to: DispatchSite, type: has_many, via: sites}
+  - {from: DispatchSite, to: Site, type: belongs_to, via: id}
+  - {from: Telemetry, to: Site, type: belongs_to, via: site_id}
+  - {from: Telemetry, to: Meter, type: belongs_to, via: meter_id}
+  - {from: ControllableLoadKwReading, to: Site, type: belongs_to, via: site_id}
+  - {from: TelemetryKwData, to: Site, type: has_many, via: 'sites[].site_id'}
+  - {from: Webhook, to: WebhookEvent, type: has_many, via: events}
+  - {from: WebhookEvent, to: Dispatch, type: references, via: 'resource path in the delivered payload'}
+lifecycle_notes:
+  - A dispatch is mutable: modification_number increments and start_time/end_time can move in either direction until it ends.
+  - authorized=false marks a cancelled dispatch.
+  - test=true marks a dispatch created through POST /dispatches rather than issued by a market.

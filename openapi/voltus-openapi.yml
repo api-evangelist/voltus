@@ -1,0 +1,3725 @@
+# Harvested verbatim from the Voltus API Portal build (docusaurus-plugin-openapi-docs).
+# Each operation object below was extracted, byte-for-byte, from the base64+zlib `api` payload
+# embedded in the portal's per-operation JS chunks (https://api.voltus.co/assets/js/*.js), which
+# the plugin serialises from Voltus's own build-time src/openapi3.yaml. Voltus serves no
+# downloadable spec (/openapi.json, /swagger.json, /openapi3.yaml all 404), so this document is
+# the assembly container only: info, servers, security, securitySchemes, paths and every operation
+# (parameters, requestBody, responses, examples) are Voltus's published content. The `openapi:`
+# version string and the tags[] list are ours - Voltus does not publish the source spec version.
+# generated: '2026-07-27'
+# method: searched
+# source: https://api.voltus.co/docs/openapi/voltus-api-reference (portal JS chunks)
+openapi: 3.0.3
+info:
+  title: Voltus API Reference
+  description: "Welcome to the Voltus API Reference.\n\nThe live production API hostname is `api.voltus.co`.\n\
+    \n## Versioning\n\nWe use date-based versioning. `api.voltus.co` will always redirect to the latest\
+    \ version.\n\n**Current version: api.voltus.co/2022-04-15**\n\n<details>\n  <summary>Changelog</summary>\n\
+    \n- Renamed \"Facilities\" to \"Sites\n- Entity IDs are now strings instead of ints\n- New Authorization\
+    \ header `X-Voltus-API-Key`\n- Removed support for `Authorization: Bearer` header\n</details>\n\n\
+    ### Previous versions:\n\n- api.voltus.co/2020-12-30\n\n## Authentication\n\nThe API uses [API key\
+    \ authentication](https://swagger.io/docs/specification/authentication/api-keys/). API keys are provided\
+    \ by your account manager. Each request must include an `X-Voltus-API-Key` header where the value\
+    \ is your API key. Code examples for each endpoint will demonstrate how this header can be added in\
+    \ various languages.\n\n## Errors\n\nExample error responses\n\n```json\n{\n  \"message\": \"A create\
+    \ webhook request must contain an 'events' field\",\n  \"type\": \"Bad Request\"\n}\n\n{\n  \"message\"\
+    : \"Permission denied\",\n  \"type\": \"Unauthorized\"\n}\n```\n\nVoltus uses conventional HTTP response\
+    \ codes to indicate the success or failure of an API request. In general: Codes in the `2xx` range\
+    \ indicate success. Codes in the `4xx` range indicate an error that failed given the information provided\
+    \ (e.g., a required parameter was omitted, an api key has been revoked, etc.). Codes in the `5xx`\
+    \ range indicate an error with Voltus's servers (these are rare).\n\n### Attributes\n\n- `message`\
+    \ (string) A human-readable message providing more details about the error.\n\n- `type` (string) The\
+    \ error type. These types will always match the name of the name of the http status code that is used\
+    \ in the response. One of `Unauthorized`, `Bad Request`, `Content Too Large`, `Internal Server Error`,\
+    \ `Too Many Requests` or `Not Found`."
+  version: '2022-04-15'
+servers:
+- url: https://api.voltus.co
+security:
+- X-Voltus-API-Key: []
+tags:
+- name: Dispatches
+- name: Sites
+- name: Telemetry
+- name: Webhooks
+paths:
+  /2022-04-15/dispatches:
+    post:
+      tags:
+      - Dispatches
+      description: 'Creates a test dispatch.
+
+
+        Create a new dispatch object. Upon sending a successful request, a new dispatch object will be
+        persisted. The new dispatch will be returned in the response to `GET /dispatches` for the appropriate
+        time-frame, and will also be available at its ID-specific path. If you have a webhook registered
+        for the `dispatch.create` event type, it will be triggered. This type of dispatch will not trigger
+        any customer communications such as email, SMS, or phone calls.
+
+
+        If you plan to use this endpoint, you should use the `dispatch.test` field to distinguish between
+        a Voltus-initiated dispatch and a dispatch created through this endpoint. Dispatches created through
+        this endpoint will have `test=true`.'
+      operationId: voltus#post-dispatch
+      parameters:
+      - name: X-Voltus-API-Key
+        in: header
+        description: API key used to perform authorization
+        allowEmptyValue: true
+        required: true
+        schema:
+          type: string
+          description: API key used to perform authorization
+          example: API_KEY
+        example: API_KEY
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                end_time:
+                  type: string
+                  description: End time of the dispatch (RFC 3339). Must be after start_time, within the
+                    next 72 hours.
+                  example: '2024-12-22T06:04:02Z'
+                program_id:
+                  type: integer
+                  description: Optional program ID. If not specified, will default to test program. Sites
+                    must have active registrations in the program.
+                  example: 867
+                  format: int64
+                start_time:
+                  type: string
+                  description: Start time of the dispatch (RFC 3339). Must be in the future, within the
+                    next 72 hours.
+                  example: '2024-12-22T05:04:02Z'
+              example:
+                end_time: '2024-12-22T06:04:02Z'
+                program_id: 867
+                start_time: '2024-12-22T05:04:02Z'
+              required:
+              - start_time
+              - end_time
+              title: PostDispatchRequestBody
+            example:
+              end_time: '2024-12-22T06:04:02Z'
+              program_id: 867
+              start_time: '2024-12-22T05:04:02Z'
+      responses:
+        '200':
+          description: OK response.
+        '400':
+          description: 'Bad Request: Bad Request response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`,
+                      `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '403':
+          description: 'Unauthorized: Forbidden response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`,
+                      `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '404':
+          description: 'Not Found: Not Found response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`,
+                      `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '413':
+          description: 'Content Too Large: Request Entity Too Large response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`,
+                      `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '429':
+          description: 'Too Many Requests: Too Many Requests response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`,
+                      `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '500':
+          description: 'Internal Server Error: Internal Server Error response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`,
+                      `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+      security:
+      - X-Voltus-API-Key: []
+    get:
+      tags:
+      - Dispatches
+      description: 'Returns a list of dispatches.
+
+
+        By default, the list dispatches endpoint returns all dispatch events from the previous 24 hours.
+        This endpoint is commonly used to implement a polling pattern to listen for new dispatch notifications.
+
+
+        If you would like to implement a polling pattern to check for new dispatches, we recommend the
+        following approach:
+
+
+        1. Make requests to this endpoint every 30 seconds in a loop. You may make requests more quickly
+        if you''d like, but if you need very fast response times, we recommend using [Webhooks](./webhooks)
+        instead. Excessive polling requests made to this endpoint may result in a `429 - Too Many Requests`
+        response.
+
+        2. When you make a request, check for new dispatches in the response body. Each dispatch has a
+        unique `id` attribute that can be used for identification.
+
+        3. Check each new dispatch''s `start_time`, list of `sites`, and `test` value to see if, when,
+        and how you need to respond.
+
+        4. If you need to respond, begin curtailment for the affected sites.
+
+        5. On subsequent requests, make sure you''re checking for any updates that have been made to the
+        active dispatch. `end_time` could be populated or be updated, and in extremely rare cases, the
+        dispatch may be cancelled. If the dispatch is cancelled, the `authorized` attribute will be set
+        to `false`.
+
+        6. Once the dispatch `end_time` has passed, curtailment can stop as long as there are no other
+        dispatches that require continued curtailment.
+
+
+        **NOTES**:
+
+
+        - Sites can be involved in multiple overlapping dispatches at the same time. Do not stop curtailment
+        for a given site until all the active dispatches for that site have reached their end time (or
+        the dispatch(es) have been canceled). If two events are scheduled at the same time and one is
+        shorter than the other, the site must continue to curtail for the full duration of the second
+        event, e.g. for Dispatch A from 9:00-10:00 and Dispatch B from 9:00-11:00, site must curtail from
+        9:00-11:00.
+
+        - Dispatches can be scheduled back-to-back, e.g. Dispatch A from 9:00-10:00 and Dispatch B from
+        10:00-11:00. If your system will be pre-curtailing (e.g. starting the load drop 5 min before start
+        time to ensure performance), make sure that your system does not ignore the second dispatch, and
+        continues to curtail through the end of the second event.
+
+        - A single dispatch can contain multiple sites. All sites listed must curtail during the dispatch
+        time period.
+
+        - All dispatches will be returned in a single request. While the fields `page` and `per_page`
+        have been reserved for future use, their values should be ignored.'
+      operationId: voltus#get-dispatches
+      parameters:
+      - name: X-Voltus-API-Key
+        in: header
+        description: API key used to perform authorization
+        allowEmptyValue: true
+        required: true
+        schema:
+          type: string
+          description: API key used to perform authorization
+          example: API_KEY
+        example: API_KEY
+      responses:
+        '200':
+          description: OK response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  dispatches:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        authorized:
+                          type: boolean
+                          description: The authorization status of the dispatch. If this value is false,
+                            a dispatch is cancelled, and curtailment can stop immediately.
+                          example: true
+                        creation_time:
+                          type: string
+                          description: Time the dispatch was created. Formatted as a RFC 3339 timestamp.
+                          example: '2024-02-02T08:00:00Z'
+                        end_time:
+                          type: string
+                          description: End time of the dispatch. This attribute will be omitted until
+                            an end time is determined. All dispatches will eventually have an end time
+                            unless they are cancelled. Formatted as a RFC 3339 timestamp.
+                          example: '2024-02-02T10:00:00Z'
+                        id:
+                          type: string
+                          description: Primary key of the dispatch.
+                          example: 5j94
+                        metadata:
+                          type: object
+                          description: Extra metadata on the dispatch, if available. May be omitted. You
+                            can ignore this field unless instructed otherwise by Voltus.
+                          example:
+                            dispatch_source: manual_test
+                          additionalProperties: true
+                        modification_number:
+                          type: integer
+                          description: Number of times this dispatch has been modified since creation.
+                          example: 0
+                          format: int64
+                        program:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              description: Unique integer identifier for program. Will not change.
+                              example: 867
+                              format: int64
+                            market:
+                              type: string
+                              description: The market the program is participating in
+                              example: CAISO
+                            name:
+                              type: string
+                              description: The program's name
+                              example: CAISO Operating Reserves
+                            program_type:
+                              type: string
+                              description: the type of program
+                              example: ancillary_services
+                              enum:
+                              - ancillary_services
+                              - capacity
+                              - energy
+                              - peak_saver
+                              - utility_interruptible_rate
+                              - utility_program
+                              - not_specified
+                            timezone:
+                              type: string
+                              description: The program's time zone (ignore to determine dispatch start
+                                and end times)
+                              example: US/Pacific
+                          example:
+                            id: 867
+                            market: CAISO
+                            name: CAISO Operating Reserves
+                            program_type: ancillary_services
+                            timezone: US/Pacific
+                          required:
+                          - id
+                          - name
+                          - timezone
+                          - market
+                          - program_type
+                          title: Program
+                        sites:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              commitment:
+                                type: number
+                                description: Expected electricity reduction in kW when measured against
+                                  the site's registered baseline for this dispatch.
+                                example: 12
+                                format: float
+                              customer_location_id:
+                                type: string
+                                description: An identifier for this site provided by a customer. This
+                                  can be any identifier supplied by the site owner, such as a store number.
+                                example: site101
+                              drop_by:
+                                description: Amount of power to reduce during dispatch (kW). Nullable.
+                                  Deprecated.
+                                example: 12
+                                format: float
+                                type: number
+                                deprecated: true
+                              id:
+                                type: string
+                                description: Primary key of the site
+                                example: xv1w4
+                              name:
+                                type: string
+                                description: Name of the site
+                                example: A cool site
+                            example:
+                              commitment: 12
+                              customer_location_id: site101
+                              drop_by: 12
+                              id: xv1w4
+                              name: A cool site
+                            required:
+                            - name
+                            - id
+                            - customer_location_id
+                            title: DispatchSite
+                          description: The sites that must curtail as a result of this dispatch
+                          example:
+                          - commitment: 1248
+                            customer_location_id: site102
+                            drop_by: 1248
+                            id: yd4g
+                            name: The coolest site
+                          - commitment: 5.3
+                            customer_location_id: ''
+                            drop_by: 5.3
+                            id: 40wl
+                            name: Just an ok site
+                        start_time:
+                          type: string
+                          description: Start time of the dispatch. Formatted as a RFC 3339 timestamp.
+                          example: '2024-02-02T09:00:00Z'
+                        test:
+                          type: boolean
+                          description: Whether the dispatch is a test. If this value is false, this is
+                            real, non-test dispatch, and you should curtail the site(s). If this value
+                            is true, this is a test dispatch, and you do not need to curtail.
+                          example: false
+                      example:
+                        authorized: true
+                        creation_time: '2024-02-02T08:00:00Z'
+                        end_time: '2024-02-02T10:00:00Z'
+                        id: 5j94
+                        metadata:
+                          dispatch_source: manual_test
+                        modification_number: 0
+                        program:
+                          id: 867
+                          market: CAISO
+                          name: CAISO Operating Reserves
+                          program_type: ancillary_services
+                          timezone: US/Pacific
+                        sites:
+                        - commitment: 1248
+                          customer_location_id: site102
+                          drop_by: 1248
+                          id: yd4g
+                          name: The coolest site
+                        - commitment: 5.3
+                          customer_location_id: ''
+                          drop_by: 5.3
+                          id: 40wl
+                          name: Just an ok site
+                        start_time: '2024-02-02T09:00:00Z'
+                        test: false
+                      required:
+                      - id
+                      - authorized
+                      - test
+                      - start_time
+                      - creation_time
+                      - modification_number
+                      - program
+                      - sites
+                      title: Dispatch
+                    example:
+                    - authorized: true
+                      creation_time: '2024-02-02T08:00:00Z'
+                      end_time: '2024-02-02T10:00:00Z'
+                      id: 5j94
+                      metadata:
+                        dispatch_source: manual_test
+                      modification_number: 0
+                      program:
+                        id: 867
+                        market: CAISO
+                        name: CAISO Operating Reserves
+                        program_type: ancillary_services
+                        timezone: US/Pacific
+                      sites:
+                      - commitment: 1248
+                        customer_location_id: site102
+                        drop_by: 1248
+                        id: yd4g
+                        name: The coolest site
+                      - commitment: 5.3
+                        customer_location_id: ''
+                        drop_by: 5.3
+                        id: 40wl
+                        name: Just an ok site
+                      start_time: '2024-02-02T09:00:00Z'
+                      test: false
+                    - authorized: true
+                      creation_time: '2024-02-02T08:00:00Z'
+                      end_time: '2024-02-02T10:00:00Z'
+                      id: 5j94
+                      metadata:
+                        dispatch_source: manual_test
+                      modification_number: 0
+                      program:
+                        id: 867
+                        market: CAISO
+                        name: CAISO Operating Reserves
+                        program_type: ancillary_services
+                        timezone: US/Pacific
+                      sites:
+                      - commitment: 1248
+                        customer_location_id: site102
+                        drop_by: 1248
+                        id: yd4g
+                        name: The coolest site
+                      - commitment: 5.3
+                        customer_location_id: ''
+                        drop_by: 5.3
+                        id: 40wl
+                        name: Just an ok site
+                      start_time: '2024-02-02T09:00:00Z'
+                      test: false
+                  page:
+                    type: integer
+                    description: Page number. Reserved for future use, should ignore for now.
+                    example: 1
+                    format: int64
+                  perPage:
+                    type: integer
+                    description: Number of items per page. Reserved for future use, should ignore for
+                      now.
+                    example: 50
+                    format: int64
+                example:
+                  dispatches:
+                  - authorized: true
+                    creation_time: '2024-02-02T08:00:00Z'
+                    end_time: '2024-02-02T10:00:00Z'
+                    id: 5j94
+                    metadata:
+                      dispatch_source: manual_test
+                    modification_number: 0
+                    program:
+                      id: 867
+                      market: CAISO
+                      name: CAISO Operating Reserves
+                      program_type: ancillary_services
+                      timezone: US/Pacific
+                    sites:
+                    - commitment: 1248
+                      customer_location_id: site102
+                      drop_by: 1248
+                      id: yd4g
+                      name: The coolest site
+                    - commitment: 5.3
+                      customer_location_id: ''
+                      drop_by: 5.3
+                      id: 40wl
+                      name: Just an ok site
+                    start_time: '2024-02-02T09:00:00Z'
+                    test: false
+                  - authorized: true
+                    creation_time: '2024-02-02T09:00:00Z'
+                    id: zg1p
+                    modification_number: 0
+                    program:
+                      id: 1092
+                      market: ERCOT
+                      name: ERCOT - Non-Spin
+                      program_type: ancillary_services
+                      timezone: US/Central
+                    sites:
+                    - commitment: null
+                      customer_location_id: site101
+                      drop_by: null
+                      id: xv1w4
+                      name: A cool site
+                    - commitment: null
+                      customer_location_id: site102
+                      drop_by: null
+                      id: yd4g
+                      name: The coolest site
+                    start_time: '2024-02-02T10:00:00Z'
+                    test: false
+                  - authorized: true
+                    creation_time: '2024-01-15T20:00:00Z'
+                    end_time: '2024-01-15T22:00:00Z'
+                    id: ez4p
+                    modification_number: 0
+                    program:
+                      id: 700
+                      market: ''
+                      name: Voltus Communications Test
+                      program_type: capacity
+                      timezone: US/Eastern
+                    sites:
+                    - commitment: 0
+                      customer_location_id: site101
+                      drop_by: 0
+                      id: xv1w4
+                      name: A cool site
+                    - commitment: 0
+                      customer_location_id: site102
+                      drop_by: 0
+                      id: yd4g
+                      name: The coolest site
+                    - commitment: 0
+                      customer_location_id: ''
+                      drop_by: 0
+                      id: 40wl
+                      name: Just an ok site
+                    - commitment: 0
+                      customer_location_id: ''
+                      drop_by: 0
+                      id: 6rnp
+                      name: A decent site
+                    start_time: '2024-01-15T21:00:00Z'
+                    test: true
+                  page: 0
+                  perPage: 0
+                required:
+                - dispatches
+                - page
+                - perPage
+                title: GetDispatchesResponseBody
+              example:
+                dispatches:
+                - authorized: true
+                  creation_time: '2024-02-02T08:00:00Z'
+                  end_time: '2024-02-02T10:00:00Z'
+                  id: 5j94
+                  metadata:
+                    dispatch_source: manual_test
+                  modification_number: 0
+                  program:
+                    id: 867
+                    market: CAISO
+                    name: CAISO Operating Reserves
+                    program_type: ancillary_services
+                    timezone: US/Pacific
+                  sites:
+                  - commitment: 1248
+                    customer_location_id: site102
+                    drop_by: 1248
+                    id: yd4g
+                    name: The coolest site
+                  - commitment: 5.3
+                    customer_location_id: ''
+                    drop_by: 5.3
+                    id: 40wl
+                    name: Just an ok site
+                  start_time: '2024-02-02T09:00:00Z'
+                  test: false
+                - authorized: true
+                  creation_time: '2024-02-02T09:00:00Z'
+                  id: zg1p
+                  modification_number: 0
+                  program:
+                    id: 1092
+                    market: ERCOT
+                    name: ERCOT - Non-Spin
+                    program_type: ancillary_services
+                    timezone: US/Central
+                  sites:
+                  - commitment: null
+                    customer_location_id: site101
+                    drop_by: null
+                    id: xv1w4
+                    name: A cool site
+                  - commitment: null
+                    customer_location_id: site102
+                    drop_by: null
+                    id: yd4g
+                    name: The coolest site
+                  start_time: '2024-02-02T10:00:00Z'
+                  test: false
+                - authorized: true
+                  creation_time: '2024-01-15T20:00:00Z'
+                  end_time: '2024-01-15T22:00:00Z'
+                  id: ez4p
+                  modification_number: 0
+                  program:
+                    id: 700
+                    market: ''
+                    name: Voltus Communications Test
+                    program_type: capacity
+                    timezone: US/Eastern
+                  sites:
+                  - commitment: 0
+                    customer_location_id: site101
+                    drop_by: 0
+                    id: xv1w4
+                    name: A cool site
+                  - commitment: 0
+                    customer_location_id: site102
+                    drop_by: 0
+                    id: yd4g
+                    name: The coolest site
+                  - commitment: 0
+                    customer_location_id: ''
+                    drop_by: 0
+                    id: 40wl
+                    name: Just an ok site
+                  - commitment: 0
+                    customer_location_id: ''
+                    drop_by: 0
+                    id: 6rnp
+                    name: A decent site
+                  start_time: '2024-01-15T21:00:00Z'
+                  test: true
+                page: 0
+                perPage: 0
+        '400':
+          description: 'Bad Request: Bad Request response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`,
+                      `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '403':
+          description: 'Unauthorized: Forbidden response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`,
+                      `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '404':
+          description: 'Not Found: Not Found response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`,
+                      `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '413':
+          description: 'Content Too Large: Request Entity Too Large response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`,
+                      `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '429':
+          description: 'Too Many Requests: Too Many Requests response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`,
+                      `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '500':
+          description: 'Internal Server Error: Internal Server Error response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`,
+                      `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+      security:
+      - X-Voltus-API-Key: []
+  /2022-04-15/dispatches/{id}:
+    get:
+      tags:
+      - Dispatches
+      description: 'Retrieves the dispatch with the given ID.
+
+
+        Can be used to explicitly check for the status of an individual dispatch.'
+      operationId: voltus#get-dispatch
+      parameters:
+      - name: id
+        in: path
+        description: The dispatch ID
+        required: true
+        schema:
+          type: string
+          description: The dispatch ID
+          example: 12345678asdfghjk
+        example: 12345678asdfghjk
+      - name: X-Voltus-API-Key
+        in: header
+        description: API key used to perform authorization
+        allowEmptyValue: true
+        required: true
+        schema:
+          type: string
+          description: API key used to perform authorization
+          example: API_KEY
+        example: API_KEY
+      responses:
+        '200':
+          description: OK response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  authorized:
+                    type: boolean
+                    description: The authorization status of the dispatch. If this value is false, a dispatch
+                      is cancelled, and curtailment can stop immediately.
+                    example: true
+                  creation_time:
+                    type: string
+                    description: Time the dispatch was created. Formatted as a RFC 3339 timestamp.
+                    example: '2024-02-02T08:00:00Z'
+                  end_time:
+                    type: string
+                    description: End time of the dispatch. This attribute will be omitted until an end
+                      time is determined. All dispatches will eventually have an end time unless they
+                      are cancelled. Formatted as a RFC 3339 timestamp.
+                    example: '2024-02-02T10:00:00Z'
+                  id:
+                    type: string
+                    description: Primary key of the dispatch.
+                    example: 5j94
+                  metadata:
+                    type: object
+                    description: Extra metadata on the dispatch, if available. May be omitted. You can
+                      ignore this field unless instructed otherwise by Voltus.
+                    example:
+                      dispatch_source: manual_test
+                    additionalProperties: true
+                  modification_number:
+                    type: integer
+                    description: Number of times this dispatch has been modified since creation.
+                    example: 0
+                    format: int64
+                  program:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        description: Unique integer identifier for program. Will not change.
+                        example: 867
+                        format: int64
+                      market:
+                        type: string
+                        description: The market the program is participating in
+                        example: CAISO
+                      name:
+                        type: string
+                        description: The program's name
+                        example: CAISO Operating Reserves
+                      program_type:
+                        type: string
+                        description: the type of program
+                        example: ancillary_services
+                        enum:
+                        - ancillary_services
+                        - capacity
+                        - energy
+                        - peak_saver
+                        - utility_interruptible_rate
+                        - utility_program
+                        - not_specified
+                      timezone:
+                        type: string
+                        description: The program's time zone (ignore to determine dispatch start and end
+                          times)
+                        example: US/Pacific
+                    example:
+                      id: 867
+                      market: CAISO
+                      name: CAISO Operating Reserves
+                      program_type: ancillary_services
+                      timezone: US/Pacific
+                    required:
+                    - id
+                    - name
+                    - timezone
+                    - market
+                    - program_type
+                    title: Program
+                  sites:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        commitment:
+                          type: number
+                          description: Expected electricity reduction in kW when measured against the
+                            site's registered baseline for this dispatch.
+                          example: 12
+                          format: float
+                        customer_location_id:
+                          type: string
+                          description: An identifier for this site provided by a customer. This can be
+                            any identifier supplied by the site owner, such as a store number.
+                          example: site101
+                        drop_by:
+                          description: Amount of power to reduce during dispatch (kW). Nullable. Deprecated.
+                          example: 12
+                          format: float
+                          type: number
+                          deprecated: true
+                        id:
+                          type: string
+                          description: Primary key of the site
+                          example: xv1w4
+                        name:
+                          type: string
+                          description: Name of the site
+                          example: A cool site
+                      example:
+                        commitment: 12
+                        customer_location_id: site101
+                        drop_by: 12
+                        id: xv1w4
+                        name: A cool site
+                      required:
+                      - name
+                      - id
+                      - customer_location_id
+                      title: DispatchSite
+                    description: The sites that must curtail as a result of this dispatch
+                    example:
+                    - commitment: 1248
+                      customer_location_id: site102
+                      drop_by: 1248
+                      id: yd4g
+                      name: The coolest site
+                    - commitment: 5.3
+                      customer_location_id: ''
+                      drop_by: 5.3
+                      id: 40wl
+                      name: Just an ok site
+                  start_time:
+                    type: string
+                    description: Start time of the dispatch. Formatted as a RFC 3339 timestamp.
+                    example: '2024-02-02T09:00:00Z'
+                  test:
+                    type: boolean
+                    description: Whether the dispatch is a test. If this value is false, this is real,
+                      non-test dispatch, and you should curtail the site(s). If this value is true, this
+                      is a test dispatch, and you do not need to curtail.
+                    example: false
+                example:
+                  authorized: true
+                  creation_time: '2024-02-02T08:00:00Z'
+                  end_time: '2024-02-02T10:00:00Z'
+                  id: 5j94
+                  metadata:
+                    dispatch_source: manual_test
+                  modification_number: 0
+                  program:
+                    id: 867
+                    market: CAISO
+                    name: CAISO Operating Reserves
+                    program_type: ancillary_services
+                    timezone: US/Pacific
+                  sites:
+                  - commitment: 1248
+                    customer_location_id: site102
+                    drop_by: 1248
+                    id: yd4g
+                    name: The coolest site
+                  - commitment: 5.3
+                    customer_location_id: ''
+                    drop_by: 5.3
+                    id: 40wl
+                    name: Just an ok site
+                  start_time: '2024-02-02T09:00:00Z'
+                  test: false
+                required:
+                - id
+                - authorized
+                - test
+                - start_time
+                - creation_time
+                - modification_number
+                - program
+                - sites
+                title: Dispatch
+              example:
+                authorized: true
+                creation_time: '2024-02-02T08:00:00Z'
+                end_time: '2024-02-02T10:00:00Z'
+                id: 5j94
+                metadata:
+                  dispatch_source: manual_test
+                modification_number: 0
+                program:
+                  id: 867
+                  market: CAISO
+                  name: CAISO Operating Reserves
+                  program_type: ancillary_services
+                  timezone: US/Pacific
+                sites:
+                - commitment: 1248
+                  customer_location_id: site102
+                  drop_by: 1248
+                  id: yd4g
+                  name: The coolest site
+                - commitment: 5.3
+                  customer_location_id: ''
+                  drop_by: 5.3
+                  id: 40wl
+                  name: Just an ok site
+                start_time: '2024-02-02T09:00:00Z'
+                test: false
+        '400':
+          description: 'Bad Request: Bad Request response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`,
+                      `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '403':
+          description: 'Unauthorized: Forbidden response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`,
+                      `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '404':
+          description: 'Not Found: Not Found response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`,
+                      `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '413':
+          description: 'Content Too Large: Request Entity Too Large response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`,
+                      `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '429':
+          description: 'Too Many Requests: Too Many Requests response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`,
+                      `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '500':
+          description: 'Internal Server Error: Internal Server Error response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`,
+                      `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+      security:
+      - X-Voltus-API-Key: []
+  /2022-04-15/sites:
+    get:
+      tags:
+      - Sites
+      description: 'Returns a list of your sites.
+
+
+        The sites endpoint is important because a given API key will only get dispatch notifications that
+        include sites visible to the account. You should make sure that all expected sites are returned
+        by this endpoint.
+
+
+        Sites include `id` and `customer_location_id` fields that can be used to identify sites in a dispatch
+        communication. A site''s `name` value may change, and should not be used as a static identifier.
+
+
+        All sites will be returned in a single request. The values of `page` and `per_page` have been
+        reserved for future use, but should be ignored at present.'
+      operationId: voltus#get-sites
+      parameters:
+      - name: X-Voltus-API-Key
+        in: header
+        description: API key used to perform authorization
+        allowEmptyValue: true
+        required: true
+        schema:
+          type: string
+          description: API key used to perform authorization
+          example: API_KEY
+        example: API_KEY
+      responses:
+        '200':
+          description: OK response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  page:
+                    type: integer
+                    description: Page number. Reserved for future use, should ignore for now.
+                    example: 1
+                    format: int64
+                  perPage:
+                    type: integer
+                    description: Number of items per page. Reserved for future use, should ignore for
+                      now.
+                    example: 50
+                    format: int64
+                  sites:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        customer_location_id:
+                          type: string
+                          description: An identifier for this site provided by a customer. This can be
+                            any identifier supplied by the site owner, such as a store number.
+                          example: site101
+                        id:
+                          type: string
+                          description: Primary key of the site
+                          example: xv1w4
+                        meters:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              asset_type:
+                                type: string
+                                description: Type of asset associated with this meter (e.g. load, battery,
+                                  generator, poi)
+                                example: load
+                              id:
+                                type: string
+                                description: Primary key of the meter
+                                example: wpv31
+                              name:
+                                type: string
+                                description: Name of the meter
+                                example: Primary Meter
+                            example:
+                              asset_type: load
+                              id: wpv31
+                              name: Primary Meter
+                            required:
+                            - id
+                            - name
+                            - asset_type
+                            title: Meter
+                          description: Meters associated with this site
+                          example:
+                          - asset_type: load
+                            id: wpv31
+                            name: Primary Meter
+                          - asset_type: load
+                            id: wpv31
+                            name: Primary Meter
+                          - asset_type: load
+                            id: wpv31
+                            name: Primary Meter
+                        name:
+                          type: string
+                          description: Name of the site
+                          example: A cool site
+                      example:
+                        customer_location_id: site101
+                        id: xv1w4
+                        meters:
+                        - asset_type: load
+                          id: wpv31
+                          name: Primary Meter
+                        - asset_type: load
+                          id: wpv31
+                          name: Primary Meter
+                        name: A cool site
+                      required:
+                      - name
+                      - id
+                      - customer_location_id
+                      title: Site
+                    example:
+                    - customer_location_id: site101
+                      id: xv1w4
+                      meters:
+                      - asset_type: load
+                        id: wpv31
+                        name: Primary Meter
+                      - asset_type: load
+                        id: wpv31
+                        name: Primary Meter
+                      - asset_type: load
+                        id: wpv31
+                        name: Primary Meter
+                      - asset_type: load
+                        id: wpv31
+                        name: Primary Meter
+                      name: A cool site
+                    - customer_location_id: site101
+                      id: xv1w4
+                      meters:
+                      - asset_type: load
+                        id: wpv31
+                        name: Primary Meter
+                      - asset_type: load
+                        id: wpv31
+                        name: Primary Meter
+                      - asset_type: load
+                        id: wpv31
+                        name: Primary Meter
+                      - asset_type: load
+                        id: wpv31
+                        name: Primary Meter
+                      name: A cool site
+                example:
+                  page: 0
+                  perPage: 0
+                  sites:
+                  - customer_location_id: site101
+                    id: xv1w4
+                    meters:
+                    - asset_type: load
+                      id: wpv31
+                      name: Primary Meter
+                    - asset_type: generator
+                      id: yvve
+                      name: Generator
+                    name: A cool site
+                  - customer_location_id: site102
+                    id: yd4g
+                    meters:
+                    - asset_type: poi
+                      id: njj1
+                      name: The best meter
+                    name: The coolest site
+                  - customer_location_id: ''
+                    id: 40wl
+                    meters: []
+                    name: Just an ok site
+                  - customer_location_id: ''
+                    id: 6rnp
+                    meters:
+                    - asset_type: poi
+                      id: 2j3y
+                      name: The sites meter name
+                    name: A decent site
+                required:
+                - sites
+                - page
+                - perPage
+                title: GetSitesResponseBody
+              example:
+                page: 0
+                perPage: 0
+                sites:
+                - customer_location_id: site101
+                  id: xv1w4
+                  meters:
+                  - asset_type: load
+                    id: wpv31
+                    name: Primary Meter
+                  - asset_type: generator
+                    id: yvve
+                    name: Generator
+                  name: A cool site
+                - customer_location_id: site102
+                  id: yd4g
+                  meters:
+                  - asset_type: poi
+                    id: njj1
+                    name: The best meter
+                  name: The coolest site
+                - customer_location_id: ''
+                  id: 40wl
+                  meters: []
+                  name: Just an ok site
+                - customer_location_id: ''
+                  id: 6rnp
+                  meters:
+                  - asset_type: poi
+                    id: 2j3y
+                    name: The sites meter name
+                  name: A decent site
+        '400':
+          description: 'Bad Request: Bad Request response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`,
+                      `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '403':
+          description: 'Unauthorized: Forbidden response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`,
+                      `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '404':
+          description: 'Not Found: Not Found response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`,
+                      `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '413':
+          description: 'Content Too Large: Request Entity Too Large response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`,
+                      `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '429':
+          description: 'Too Many Requests: Too Many Requests response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`,
+                      `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '500':
+          description: 'Internal Server Error: Internal Server Error response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`,
+                      `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+      security:
+      - X-Voltus-API-Key: []
+  /2022-04-15/telemetry:
+    post:
+      tags:
+      - Telemetry
+      description: 'This endpoint is intended for bulk-data submission and can receive many telemetry
+        points in the same request. You can also post non-contiguous intervals, intervals for multiple
+        meters, and intervals that have been submitted before, all without issue. We''ll handle the de-duplication
+        of double-submitted points, and you can take this into consideration when implementing retry and
+        failure logic.
+
+
+        There is a limit on the number of telemetry points per request. We recommend keeping requests
+        to 2048 points or fewer. Requests that exceed the maximum will receive a `413 Content Too Large`
+        response — split the data into smaller batches and retry.'
+      operationId: voltus#post-telemetry
+      parameters:
+      - name: X-Voltus-API-Key
+        in: header
+        description: API key used to perform authorization
+        allowEmptyValue: true
+        required: true
+        schema:
+          type: string
+          description: API key used to perform authorization
+          example: API_KEY
+        example: API_KEY
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                telemetry:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      interval_seconds:
+                        type: integer
+                        description: Number of seconds in this interval. This must be divisible by 30
+                          and the maximum value is 300 - requests where any interval violates these rules
+                          will fail completely and will need to be corrected and resubmitted. E.g. If
+                          you are posting the total `kWh` consumed in 5 minutes of data this value will
+                          be 300.
+                        example: 30
+                        format: int64
+                      kW:
+                        description: DEPRECATED. Please use 'value' and 'units' instead. Average instantaneous
+                          power reading for this interval
+                        example: 0.2
+                        format: float
+                        type: number
+                        deprecated: true
+                      meter_id:
+                        type: string
+                        description: ID of the meter that you're writing telemetry for. Cannot be used
+                          with site_id. Can be found with the /sites endpoint.
+                        example: wpv31
+                      site_id:
+                        type: string
+                        description: ID of the site that you're writing telemetry for. The site must only
+                          have one meter. Cannot be used with meter_id. Can be found with the /sites endpoint.
+                        example: yd4g
+                      timestamp:
+                        type: string
+                        description: The timestamp of the END of this telemetry interval in RFC3339 format.
+                          E.g. If the timestamp is 10:30 and the interval_seconds is 60 seconds, this
+                          interval is for 10:29-10:30.
+                        example: '2020-12-22T05:04:02Z'
+                      units:
+                        type: string
+                        description: The units of the measurement. Currently support kW and kWh. Must
+                          be ommitted if using deprecated field 'KW'. When submitting telemetry for a
+                          battery meter, request must include `kW` units representing battery power and
+                          `kWh` units representing battery state of charge. For all other meters, one
+                          request must use the same units for all intervals.
+                        example: kW
+                        enum:
+                        - kW
+                        - kWh
+                      value:
+                        type: number
+                        description: The value of the telemetry measurement for this interval. A positive
+                          value represents load. For meters capable of export to the grid (solar net metering,
+                          for example), exported energy is represented by a negative value. Must be omitted
+                          if using deprecated field `kW`
+                        example: 0.2
+                        format: float
+                    example:
+                      interval_seconds: 30
+                      kW: 0.2
+                      meter_id: wpv31
+                      site_id: yd4g
+                      timestamp: '2020-12-22T05:04:02Z'
+                      units: kW
+                      value: 0.2
+                    required:
+                    - timestamp
+                    - interval_seconds
+                    title: Telemetry
+                  example:
+                  - interval_seconds: 30
+                    meter_id: wpv31
+                    timestamp: '2024-01-02T09:00:00Z'
+                    units: kW
+                    value: 0.2
+                  - interval_seconds: 30
+                    meter_id: wpv31
+                    timestamp: '2024-01-02T09:00:30Z'
+                    units: kW
+                    value: 0.25
+                  - interval_seconds: 60
+                    site_id: yd4g
+                    timestamp: '2024-01-02T09:00:00Z'
+                    units: kW
+                    value: 0.5
+              example:
+                telemetry:
+                - interval_seconds: 30
+                  meter_id: wpv31
+                  timestamp: '2024-01-02T09:00:00Z'
+                  units: kW
+                  value: 0.2
+                - interval_seconds: 30
+                  meter_id: wpv31
+                  timestamp: '2024-01-02T09:00:30Z'
+                  units: kW
+                  value: 0.25
+                - interval_seconds: 60
+                  site_id: yd4g
+                  timestamp: '2024-01-02T09:00:00Z'
+                  units: kW
+                  value: 0.5
+              required:
+              - telemetry
+              title: PostTelemetryRequestBody
+            example:
+              telemetry:
+              - interval_seconds: 30
+                meter_id: wpv31
+                timestamp: '2024-01-02T09:00:00Z'
+                units: kW
+                value: 0.2
+              - interval_seconds: 30
+                meter_id: wpv31
+                timestamp: '2024-01-02T09:00:30Z'
+                units: kW
+                value: 0.25
+              - interval_seconds: 60
+                site_id: yd4g
+                timestamp: '2024-01-02T09:00:00Z'
+                units: kW
+                value: 0.5
+      responses:
+        '200':
+          description: OK response.
+        '400':
+          description: 'Bad Request: Bad Request response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`,
+                      `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '403':
+          description: 'Unauthorized: Forbidden response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`,
+                      `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '404':
+          description: 'Not Found: Not Found response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`,
+                      `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '413':
+          description: 'Content Too Large: Request Entity Too Large response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`,
+                      `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '429':
+          description: 'Too Many Requests: Too Many Requests response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`,
+                      `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '500':
+          description: 'Internal Server Error: Internal Server Error response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`,
+                      `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+      security:
+      - X-Voltus-API-Key: []
+  /2022-04-15/telemetry/controllable-load:
+    post:
+      tags:
+      - Telemetry
+      description: 'Posts controllable load.
+
+
+        Controllable load is an estimated kW value based on the nameplate energy usage (or actual energy
+        usage) of equipment currently under the control by your integration’s software. Example Use Case:
+        If your software loses network connection to control the equipment, even if the equipment is still
+        running, the value should decrease.'
+      operationId: voltus#post-controllable-load
+      parameters:
+      - name: X-Voltus-API-Key
+        in: header
+        description: API key used to perform authorization
+        allowEmptyValue: true
+        required: true
+        schema:
+          type: string
+          description: API key used to perform authorization
+          example: API_KEY
+        example: API_KEY
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                controllable_load:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      interval_seconds:
+                        type: integer
+                        description: Number of seconds in this interval. This must be divisible by 30
+                          and the maximum value is 300 - requests where any interval violates these rules
+                          will fail completely and will need to be corrected and resubmitted. E.g. If
+                          you are posting the total kW controllable for a 5 minute period this value will
+                          be 300.
+                        example: 30
+                        format: int64
+                      site_id:
+                        type: string
+                        description: ID of the site that you're writing telemetry for. Can be found with
+                          the /sites endpoint.
+                        example: yd4g
+                      timestamp:
+                        type: string
+                        description: The timestamp of the END of this telemetry interval in RFC3339 format.
+                          E.g. If the timestamp is 10:30 and the interval_seconds is 60 seconds, this
+                          interval is for 10:29-10:30.
+                        example: '2020-12-22T05:04:02Z'
+                      units:
+                        type: string
+                        description: The units of the measurement. Currently support kW. One request must
+                          use the same units for all intervals.
+                        example: kW
+                        enum:
+                        - kW
+                      value:
+                        type: number
+                        description: The value of the controllable load measurement for this interval.
+                        example: 0.2
+                        format: float
+                    example:
+                      interval_seconds: 30
+                      site_id: yd4g
+                      timestamp: '2020-12-22T05:04:02Z'
+                      units: kW
+                      value: 0.2
+                    required:
+                    - timestamp
+                    - site_id
+                    - interval_seconds
+                    - value
+                    - units
+                    title: ControllableLoadKwReading
+                  example:
+                  - interval_seconds: 30
+                    site_id: yd4g
+                    timestamp: '2024-01-02T09:00:00Z'
+                    units: kW
+                    value: 0.2
+                  - interval_seconds: 30
+                    site_id: yd4g
+                    timestamp: '2024-01-02T09:00:30Z'
+                    units: kW
+                    value: 0.25
+                  - interval_seconds: 60
+                    site_id: yd4g
+                    timestamp: '2024-01-02T09:00:00Z'
+                    units: kW
+                    value: 0.5
+              example:
+                controllable_load:
+                - interval_seconds: 30
+                  site_id: yd4g
+                  timestamp: '2024-01-02T09:00:00Z'
+                  units: kW
+                  value: 0.2
+                - interval_seconds: 30
+                  site_id: yd4g
+                  timestamp: '2024-01-02T09:00:30Z'
+                  units: kW
+                  value: 0.25
+                - interval_seconds: 60
+                  site_id: yd4g
+                  timestamp: '2024-01-02T09:00:00Z'
+                  units: kW
+                  value: 0.5
+              required:
+              - controllable_load
+              title: PostControllableLoadRequestBody
+            example:
+              controllable_load:
+              - interval_seconds: 30
+                site_id: yd4g
+                timestamp: '2024-01-02T09:00:00Z'
+                units: kW
+                value: 0.2
+              - interval_seconds: 30
+                site_id: yd4g
+                timestamp: '2024-01-02T09:00:30Z'
+                units: kW
+                value: 0.25
+              - interval_seconds: 60
+                site_id: yd4g
+                timestamp: '2024-01-02T09:00:00Z'
+                units: kW
+                value: 0.5
+      responses:
+        '200':
+          description: OK response.
+        '400':
+          description: 'Bad Request: Bad Request response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`,
+                      `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '403':
+          description: 'Unauthorized: Forbidden response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`,
+                      `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '404':
+          description: 'Not Found: Not Found response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`,
+                      `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '413':
+          description: 'Content Too Large: Request Entity Too Large response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`,
+                      `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '429':
+          description: 'Too Many Requests: Too Many Requests response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`,
+                      `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '500':
+          description: 'Internal Server Error: Internal Server Error response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`,
+                      `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+      security:
+      - X-Voltus-API-Key: []
+  /2022-04-15/telemetry/kw:
+    get:
+      tags:
+      - Telemetry
+      description: 'Returns a list of telemetry readings for one or more sites. The maximum number of
+        sites per request is 10. The maximum request interval is 90 days, with a limit of 10,000 total
+        data points per site.
+
+
+        This endpoint returns data that was available at the time of request, if the site''s telemetry
+        is delayed recent data may be incomplete. This is particularly important when fetching data for
+        a larger interval. If fetching data for an hour (3600 seconds), we recommend waiting at least
+        20 minutes in most cases after the end of that interval to be sure data has been fully submitted.
+        When in doubt, you can also fetch data for a smaller interval length which will give a better
+        picture of what data is actually available.'
+      operationId: voltus#get-telemetry-kw
+      parameters:
+      - name: start_time
+        in: query
+        description: An RFC3339 compatible string that denotes the beginning (exclusive) of the requested
+          interval. Must be aligned to 30 seconds
+        allowEmptyValue: true
+        required: true
+        schema:
+          type: string
+          description: An RFC3339 compatible string that denotes the beginning (exclusive) of the requested
+            interval. Must be aligned to 30 seconds
+          example: '2020-08-22T05:00:30Z'
+          format: date-time
+        examples:
+          default:
+            summary: default
+            value: '2020-08-22T05:00:30Z'
+      - name: end_time
+        in: query
+        description: An RFC3339 compatible string that denotes the end (inclusive) of the requested interval.
+          Defaults to 24 hours ahead of start_time if omitted. Must be aligned to 30 seconds.
+        allowEmptyValue: true
+        schema:
+          type: string
+          description: An RFC3339 compatible string that denotes the end (inclusive) of the requested
+            interval. Defaults to 24 hours ahead of start_time if omitted. Must be aligned to 30 seconds.
+          example: '2020-08-22T05:00:30Z'
+          format: date-time
+        examples:
+          default:
+            summary: default
+            value: '2020-08-22T05:00:30Z'
+      - name: interval_seconds
+        in: query
+        description: Interval width desired, in seconds. Defaults to 30. Use one of 30, 60, 300, 900,
+          1800, 3600, 21600.
+        allowEmptyValue: true
+        schema:
+          type: integer
+          description: Interval width desired, in seconds. Defaults to 30. Use one of 30, 60, 300, 900,
+            1800, 3600, 21600.
+          example: 3600
+          enum:
+          - 30
+          - 60
+          - 300
+          - 900
+          - 1800
+          - 3600
+          - 21600
+        example: 1800
+      - name: site_id
+        in: query
+        description: ID of a site. For multiple sites, add multiple instances of this parameter.
+        allowEmptyValue: true
+        required: true
+        schema:
+          type: array
+          items:
+            type: string
+            example: Aliquam eaque eius ab.
+          description: ID of a site. For multiple sites, add multiple instances of this parameter.
+          example:
+          - xv1w4
+          - yd4g
+        example:
+        - xv1w4
+        - yd4g
+      - name: X-Voltus-API-Key
+        in: header
+        description: API key used to perform authorization
+        allowEmptyValue: true
+        required: true
+        schema:
+          type: string
+          description: API key used to perform authorization
+          example: API_KEY
+        example: API_KEY
+      responses:
+        '200':
+          description: OK response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      sites:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            meters:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  meter_id:
+                                    type: string
+                                    description: ID of the meter
+                                    example: wpv31
+                                  telemetry:
+                                    type: array
+                                    items:
+                                      type: object
+                                      properties:
+                                        interval_seconds:
+                                          type: integer
+                                          description: Number of seconds in this interval.
+                                          example: 30
+                                          format: int64
+                                        timestamp:
+                                          type: string
+                                          description: The timestamp of the END of this telemetry interval
+                                            in RFC3339 format. E.g. If the timestamp is 10:30:00, this
+                                            interval is for 10:29:30-10:30:00.
+                                          example: '2020-12-22T05:04:02Z'
+                                        units:
+                                          type: string
+                                          description: The units of the measurement. Currently supports
+                                            kw.
+                                          example: kW
+                                          enum:
+                                          - kW
+                                        value:
+                                          type: number
+                                          description: The value of the telemetry measurement for this
+                                            interval. A positive value represents load. For meters capable
+                                            of export to the grid (solar net metering, for example), exported
+                                            energy is represented by a negative value.
+                                          example: 0.2
+                                          format: float
+                                      example:
+                                        interval_seconds: 30
+                                        timestamp: '2020-12-22T05:04:02Z'
+                                        units: kW
+                                        value: 0.2
+                                      required:
+                                      - interval_seconds
+                                      - timestamp
+                                      - units
+                                      title: TelemetryKwReading
+                                    description: A list of readings.
+                                    example:
+                                    - interval_seconds: 30
+                                      timestamp: '2020-12-22T05:04:02Z'
+                                      units: kW
+                                      value: 0.2
+                                    - interval_seconds: 30
+                                      timestamp: '2020-12-22T05:04:02Z'
+                                      units: kW
+                                      value: 0.2
+                                    - interval_seconds: 30
+                                      timestamp: '2020-12-22T05:04:02Z'
+                                      units: kW
+                                      value: 0.2
+                                    - interval_seconds: 30
+                                      timestamp: '2020-12-22T05:04:02Z'
+                                      units: kW
+                                      value: 0.2
+                                example:
+                                  meter_id: wpv31
+                                  telemetry:
+                                  - interval_seconds: 30
+                                    timestamp: '2020-12-22T05:04:02Z'
+                                    units: kW
+                                    value: 0.2
+                                  - interval_seconds: 30
+                                    timestamp: '2020-12-22T05:04:02Z'
+                                    units: kW
+                                    value: 0.2
+                                  - interval_seconds: 30
+                                    timestamp: '2020-12-22T05:04:02Z'
+                                    units: kW
+                                    value: 0.2
+                                  - interval_seconds: 30
+                                    timestamp: '2020-12-22T05:04:02Z'
+                                    units: kW
+                                    value: 0.2
+                                required:
+                                - meter_id
+                                - telemetry
+                                title: TelemetryKwMeters
+                              description: Array of meters with list of readings in each.
+                              example:
+                              - meter_id: wpv31
+                                telemetry:
+                                - interval_seconds: 30
+                                  timestamp: '2020-12-22T05:04:02Z'
+                                  units: kW
+                                  value: 0.2
+                                - interval_seconds: 30
+                                  timestamp: '2020-12-22T05:04:02Z'
+                                  units: kW
+                                  value: 0.2
+                                - interval_seconds: 30
+                                  timestamp: '2020-12-22T05:04:02Z'
+                                  units: kW
+                                  value: 0.2
+                                - interval_seconds: 30
+                                  timestamp: '2020-12-22T05:04:02Z'
+                                  units: kW
+                                  value: 0.2
+                              - meter_id: wpv31
+                                telemetry:
+                                - interval_seconds: 30
+                                  timestamp: '2020-12-22T05:04:02Z'
+                                  units: kW
+                                  value: 0.2
+                                - interval_seconds: 30
+                                  timestamp: '2020-12-22T05:04:02Z'
+                                  units: kW
+                                  value: 0.2
+                                - interval_seconds: 30
+                                  timestamp: '2020-12-22T05:04:02Z'
+                                  units: kW
+                                  value: 0.2
+                                - interval_seconds: 30
+                                  timestamp: '2020-12-22T05:04:02Z'
+                                  units: kW
+                                  value: 0.2
+                              - meter_id: wpv31
+                                telemetry:
+                                - interval_seconds: 30
+                                  timestamp: '2020-12-22T05:04:02Z'
+                                  units: kW
+                                  value: 0.2
+                                - interval_seconds: 30
+                                  timestamp: '2020-12-22T05:04:02Z'
+                                  units: kW
+                                  value: 0.2
+                                - interval_seconds: 30
+                                  timestamp: '2020-12-22T05:04:02Z'
+                                  units: kW
+                                  value: 0.2
+                                - interval_seconds: 30
+                                  timestamp: '2020-12-22T05:04:02Z'
+                                  units: kW
+                                  value: 0.2
+                              - meter_id: wpv31
+                                telemetry:
+                                - interval_seconds: 30
+                                  timestamp: '2020-12-22T05:04:02Z'
+                                  units: kW
+                                  value: 0.2
+                                - interval_seconds: 30
+                                  timestamp: '2020-12-22T05:04:02Z'
+                                  units: kW
+                                  value: 0.2
+                                - interval_seconds: 30
+                                  timestamp: '2020-12-22T05:04:02Z'
+                                  units: kW
+                                  value: 0.2
+                                - interval_seconds: 30
+                                  timestamp: '2020-12-22T05:04:02Z'
+                                  units: kW
+                                  value: 0.2
+                            site_id:
+                              type: string
+                              description: ID of the site
+                              example: xv1w4
+                          example:
+                            meters:
+                            - meter_id: wpv31
+                              telemetry:
+                              - interval_seconds: 30
+                                timestamp: '2020-12-22T05:04:02Z'
+                                units: kW
+                                value: 0.2
+                              - interval_seconds: 30
+                                timestamp: '2020-12-22T05:04:02Z'
+                                units: kW
+                                value: 0.2
+                              - interval_seconds: 30
+                                timestamp: '2020-12-22T05:04:02Z'
+                                units: kW
+                                value: 0.2
+                              - interval_seconds: 30
+                                timestamp: '2020-12-22T05:04:02Z'
+                                units: kW
+                                value: 0.2
+                            - meter_id: wpv31
+                              telemetry:
+                              - interval_seconds: 30
+                                timestamp: '2020-12-22T05:04:02Z'
+                                units: kW
+                                value: 0.2
+                              - interval_seconds: 30
+                                timestamp: '2020-12-22T05:04:02Z'
+                                units: kW
+                                value: 0.2
+                              - interval_seconds: 30
+                                timestamp: '2020-12-22T05:04:02Z'
+                                units: kW
+                                value: 0.2
+                              - interval_seconds: 30
+                                timestamp: '2020-12-22T05:04:02Z'
+                                units: kW
+                                value: 0.2
+                            - meter_id: wpv31
+                              telemetry:
+                              - interval_seconds: 30
+                                timestamp: '2020-12-22T05:04:02Z'
+                                units: kW
+                                value: 0.2
+                              - interval_seconds: 30
+                                timestamp: '2020-12-22T05:04:02Z'
+                                units: kW
+                                value: 0.2
+                              - interval_seconds: 30
+                                timestamp: '2020-12-22T05:04:02Z'
+                                units: kW
+                                value: 0.2
+                              - interval_seconds: 30
+                                timestamp: '2020-12-22T05:04:02Z'
+                                units: kW
+                                value: 0.2
+                            - meter_id: wpv31
+                              telemetry:
+                              - interval_seconds: 30
+                                timestamp: '2020-12-22T05:04:02Z'
+                                units: kW
+                                value: 0.2
+                              - interval_seconds: 30
+                                timestamp: '2020-12-22T05:04:02Z'
+                                units: kW
+                                value: 0.2
+                              - interval_seconds: 30
+                                timestamp: '2020-12-22T05:04:02Z'
+                                units: kW
+                                value: 0.2
+                              - interval_seconds: 30
+                                timestamp: '2020-12-22T05:04:02Z'
+                                units: kW
+                                value: 0.2
+                            site_id: xv1w4
+                          required:
+                          - site_id
+                          - meters
+                          title: TelemetryKwSite
+                        description: Array of readings for requested sites.
+                        example:
+                        - meters:
+                          - meter_id: wpv31
+                            telemetry:
+                            - interval_seconds: 30
+                              timestamp: '2024-01-02T09:00:00Z'
+                              units: kW
+                              value: 0.2
+                          - meter_id: wpv31
+                            telemetry:
+                            - interval_seconds: 30
+                              timestamp: '2024-01-02T09:00:30Z'
+                              units: kW
+                              value: 0.25
+                          site_id: xv1w4
+                        - meters:
+                          - meter_id: njj1
+                            telemetry:
+                            - interval_seconds: 60
+                              timestamp: '2024-01-02T09:00:00Z'
+                              units: kW
+                              value: 0.5
+                          site_id: yd4g
+                    example:
+                      sites:
+                      - meters:
+                        - meter_id: wpv31
+                          telemetry:
+                          - interval_seconds: 30
+                            timestamp: '2024-01-02T09:00:00Z'
+                            units: kW
+                            value: 0.2
+                        - meter_id: wpv31
+                          telemetry:
+                          - interval_seconds: 30
+                            timestamp: '2024-01-02T09:00:30Z'
+                            units: kW
+                            value: 0.25
+                        site_id: xv1w4
+                      - meters:
+                        - meter_id: njj1
+                          telemetry:
+                          - interval_seconds: 60
+                            timestamp: '2024-01-02T09:00:00Z'
+                            units: kW
+                            value: 0.5
+                        site_id: yd4g
+                    required:
+                    - sites
+                    title: TelemetryKwData
+                example:
+                  data:
+                    sites:
+                    - meters:
+                      - meter_id: wpv31
+                        telemetry:
+                        - interval_seconds: 30
+                          timestamp: '2024-01-02T09:00:00Z'
+                          units: kW
+                          value: 0.2
+                      - meter_id: wpv31
+                        telemetry:
+                        - interval_seconds: 30
+                          timestamp: '2024-01-02T09:00:30Z'
+                          units: kW
+                          value: 0.25
+                      site_id: xv1w4
+                    - meters:
+                      - meter_id: njj1
+                        telemetry:
+                        - interval_seconds: 60
+                          timestamp: '2024-01-02T09:00:00Z'
+                          units: kW
+                          value: 0.5
+                      site_id: yd4g
+                required:
+                - data
+                title: TelemetryKwResponse
+              example:
+                data:
+                  sites:
+                  - meters:
+                    - meter_id: wpv31
+                      telemetry:
+                      - interval_seconds: 30
+                        timestamp: '2024-01-02T09:00:00Z'
+                        units: kW
+                        value: 0.2
+                    - meter_id: wpv31
+                      telemetry:
+                      - interval_seconds: 30
+                        timestamp: '2024-01-02T09:00:30Z'
+                        units: kW
+                        value: 0.25
+                    site_id: xv1w4
+                  - meters:
+                    - meter_id: njj1
+                      telemetry:
+                      - interval_seconds: 60
+                        timestamp: '2024-01-02T09:00:00Z'
+                        units: kW
+                        value: 0.5
+                    site_id: yd4g
+        '400':
+          description: 'Bad Request: Bad Request response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`,
+                      `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '403':
+          description: 'Unauthorized: Forbidden response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`,
+                      `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '404':
+          description: 'Not Found: Not Found response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`,
+                      `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '413':
+          description: 'Content Too Large: Request Entity Too Large response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`,
+                      `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '429':
+          description: 'Too Many Requests: Too Many Requests response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`,
+                      `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '500':
+          description: 'Internal Server Error: Internal Server Error response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`,
+                      `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+      security:
+      - X-Voltus-API-Key: []
+  /2022-04-15/webhooks:
+    get:
+      tags:
+      - Webhooks
+      description: 'Returns a list of all webhooks that have been created.
+
+
+        All webhooks will be returned in a single request. The values of `page` and `per_page` have been
+        reserved for future use, but should be ignored at present.'
+      operationId: voltus#get-webhooks
+      parameters:
+      - name: X-Voltus-API-Key
+        in: header
+        description: API key used to perform authorization
+        allowEmptyValue: true
+        required: true
+        schema:
+          type: string
+          description: API key used to perform authorization
+          example: API_KEY
+        example: API_KEY
+      responses:
+        '200':
+          description: OK response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  page:
+                    type: integer
+                    description: Page number. Reserved for future use, should ignore for now.
+                    example: 1
+                    format: int64
+                  perPage:
+                    type: integer
+                    description: Number of items per page. Reserved for future use, should ignore for
+                      now.
+                    example: 50
+                    format: int64
+                  webhooks:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        events:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              name:
+                                type: string
+                                description: Name of the event
+                                example: dispatch.create
+                            example:
+                              name: dispatch.create
+                            required:
+                            - name
+                            title: WebhookEvent
+                          description: List of events that will be posted to this webhook. Currently only
+                            `dispatch.create` and `dispatch.update` are supported.
+                          example:
+                          - name: dispatch.create
+                          - name: dispatch.update
+                        id:
+                          type: string
+                          description: Unique identifier for this webhook
+                          example: dsft58ga
+                        url:
+                          type: string
+                          description: URL that this webhook will send requests to
+                          example: https://example.com/listeners/voltus
+                      example:
+                        events:
+                        - name: dispatch.create
+                        - name: dispatch.update
+                        id: dsft58ga
+                        url: https://example.com/listeners/voltus
+                      required:
+                      - url
+                      - events
+                      - id
+                      title: Webhook
+                    example:
+                    - events:
+                      - name: dispatch.create
+                      - name: dispatch.update
+                      id: dsft58ga
+                      url: https://example.com/listeners/voltus
+                    - events:
+                      - name: dispatch.create
+                      - name: dispatch.update
+                      id: dsft58ga
+                      url: https://example.com/listeners/voltus
+                    - events:
+                      - name: dispatch.create
+                      - name: dispatch.update
+                      id: dsft58ga
+                      url: https://example.com/listeners/voltus
+                example:
+                  page: 0
+                  perPage: 0
+                  webhooks: []
+                required:
+                - webhooks
+                - page
+                - perPage
+                title: GetWebhooksResponseBody
+              example:
+                page: 0
+                perPage: 0
+                webhooks: []
+        '400':
+          description: 'Bad Request: Bad Request response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`,
+                      `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '403':
+          description: 'Unauthorized: Forbidden response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`,
+                      `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '404':
+          description: 'Not Found: Not Found response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`,
+                      `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '413':
+          description: 'Content Too Large: Request Entity Too Large response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`,
+                      `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '429':
+          description: 'Too Many Requests: Too Many Requests response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`,
+                      `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '500':
+          description: 'Internal Server Error: Internal Server Error response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`,
+                      `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+      security:
+      - X-Voltus-API-Key: []
+    post:
+      tags:
+      - Webhooks
+      description: "Create a webhook by providing the events you'd like to listen for, and the URL where\
+        \ you'd like to receive notifications. When a webhook is created, we will send a test request\
+        \ to the provided URL with this payload:\n\n```json\n{\n  \"event\": {\n    \"name\": \"\"\n \
+        \ },\n  \"resource\": \"\"\n}\n```\n\nYour handler should respond with a 2xx status code. If it\
+        \ does not succeed, the webhook creation request will fail."
+      operationId: voltus#post-webhook
+      parameters:
+      - name: X-Voltus-API-Key
+        in: header
+        description: API key used to perform authorization
+        allowEmptyValue: true
+        required: true
+        schema:
+          type: string
+          description: API key used to perform authorization
+          example: API_KEY
+        example: API_KEY
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                events:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                        description: Name of the event
+                        example: dispatch.create
+                    example:
+                      name: dispatch.create
+                    required:
+                    - name
+                    title: WebhookEvent
+                  description: List of events that will be posted to this webhook. Currently only `dispatch.create`
+                    and `dispatch.update` are supported.
+                  example:
+                  - name: dispatch.create
+                  - name: dispatch.update
+                url:
+                  type: string
+                  description: URL that this webhook will send requests to
+                  example: https://example.com/listeners/voltus
+              example:
+                events:
+                - name: dispatch.create
+                - name: dispatch.update
+                url: https://example.com/listeners/voltus
+              required:
+              - url
+              - events
+              title: PostWebhookRequestBody
+            example:
+              events:
+              - name: dispatch.create
+              - name: dispatch.update
+              url: https://example.com/listeners/voltus
+      responses:
+        '200':
+          description: OK response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  events:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          description: Name of the event
+                          example: dispatch.create
+                      example:
+                        name: dispatch.create
+                      required:
+                      - name
+                      title: WebhookEvent
+                    description: List of events that will be posted to this webhook. Currently only `dispatch.create`
+                      and `dispatch.update` are supported.
+                    example:
+                    - name: dispatch.create
+                    - name: dispatch.update
+                  id:
+                    type: string
+                    description: Unique identifier for this webhook
+                    example: dsft58ga
+                  url:
+                    type: string
+                    description: URL that this webhook will send requests to
+                    example: https://example.com/listeners/voltus
+                example:
+                  events:
+                  - name: dispatch.create
+                  - name: dispatch.update
+                  id: dsft58ga
+                  url: https://example.com/listeners/voltus
+                required:
+                - url
+                - events
+                - id
+                title: Webhook
+              example:
+                events:
+                - name: dispatch.create
+                - name: dispatch.update
+                id: dsft58ga
+                url: https://example.com/listeners/voltus
+        '400':
+          description: 'Bad Request: Bad Request response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`,
+                      `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '403':
+          description: 'Unauthorized: Forbidden response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`,
+                      `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '404':
+          description: 'Not Found: Not Found response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`,
+                      `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '413':
+          description: 'Content Too Large: Request Entity Too Large response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`,
+                      `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '429':
+          description: 'Too Many Requests: Too Many Requests response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`,
+                      `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '500':
+          description: 'Internal Server Error: Internal Server Error response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`,
+                      `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+      security:
+      - X-Voltus-API-Key: []
+  /2022-04-15/webhooks/{id}:
+    delete:
+      tags:
+      - Webhooks
+      description: Permanently deletes a webhook. It cannot be undone.
+      operationId: voltus#delete-webhook
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier for this webhook
+        required: true
+        schema:
+          type: string
+          description: Unique identifier for this webhook
+          example: dsft58ga
+        example: dsft58ga
+      - name: X-Voltus-API-Key
+        in: header
+        description: API key used to perform authorization
+        allowEmptyValue: true
+        required: true
+        schema:
+          type: string
+          description: API key used to perform authorization
+          example: API_KEY
+        example: API_KEY
+      responses:
+        '200':
+          description: OK response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  events:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          description: Name of the event
+                          example: dispatch.create
+                      example:
+                        name: dispatch.create
+                      required:
+                      - name
+                      title: WebhookEvent
+                    description: List of events that will be posted to this webhook. Currently only `dispatch.create`
+                      and `dispatch.update` are supported.
+                    example:
+                    - name: dispatch.create
+                    - name: dispatch.update
+                  id:
+                    type: string
+                    description: Unique identifier for this webhook
+                    example: dsft58ga
+                  url:
+                    type: string
+                    description: URL that this webhook will send requests to
+                    example: https://example.com/listeners/voltus
+                example:
+                  events:
+                  - name: dispatch.create
+                  - name: dispatch.update
+                  id: dsft58ga
+                  url: https://example.com/listeners/voltus
+                required:
+                - url
+                - events
+                - id
+                title: Webhook
+              example:
+                events:
+                - name: dispatch.create
+                - name: dispatch.update
+                id: dsft58ga
+                url: https://example.com/listeners/voltus
+        '400':
+          description: 'Bad Request: Bad Request response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`,
+                      `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '403':
+          description: 'Unauthorized: Forbidden response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`,
+                      `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '404':
+          description: 'Not Found: Not Found response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`,
+                      `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '413':
+          description: 'Content Too Large: Request Entity Too Large response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`,
+                      `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '429':
+          description: 'Too Many Requests: Too Many Requests response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`,
+                      `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '500':
+          description: 'Internal Server Error: Internal Server Error response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`,
+                      `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+      security:
+      - X-Voltus-API-Key: []
+components:
+  securitySchemes:
+    X-Voltus-API-Key:
+      type: apiKey
+      name: X-Voltus-API-Key
+      in: header

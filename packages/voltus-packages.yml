@@ -1,0 +1,37 @@
+generated: '2026-07-27'
+method: searched
+source: registry searches + https://github.com/voltusdev
+description: >-
+  Voltus publishes no client SDK in any public package registry. What it does
+  publish is a first-party example repository (Python, Flask + requests) that the
+  tutorials link to, plus a Marimo notebook used as the integration test harness.
+  Recorded honestly: packages[] is empty; the example code is catalogued
+  separately so it is not mistaken for a supported client library.
+packages: []
+registries_searched:
+  - {registry: npm, query: voltus, result: 'no first-party package (only an unrelated "voltus" validators library)', date: '2026-07-27'}
+  - {registry: pypi, query: voltus, result: 'package exists but is a different Voltus - a client for the INESC TEC "Voltus feature store" by Carlos Tarjano, not voltus.co', date: '2026-07-27'}
+  - {registry: pypi, query: 'voltus-api, voltus-sdk, pyvoltus', result: 404, date: '2026-07-27'}
+  - {registry: rubygems, query: voltus, result: none, date: '2026-07-27'}
+  - {registry: crates.io, query: voltus, result: none, date: '2026-07-27'}
+  - {registry: nuget, query: voltus, result: 404, date: '2026-07-27'}
+  - {registry: maven-central, query: voltus, result: none, date: '2026-07-27'}
+source_code:
+  - name: voltus-api-examples
+    official: true
+    url: https://github.com/voltusdev/voltus-api-examples
+    language: python
+    kind: examples
+    install: 'git clone; python3 -m venv venv; pip install -r requirements.txt'
+    contents:
+      - polling/poller.py - continuous dispatch polling integration
+      - polling/processor.py - simplified dispatch state processor
+      - webhooks/webhook-server.py - Flask listener for dispatch.create / dispatch.update
+      - telemetry/get_telemetry.py - reading interval telemetry
+      - test-your-dispatch-integration/ - Marimo notebook driving the sandbox scenario suite
+    note: >-
+      Voltus states these examples "are deliberately simplified" and "should not
+      be considered production ready" - they are teaching code, not an SDK.
+github_organizations:
+  - {org: voltusdev, url: https://github.com/voltusdev, public_repos: 10, note: 'The real developer org - holds voltus-api-examples plus forks (go-xml, pytest-parallel, date, rickshaw, auto-approve-action).'}
+  - {org: voltus, url: https://github.com/voltus, public_repos: 1, note: 'Older org; one public repo (postgres-docker). No API code.'}

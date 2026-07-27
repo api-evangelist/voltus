@@ -1,0 +1,74 @@
+arazzo: 1.0.1
+info:
+  title: Poll Voltus dispatches and curtail enrolled sites
+  version: 1.0.0
+  description: >-
+    The core Voltus demand-response loop: resolve your enrolled sites, poll for
+    dispatches, then read the individual dispatch to drive per-site curtailment
+    commitments. Runs end-to-end against the public sandbox with the published
+    credential "secret".
+sourceDescriptions:
+  - name: voltus
+    url: ../openapi/voltus-openapi.yml
+    type: openapi
+workflows:
+  - workflowId: poll-dispatches-and-curtail
+    summary: List sites, poll dispatches, then read one dispatch in detail.
+    description: >-
+      Step 3 targets the dispatch returned by step 2. In production this loop runs
+      continuously; commitment (not the deprecated drop_by) is the kW each site
+      must shed.
+    inputs:
+      type: object
+      required: [apiKey]
+      properties:
+        apiKey:
+          type: string
+          description: Voltus API key. Use "secret" against https://sandbox.voltus.co.
+          default: secret
+    steps:
+      - stepId: list-sites
+        description: Resolve the sites enrolled under this key, with their meters.
+        operationId: 'voltus#get-sites'
+        parameters:
+          - name: X-Voltus-API-Key
+            in: header
+            value: $inputs.apiKey
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          siteId: $response.body#/sites/0/id
+      - stepId: list-dispatches
+        description: Poll for active and upcoming dispatches.
+        operationId: 'voltus#get-dispatches'
+        parameters:
+          - name: X-Voltus-API-Key
+            in: header
+            value: $inputs.apiKey
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          dispatchId: $response.body#/dispatches/0/id
+          authorized: $response.body#/dispatches/0/authorized
+          commitment: $response.body#/dispatches/0/sites/0/commitment
+      - stepId: get-dispatch
+        description: Read the dispatch in full before acting on it.
+        operationId: 'voltus#get-dispatch'
+        parameters:
+          - name: id
+            in: path
+            value: $steps.list-dispatches.outputs.dispatchId
+          - name: X-Voltus-API-Key
+            in: header
+            value: $inputs.apiKey
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          startTime: $response.body#/start_time
+          endTime: $response.body#/end_time
+          modificationNumber: $response.body#/modification_number
+    outputs:
+      dispatchId: $steps.list-dispatches.outputs.dispatchId
+      commitment: $steps.list-dispatches.outputs.commitment
+      startTime: $steps.get-dispatch.outputs.startTime
+      modificationNumber: $steps.get-dispatch.outputs.modificationNumber

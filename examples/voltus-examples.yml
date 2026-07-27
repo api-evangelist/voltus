@@ -1,0 +1,54 @@
+generated: '2026-07-27'
+method: searched
+source: https://sandbox.voltus.co (public sandbox, published credentials) + https://github.com/voltusdev/voltus-api-examples
+description: >-
+  Real request/response examples. Every response below was captured live on
+  2026-07-27 by calling the Voltus public sandbox anonymously with the
+  credentials Voltus publishes at
+  https://api.voltus.co/docs/concepts/public-credentials
+  (host https://sandbox.voltus.co, header "X-Voltus-API-Key: secret").
+  Nothing here is synthesised - the sandbox serves fixed fixtures and these are
+  those fixtures verbatim. The webhook payload shape is taken verbatim from
+  Voltus's own example webhook server.
+examples:
+  - file: voltus-get-sites-200.json
+    operationId: voltus#get-sites
+    request: GET https://sandbox.voltus.co/2022-04-15/sites
+    status: 200
+    captured: '2026-07-27'
+    note: Sandbox static site fixture - two sites, ids "asdf" and "lkjh".
+  - file: voltus-get-dispatches-200.json
+    operationId: voltus#get-dispatches
+    request: GET https://sandbox.voltus.co/2022-04-15/dispatches
+    status: 200
+    captured: '2026-07-27'
+    note: >-
+      Canned MISO Operating Reserves ancillary-services dispatch. start_time /
+      end_time / creation_time move with the clock; drop_by and commitment carry
+      the same value (drop_by is deprecated - see lifecycle/).
+  - file: voltus-get-webhooks-200.json
+    operationId: voltus#get-webhooks
+    request: GET https://sandbox.voltus.co/2022-04-15/webhooks
+    status: 200
+    captured: '2026-07-27'
+    note: Sandbox webhook fixture registered for dispatch.create and dispatch.update.
+  - file: voltus-dispatch-webhook-payload.json
+    operationId: null
+    request: POST <your listener URL> (Voltus -> partner callback)
+    status: null
+    captured: '2026-07-27'
+    source: https://github.com/voltusdev/voltus-api-examples/blob/main/webhooks/webhook-server.py
+    note: >-
+      Inbound webhook body shape, read from Voltus's first-party example
+      listener: {"event": {"name": ...}, "resource": <dispatch resource path>}.
+      The listener re-fetches the dispatch from `resource`; a handshake ping
+      arrives with an empty event name and empty resource.
+empty_results:
+  - operationId: voltus#get-telemetry-kw
+    request: >-
+      GET https://sandbox.voltus.co/2022-04-15/telemetry/kw?start_time=2026-07-20T00:00:00Z&end_time=2026-07-20T01:00:00Z&interval_seconds=3600&site_id=asdf
+    status: 200
+    body: '{"data":null}'
+    note: >-
+      The public sandbox holds no telemetry for the fixture sites, so the call
+      succeeds with a null payload. Recorded as-is rather than fabricating readings.

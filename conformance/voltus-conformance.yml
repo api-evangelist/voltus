@@ -1,0 +1,93 @@
+generated: '2026-07-27'
+method: searched
+source: https://api.voltus.co/docs/concepts/openadr
+derived_from: openapi/voltus-openapi.yml
+description: >-
+  Which industry and cross-cutting standards the Voltus surface actually
+  conforms to. One real open standard is implemented - OpenADR 2.0a over Simple
+  HTTP PULL with mutual TLS - and Voltus states plainly why it does not do 2.0b
+  or 3.0. Everything else is a proprietary REST shape. No energy consumer-data
+  standard (Green Button / ESPI, CDR, IEEE 2030.5, IEC CIM) appears anywhere on
+  the Voltus surface, and none is mandated for a demand-response aggregator.
+standards:
+  - id: openadr-2.0a
+    name: OpenADR 2.0a (Simple HTTP PULL profile)
+    conforms: true
+    evidence: >-
+      "Voltus supports OpenADR2.0a via Simple HTTP (PULL)"; Voltus operates the
+      VTN and partners run VENs, polling
+      https://openadr.voltus.co/vtn/YOUR_VEN_ID/OpenADR2/Simple/EiEvent and
+      replying with oadrCreatedEvent. eiEvent/marketContext/signalPayload/
+      priority/eiTarget/resourceID semantics are documented per operation.
+    url: https://api.voltus.co/docs/concepts/openadr
+  - id: openadr-2.0b
+    name: OpenADR 2.0b
+    conforms: false
+    evidence: 'Voltus states explicitly: "Neither [2.0b nor 3.0] are widely supported enough for Voltus to commit to developing an integration."'
+  - id: openadr-3.0
+    name: OpenADR 3.0
+    conforms: false
+    evidence: Same statement as 2.0b.
+  - id: mutual-tls
+    name: Mutual TLS client authentication (X.509)
+    conforms: true
+    evidence: OpenADR VTN requires a Voltus-signed client certificate obtained by submitting a CSR with CN YOUR_VEN_ID@openadr.voltus.co.
+    url: https://api.voltus.co/docs/tutorials/openadr
+  - id: rfc3339
+    name: RFC 3339 date-time
+    conforms: true
+    evidence: All time fields in the OpenAPI are format date-time with RFC 3339 examples; telemetry bounds must be 30-second aligned.
+  - id: openapi
+    name: OpenAPI (as the source of the reference docs)
+    conforms: partial
+    evidence: >-
+      The reference is generated from a build-time OpenAPI document
+      (docusaurus-plugin-openapi-docs, src/openapi3.yaml), and the full operation
+      objects are recoverable from the portal build - but Voltus serves no
+      downloadable spec (/openapi.json, /swagger.json, /openapi3.yaml all 404).
+    url: https://api.voltus.co/docs/openapi/voltus-api-reference
+  - id: oauth2
+    conforms: false
+    evidence: No OAuth surface. Auth is a single static API key in the X-Voltus-API-Key header; .well-known/openid-configuration and .well-known/oauth-authorization-server both 404.
+  - id: oidc
+    conforms: false
+    evidence: Same - no OpenID Connect discovery document.
+  - id: rfc9457-problem-details
+    conforms: false
+    evidence: 'Errors are application/json {message, type}; type restates the HTTP status phrase. No application/problem+json.'
+  - id: rfc9116-security-txt
+    conforms: false
+    evidence: /.well-known/security.txt returns 404 on both voltus.co and api.voltus.co (probed 2026-07-27).
+  - id: rfc8594-sunset-header
+    conforms: false
+    evidence: No Sunset or Deprecation headers; deprecations are announced only in the changelog.
+  - id: green-button-espi
+    name: Green Button / NAESB ESPI
+    conforms: false
+    evidence: No reference anywhere on voltus.co or api.voltus.co. Not mandated - Voltus is an aggregator, not a utility or metering data holder.
+  - id: cdr-energy
+    name: Consumer Data Right (energy, Australia)
+    conforms: false
+    evidence: Out of scope for a North American aggregator; no reference.
+  - id: ieee-2030.5
+    name: IEEE 2030.5 (SEP2)
+    conforms: false
+    evidence: No reference found.
+  - id: iec-cim
+    name: IEC CIM 61968/61970
+    conforms: false
+    evidence: No reference found.
+  - id: ocpp-ocpi
+    name: OCPP / OCPI (EV charging)
+    conforms: false
+    evidence: No reference found, despite Voltus enrolling EV and transportation load.
+compliance_certifications:
+  published: false
+  note: >-
+    No trust centre, no security page and no named certification (SOC 2, ISO
+    27001, PCI DSS, HIPAA, FedRAMP) is published on voltus.co, api.voltus.co,
+    trust.voltus.co or security.voltus.co - all probed 2026-07-27. Voltus's real
+    regulated obligations are market-participation rules (ISO/RTO tariff
+    registration and telemetry/M&V requirements in AESO, CAISO, ERCOT, IESO,
+    ISO-NE, MISO, NYISO, PJM, SPP; FERC Order 2222 DER aggregation), not a
+    published information-security compliance programme.

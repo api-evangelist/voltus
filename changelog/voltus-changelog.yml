@@ -1,0 +1,120 @@
+generated: '2026-07-27'
+method: searched
+source: https://api.voltus.co/docs/changelog/atom.xml
+docs: https://api.voltus.co/docs/changelog
+feeds:
+  rss: https://api.voltus.co/docs/changelog/rss.xml
+  atom: https://api.voltus.co/docs/changelog/atom.xml
+scheme: dated entries (no release numbering); the API itself is date-versioned in the URI path
+current_version: '2022-04-15'
+description: >-
+  A real, dated, feed-published API changelog covering both the REST API and the
+  OpenADR product, running from its own launch post in October 2023 to July 2026.
+  The full feed (17 entries) is captured below - Voltus's own archive begins with
+  the welcome post, so this is the complete published history rather than a recent
+  window.
+entries:
+  - date: '2026-07-01'
+    title: Asset type added to meters
+    url: https://api.voltus.co/docs/changelog/meter-asset-type
+    kind: addition
+    breaking: false
+    highlights: 'GET /sites now returns asset_type on each meter: load, battery, generator or poi.'
+  - date: '2026-06-02'
+    title: Program ID when creating dispatches
+    url: https://api.voltus.co/docs/changelog/added-program-id-param-to-post-dispatches
+    kind: addition
+    breaking: false
+    highlights: >-
+      Optional program_id on POST /dispatches creates the test dispatch against the
+      groups registered under that program; omitting it keeps the previous mock-program behaviour.
+  - date: '2026-05-14'
+    title: Dispatch Metadata
+    url: https://api.voltus.co/docs/changelog/added-dispatch-metadata
+    kind: addition
+    breaking: false
+    highlights: Optional metadata object on the dispatch object returned by GET dispatch / list dispatches; also supported in the sandbox.
+  - date: '2025-12-09'
+    title: Sandbox OpenADR Support
+    url: https://api.voltus.co/docs/changelog/sandbox-openadr-support
+    kind: addition
+    breaking: false
+    highlights: Self-serve customizable dispatch scenarios extended to OpenADR integrations.
+  - date: '2025-08-21'
+    title: Custom Sandbox Scenarios
+    url: https://api.voltus.co/docs/changelog/custom-sandbox-scenarios
+    kind: addition
+    breaking: false
+    highlights: Custom sandbox scenarios; notification_time is now optional and defaults to now.
+  - date: '2025-08-15'
+    title: Modification Number and Creation Time
+    url: https://api.voltus.co/docs/changelog/modification-number-and-creation-time
+    kind: addition
+    breaking: false
+    highlights: modification_number and creation_time exposed on dispatches to make update history trackable.
+  - date: '2025-07-11'
+    title: New Scenarios in Sandbox Environment
+    url: https://api.voltus.co/docs/changelog/sandbox-new-scenarios
+    kind: addition
+    breaking: false
+    highlights: Cancelled-dispatch scenario via cancel_time (authorized=false) and a two-dispatches scenario via minutes_between_dispatches.
+  - date: '2025-06-27'
+    title: Sandbox Environment Improvements
+    url: https://api.voltus.co/docs/changelog/sandbox-v2
+    kind: improvement
+    breaking: false
+    highlights: POST scenarios accepts site IDs; sandbox dispatch IDs are now randomly generated per scenario, matching production.
+  - date: '2025-01-14'
+    title: New endpoint for submitting controllable load
+    url: https://api.voltus.co/docs/changelog/telemetry-controllable-load
+    kind: addition
+    breaking: false
+    highlights: POST /telemetry/controllable-load - aggregate kW controlled by the integration at a site, typically lower than metered load.
+  - date: '2024-11-21'
+    title: Increased range of telemetry that can be fetched at one time
+    url: https://api.voltus.co/docs/changelog/telemetry-data-range-increased
+    kind: improvement
+    breaking: false
+    highlights: Telemetry fetch window raised from 48 hours to 90 days.
+  - date: '2024-11-18'
+    title: Program ID
+    url: https://api.voltus.co/docs/changelog/program-id
+    kind: addition
+    breaking: false
+    highlights: Stable integer program.id exposed on dispatches returned by GET /dispatches.
+  - date: '2024-03-26'
+    title: Sandbox Dispatch Simulations are Self-Serve
+    url: https://api.voltus.co/docs/changelog/sandbox-self-serve
+    kind: improvement
+    breaking: false
+    highlights: Customers self-schedule dispatch scenarios instead of emailing Voltus.
+  - date: '2024-02-13'
+    title: Removed lookback limit on retrieving telemetry data
+    url: https://api.voltus.co/docs/changelog/removed-lookback-limit-on-retrieving-telemetry-data
+    kind: improvement
+    breaking: false
+    highlights: Two-week telemetry lookback limit removed; history is now available as far back as Voltus holds data.
+  - date: '2023-12-13'
+    title: DropBy field is deprecated
+    url: https://api.voltus.co/docs/changelog/deprecated-field-drop-by
+    kind: deprecation
+    breaking: false
+    highlights: dispatches.sites[n].drop_by deprecated in favour of dispatches.sites[n].commitment.
+  - date: '2023-12-01'
+    title: New Sandbox Dispatch Simulation Features
+    url: https://api.voltus.co/docs/changelog/new-sandbox-features
+    kind: addition
+    breaking: false
+    highlights: Simulated dispatches with changing conditions - updated end-times, back-to-back dispatches.
+  - date: '2023-11-21'
+    title: Test Key Moved to Sandbox Environment
+    url: https://api.voltus.co/docs/changelog/test-key-moved-to-sandbox-environment
+    kind: breaking
+    breaking: true
+    highlights: The public test key "secret" stopped working against api.voltus.co and now only works against sandbox.voltus.co.
+  - date: '2023-10-11'
+    title: Welcome to the Voltus API Changelog
+    url: https://api.voltus.co/docs/changelog/welcome-to-the-voltus-api-changelog
+    kind: announcement
+    breaking: false
+    highlights: Launch of the changelog, covering the REST API and OpenADR products.

@@ -145,17 +145,23 @@ authModel:
     x-ratelimit-limit 301 on api.voltus.co and 101 on sandbox.voltus.co, with
     x-ratelimit-remaining and x-ratelimit-reset.
 downloadableContracts:
-  openapiHarvested: false
-  specsCount: 0
+  openapiHarvested: true
+  specsCount: 1
+  harvestedOn: '2026-07-27'
   finding: >-
     Voltus generates its API reference from an OpenAPI document — the docs bundle
     references the build-time source path "src/openapi3.yaml" and the reference
     pages are produced by the Docusaurus OpenAPI plugin — but no machine-readable
-    contract is served anywhere. Every candidate path 404s (see probes[]).
-    Nothing was written to openapi/ because nothing real was retrievable; the
-    endpoint inventory below was taken verbatim from the site's own generated
-    sidebar/route data rather than reconstructed into a spec, so that no invented
-    schema enters the record.
+    contract is SERVED anywhere: /openapi.json, /swagger.json, /openapi3.yaml,
+    /redoc and the sandbox equivalents all 404 (see probes[]).
+    UPDATE (2026-07-27, enrichment round): the contract was recoverable anyway.
+    docusaurus-plugin-openapi-docs embeds each operation object, base64+zlib
+    compressed, in the per-operation JS chunk it ships to the browser. All ten
+    operation objects were decompressed from https://api.voltus.co/assets/js/*.js
+    and assembled verbatim into openapi/voltus-openapi.yml — info, servers,
+    security, securitySchemes, parameters, request bodies, response schemas and
+    examples are Voltus's own published content; only the container's `openapi:`
+    version string and the tags[] list are ours. Nothing was invented.
   endpointsDocumented:
   - GET /dispatches — "Returns a list of dispatches."
   - POST /dispatches — "Creates a test dispatch."
@@ -220,7 +226,11 @@ probes:
     note: 'With the public sandbox key: {"message":"Permission denied","type":"Unauthorized"} — production is genuinely gated.'
   - url: https://openadr.voltus.co
     status: 000
-    note: Connection could not be established over plain HTTPS; consistent with an mTLS-only VTN endpoint.
+    note: >-
+      Connection could not be established over plain HTTPS; consistent with an
+      mTLS-only VTN endpoint. A 2026-07-27 TLS probe did complete a handshake
+      (TLSv1.2, certificate valid to 2026-09-29), so the host is up and simply
+      refuses unauthenticated clients.
   - url: https://api.voltus.co/openapi.json
     status: 404
   - url: https://api.voltus.co/swagger.json
@@ -265,6 +275,30 @@ probes:
   - url: https://api.github.com/orgs/voltus
     status: 200
     note: 'GitHub org "Voltus", blog https://voltus.co, created 2014-10-20, 1 public repo (voltus/postgres-docker). No SDKs or spec repo published.'
+  - url: https://api.voltus.co/assets/js/*.js
+    status: 200
+    note: >-
+      Docusaurus OpenAPI plugin chunks. Each carries the operation object
+      base64+zlib encoded; all ten were decompressed into openapi/voltus-openapi.yml
+      on 2026-07-27.
+  - url: https://sandbox.voltus.co/2022-04-15/scenarios
+    status: 405
+    note: >-
+      GET returns Method Not Allowed, so the POST-only sandbox scenario endpoint
+      exists. It is not in the published API reference; it is documented only in
+      the Marimo integration-test notebook.
+  - url: https://github.com/voltusdev
+    status: 200
+    note: >-
+      The real Voltus developer GitHub org (10 repos) — distinct from
+      github.com/voltus found in round 1. Holds voltusdev/voltus-api-examples,
+      the first-party Python examples the tutorials link to. Still no SDK.
+  - url: https://voltus.statuspage.io
+    status: 200
+    note: Redirects to Atlassian marketing — not provisioned. Voltus has no status page.
+  - url: https://cashdash.voltus.co
+    status: 200
+    note: Cash Dash customer portal (JS app login surface).
 sources:
 - url: https://api.voltus.co/docs/
   type: DeveloperPortal

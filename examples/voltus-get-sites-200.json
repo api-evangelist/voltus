@@ -1,0 +1,8 @@
+{
+  "sites": [
+    { "name": "Site 1", "id": "asdf", "customer_location_id": "" },
+    { "name": "Site 2", "id": "lkjh", "customer_location_id": "" }
+  ],
+  "page": 0,
+  "perPage": 0
+}

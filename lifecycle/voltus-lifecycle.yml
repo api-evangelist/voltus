@@ -1,0 +1,78 @@
+generated: '2026-07-27'
+method: searched
+source: https://api.voltus.co/docs/openapi/voltus-api-reference
+description: >-
+  Voltus versions by date in the URI path and communicates change through a
+  dated, RSS/Atom-published changelog. It publishes no formal deprecation policy,
+  no SLA and no public status page - but it does ship real, dated deprecation
+  notices with a named replacement field, and it has retired an auth mechanism
+  and a whole API version in public.
+versioning:
+  scheme: date-in-uri-path
+  current: '2022-04-15'
+  current_base_url: https://api.voltus.co/2022-04-15
+  previous: ['2020-12-30']
+  latest_redirect: api.voltus.co always redirects to the latest version.
+  docs: https://api.voltus.co/docs/openapi/voltus-api-reference
+  breaking_changes_in_current:
+    - Renamed "Facilities" to "Sites"
+    - Entity IDs are now strings instead of ints
+    - New authorization header X-Voltus-API-Key
+    - 'Removed support for Authorization: Bearer header'
+deprecation:
+  policy_url: null
+  policy_published: false
+  sunset_header: false
+  deprecation_header: false
+  notices:
+    - item: dispatches.sites[n].drop_by
+      kind: field
+      announced: '2023-12-13'
+      url: https://api.voltus.co/docs/changelog/deprecated-field-drop-by
+      replacement: dispatches.sites[n].commitment
+      status: still served
+      note: >-
+        Announced deprecated in December 2023; the field is still present in the
+        published schema and still returned by the sandbox (verified 2026-07-27),
+        carrying the same value as commitment. No sunset date was given.
+    - item: 'Authorization: Bearer'
+      kind: authentication scheme
+      announced: '2022-04-15'
+      url: https://api.voltus.co/docs/openapi/voltus-api-reference
+      replacement: 'X-Voltus-API-Key header'
+      status: removed
+    - item: test key "secret" on api.voltus.co
+      kind: credential
+      announced: '2023-11-21'
+      url: https://api.voltus.co/docs/changelog/test-key-moved-to-sandbox-environment
+      replacement: same key against sandbox.voltus.co
+      status: removed
+  deprecated_operations: []
+support_windows:
+  note: >-
+    No published support window for the 2020-12-30 version. Voltus states only
+    that the current version is 2022-04-15 and lists the previous version.
+sla:
+  url: null
+  uptime_target: null
+  note: No public SLA or uptime commitment is published for the API.
+status_page: null
+status_page_note: >-
+  No status page exists. status.voltus.co does not resolve and voltus.statuspage.io
+  is not provisioned (it redirects to Atlassian's marketing site) - probed 2026-07-27.
+change_communication:
+  changelog: https://api.voltus.co/docs/changelog
+  rss: https://api.voltus.co/docs/changelog/rss.xml
+  atom: https://api.voltus.co/docs/changelog/atom.xml
+  cadence: irregular; 17 entries between 2023-10-11 and 2026-07-01
+  see: changelog/voltus-changelog.yml
+onboarding_lifecycle:
+  docs: https://api.voltus.co/docs/concepts/start-earning-with-voltus
+  stages:
+    - Signed Letter of Authorization and utility bill per site
+    - Kick-off meeting
+    - Software integration (REST or OpenADR 2.0a) against the sandbox
+    - Sandbox integration test suite must pass
+    - Production integration test (self-scheduled test dispatch)
+    - Per-site production dispatch verification
+    - Market registration

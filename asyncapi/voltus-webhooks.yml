@@ -1,0 +1,69 @@
+generated: '2026-07-27'
+method: searched
+source: https://api.voltus.co/docs/openapi/webhooks
+docs:
+  - https://api.voltus.co/docs/openapi/webhooks
+  - https://github.com/voltusdev/voltus-api-examples/blob/main/webhooks/webhook-server.py
+spec_type: none
+asyncapi_published: false
+description: >-
+  Voltus publishes no AsyncAPI document, but it does run a real webhook surface:
+  partners register an HTTPS callback and Voltus pushes dispatch notifications
+  instead of the partner polling GET /dispatches. Only two events exist. The
+  payload shape below is taken verbatim from Voltus's own first-party example
+  listener, and the registration/fixture shapes from the harvested OpenAPI and a
+  live sandbox call. Nothing here is inferred beyond what Voltus publishes.
+transport: https
+subscribe_direction: Voltus -> partner (HTTP POST to the registered url)
+registration:
+  create: {operationId: 'voltus#post-webhook', method: POST, path: /2022-04-15/webhooks}
+  list: {operationId: 'voltus#get-webhooks', method: GET, path: /2022-04-15/webhooks}
+  delete: {operationId: 'voltus#delete-webhook', method: DELETE, path: '/2022-04-15/webhooks/{id}', note: 'Permanently deletes a webhook. It cannot be undone.'}
+  request_body:
+    url: URL that this webhook will send requests to
+    events: 'List of events that will be posted to this webhook. Currently only dispatch.create and dispatch.update are supported.'
+events:
+  - name: dispatch.create
+    description: A new grid dispatch has been issued for one or more of your sites.
+    payload: {event: {name: dispatch.create}, resource: '<path of the dispatch resource>'}
+    consumer_action: >-
+      GET the `resource` path to retrieve the full dispatch, then signal the
+      listed sites to curtail to their `commitment` by `start_time`.
+  - name: dispatch.update
+    description: >-
+      An existing dispatch changed - start_time or end_time moved (earlier or
+      later), the dispatch was cancelled (authorized=false), or another field was
+      revised. modification_number increments on each update.
+    payload: {event: {name: dispatch.update}, resource: '<path of the dispatch resource>'}
+    consumer_action: >-
+      Re-fetch the dispatch. If end_time is in the past or authorized is false,
+      treat it as a cancellation and ramp the sites back up.
+payload_contract:
+  fields:
+    event.name: The event name (dispatch.create or dispatch.update).
+    resource: >-
+      Relative path of the changed resource, to be joined onto the API base URL
+      and re-fetched with your API key. The event carries a pointer, not the
+      dispatch body.
+  handshake: >-
+    Voltus's example listener answers 200 "Hello webhook!" when both
+    event.name and resource are empty strings - a registration/liveness ping.
+delivery:
+  guarantee: at-least-once
+  evidence: >-
+    Voltus's example handler warns, for both create and update, that the callback
+    "could get called twice if the first time you return a non-200 response".
+  ack: Respond 2xx. A non-2xx response causes redelivery.
+  retry_policy: not published
+  signing: none documented (no signature header, no shared secret in the create-webhook body)
+  ordering: not guaranteed; use dispatch id + modification_number to detect stale updates
+alternatives:
+  polling: 'GET /2022-04-15/dispatches - the poll-based integration Voltus documents first'
+  openadr: >-
+    OpenADR 2.0a Simple HTTP PULL against the VTN
+    (https://openadr.voltus.co/vtn/YOUR_VEN_ID/OpenADR2/Simple/EiEvent), polled
+    on a recommended 1-minute cadence, acknowledged with oadrCreatedEvent. This
+    is the standards-based equivalent of the webhook/poll surface.
+sandbox:
+  example: examples/voltus-get-webhooks-200.json
+  note: The public sandbox returns a fixture webhook registered for both events.

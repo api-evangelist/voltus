@@ -1,0 +1,40 @@
+generated: '2026-07-27'
+method: searched
+source: live probes, 2026-07-27
+description: >-
+  Voltus publishes no /.well-known/ discovery surface at all. Every candidate
+  document was probed on both the marketing host and the API host and every one
+  404s. Recorded as evidence of absence - no pointer is wired into apis.yml
+  because there is nothing to point at.
+hosts:
+  - https://www.voltus.co
+  - https://api.voltus.co
+  - https://sandbox.voltus.co
+documents: []
+probes:
+  - {url: 'https://api.voltus.co/.well-known/security.txt', status: 404}
+  - {url: 'https://www.voltus.co/.well-known/security.txt', status: 404}
+  - {url: 'https://voltus.co/.well-known/security.txt', status: 404}
+  - {url: 'https://www.voltus.co/security.txt', status: 404}
+  - {url: 'https://api.voltus.co/.well-known/openid-configuration', status: 404}
+  - {url: 'https://voltus.co/.well-known/openid-configuration', status: 404}
+  - {url: 'https://api.voltus.co/.well-known/oauth-authorization-server', status: 404}
+  - {url: 'https://api.voltus.co/.well-known/api-catalog', status: 404}
+  - {url: 'https://api.voltus.co/.well-known/ai-plugin.json', status: 404}
+  - {url: 'https://api.voltus.co/llms.txt', status: 404}
+  - {url: 'https://api.voltus.co/docs/llms.txt', status: 500}
+spec_probes:
+  note: Contract-discovery probes run against every host before concluding no downloadable spec is served.
+  results:
+    - {url: 'https://api.voltus.co/openapi.json', status: 404}
+    - {url: 'https://api.voltus.co/docs/openapi.json', status: 500}
+    - {url: 'https://api.voltus.co/swagger.json', status: 404}
+    - {url: 'https://api.voltus.co/openapi3.yaml', status: 404}
+    - {url: 'https://api.voltus.co/redoc', status: 404}
+    - {url: 'https://sandbox.voltus.co/openapi.json', status: 400}
+    - {url: 'https://sandbox.voltus.co/swagger.json', status: 400}
+    - {url: 'https://sandbox.voltus.co/2022-04-15/openapi.json', status: 400}
+  outcome: >-
+    No spec is served, but the real OpenAPI operation objects were recovered from
+    the portal's own build output and saved to openapi/voltus-openapi.yml.
+    See that file's header for the extraction method.

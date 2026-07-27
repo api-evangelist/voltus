@@ -1,0 +1,84 @@
+generated: '2026-07-27'
+method: searched
+source: https://api.voltus.co/docs/openapi/voltus-api-reference
+derived_from: openapi/voltus-openapi.yml
+description: >-
+  Cross-cutting request/response semantics for the Voltus REST API, read from
+  the published API reference and confirmed against the harvested OpenAPI and
+  live sandbox/production responses.
+authentication:
+  style: api-key
+  header: X-Voltus-API-Key
+  issuance: Keys are issued by your Voltus account manager; there is no self-serve key creation.
+  removed: 'Authorization: Bearer was supported before 2022-04-15 and has been removed.'
+  sandbox_key: 'secret (public, sandbox.voltus.co only)'
+  see: authentication/voltus-authentication.yml
+versioning:
+  scheme: date-in-uri-path
+  current: '2022-04-15'
+  base_url: https://api.voltus.co/2022-04-15
+  previous: ['2020-12-30']
+  behaviour: api.voltus.co always redirects to the latest version.
+  see: lifecycle/voltus-lifecycle.yml
+idempotency:
+  supported: false
+  request_key_header: null
+  note: >-
+    Voltus documents no idempotency key and the OpenAPI declares no
+    Idempotency-Key parameter. The obligation is inverted onto the consumer:
+    Voltus's own webhook example warns a callback "could get called twice if the
+    first time you return a non-200 response", so dispatch.create/dispatch.update
+    handling must be idempotent on the partner side. Dispatch identity is the
+    dispatch `id` plus `modification_number` (a monotonically increasing update
+    counter), which is the de-duplication key Voltus actually gives you.
+pagination:
+  style: none-yet
+  response_fields: [page, perPage]
+  note: >-
+    List responses (sites, dispatches, webhooks) carry `page` and `perPage`, both
+    documented verbatim as "Reserved for future use, should ignore for now." Live
+    sandbox responses return 0 for both. No page/limit/cursor request parameters
+    exist.
+filtering:
+  - operationId: voltus#get-telemetry-kw
+    parameters: [start_time, end_time, interval_seconds, site_id]
+    note: >-
+      site_id repeats for multiple sites (max 10). interval_seconds is an enum:
+      30, 60, 300, 900, 1800, 3600, 21600. Times are RFC 3339 and must be aligned
+      to 30 seconds; start_time is exclusive, end_time inclusive.
+time:
+  format: RFC 3339
+  alignment: 30-second alignment required on telemetry interval bounds
+  interval_native: 30 seconds
+  timezone: UTC on the wire; program objects carry their market timezone (e.g. US/Central)
+error_envelope:
+  shape: {message: string, type: string}
+  media_type: application/json
+  rfc9457: false
+  type_values: [Bad Request, Unauthorized, Content Too Large, Internal Server Error, Too Many Requests, Not Found]
+  note: >-
+    `type` mirrors the HTTP status phrase rather than a URI, so this is a
+    conventional-HTTP-status error model, not RFC 9457 problem+json.
+  see: errors/voltus-problem-types.yml
+rate_limit_signalling:
+  headers: [x-ratelimit-limit, x-ratelimit-remaining, x-ratelimit-reset]
+  documented: false
+  see: rate-limits/voltus-rate-limits.yml
+request_tracing:
+  request_id_header: none observed
+  note: >-
+    No request-id/correlation header is documented or returned. For OpenADR,
+    the VEN supplies its own requestID in the oadrRequestEvent payload.
+events:
+  push: webhooks (dispatch.create, dispatch.update)
+  pull: 'GET /2022-04-15/dispatches polling (1-minute cadence recommended for OpenADR VENs)'
+  see: asyncapi/voltus-webhooks.yml
+media_types:
+  request: application/json (application/xml for the OpenADR 2.0a VTN)
+  response: application/json (application/xml for the OpenADR 2.0a VTN)
+identifiers:
+  style: short opaque strings
+  note: >-
+    Entity ids are strings (they were integers before the 2022-04-15 version).
+    Examples in the reference are 4-5 character tokens (xv1w4, wpv31, asd8f).
+    program.id is an integer and is stable.

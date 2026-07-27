@@ -25,7 +25,10 @@ description: >-
   publishes no open grid or market data of its own, so consumer/site energy data
   is available under contract while market data is closed. No downloadable
   OpenAPI or Swagger document is served — /openapi.json, /swagger.json and
-  /openapi3.yaml all 404.
+  /openapi3.yaml all 404 — but the portal is built with the Docusaurus OpenAPI
+  plugin, and the real operation objects (parameters, request bodies, response
+  schemas, examples) were recovered verbatim from the published build and
+  assembled into openapi/voltus-openapi.yml: 10 operations across 8 paths.
 image: https://api.voltus.co/img/voltus.png
 tags:
 - Energy
@@ -50,10 +53,12 @@ apis:
     Grid dispatch events for enrolled sites — list dispatches, retrieve a single
     dispatch by ID, and create a test dispatch. Documented operations are GET
     /dispatches ("Returns a list of dispatches."), POST /dispatches ("Creates a
-    test dispatch.") and GET /dispatch ("Retrieves the dispatch with the given
-    ID."). Dispatch objects carry program, market (e.g. MISO), program_type,
-    start/end time, modification number and per-site drop_by and commitment
-    values. Verified live against the public sandbox.
+    test dispatch.") and GET /dispatches/{id} ("Retrieves the dispatch with the
+    given ID."). Dispatch objects carry program, market (e.g. MISO),
+    program_type, start/end time, modification_number, optional metadata and
+    per-site drop_by (deprecated) and commitment values. Verified live against
+    the public sandbox, with the full operation contracts harvested into
+    openapi/voltus-openapi.yml.
   humanURL: https://api.voltus.co/docs/openapi/dispatches
   baseURL: https://api.voltus.co/2022-04-15
   tags:
@@ -77,6 +82,16 @@ apis:
     url: https://api.voltus.co/docs/openapi/voltus-api-reference
   - type: ChangeLog
     url: https://api.voltus.co/docs/changelog
+  - type: OpenAPI
+    url: openapi/voltus-openapi.yml
+  - type: Examples
+    url: examples/voltus-get-dispatches-200.json
+  - type: Arazzo
+    name: Poll dispatches and curtail enrolled sites
+    url: arazzo/voltus-poll-dispatches-and-curtail.yml
+  - type: AgentSkill
+    name: Receive and act on Voltus grid dispatches
+    url: skills/voltus-dispatch-integration.md
 - aid: voltus:voltus-sites-api
   name: Voltus Sites API
   description: >-
@@ -100,6 +115,12 @@ apis:
     url: https://api.voltus.co/docs/concepts/public-credentials
   - type: ChangeLog
     url: https://api.voltus.co/docs/changelog/meter-asset-type
+  - type: OpenAPI
+    url: openapi/voltus-openapi.yml
+  - type: Examples
+    url: examples/voltus-get-sites-200.json
+  - type: DataModel
+    url: data-model/voltus-data-model.yml
 - aid: voltus:voltus-telemetry-api
   name: Voltus Telemetry API
   description: >-
@@ -129,6 +150,16 @@ apis:
     url: https://api.voltus.co/docs/concepts/public-credentials
   - type: ChangeLog
     url: https://api.voltus.co/docs/changelog/telemetry-controllable-load
+  - type: OpenAPI
+    url: openapi/voltus-openapi.yml
+  - type: RateLimits
+    url: rate-limits/voltus-rate-limits.yml
+  - type: Arazzo
+    name: Report telemetry and read it back
+    url: arazzo/voltus-report-and-read-telemetry.yml
+  - type: AgentSkill
+    name: Report and read Voltus site telemetry
+    url: skills/voltus-telemetry-reporting.md
 - aid: voltus:voltus-webhooks-api
   name: Voltus Webhooks API
   description: >-
@@ -149,6 +180,18 @@ apis:
     url: https://api.voltus.co/docs/openapi/webhooks
   - type: Documentation
     url: https://api.voltus.co/docs/tutorials/create-a-dispatch-integration
+  - type: OpenAPI
+    url: openapi/voltus-openapi.yml
+  - type: Webhooks
+    url: asyncapi/voltus-webhooks.yml
+  - type: Examples
+    url: examples/voltus-dispatch-webhook-payload.json
+  - type: Arazzo
+    name: Register a dispatch webhook and verify it
+    url: arazzo/voltus-register-webhook-and-verify.yml
+  - type: AgentSkill
+    name: Register a Voltus webhook and handle dispatch callbacks
+    url: skills/voltus-webhook-dispatch-listener.md
 - aid: voltus:voltus-openadr-vtn
   name: Voltus OpenADR 2.0a VTN
   description: >-
@@ -175,7 +218,17 @@ apis:
     url: https://api.voltus.co/docs/tutorials/openadr
   - type: ChangeLog
     url: https://api.voltus.co/docs/changelog/sandbox-openadr-support
+  - type: Authentication
+    url: authentication/voltus-authentication.yml
+  - type: Conformance
+    url: conformance/voltus-conformance.yml
 common:
+- type: AgenticAccess
+  url: agentic-access/voltus-agentic-access.yml
+- type: DomainSecurity
+  url: security/voltus-domain-security.yml
+- type: Authentication
+  url: authentication/voltus-authentication.yml
 - type: Website
   url: https://www.voltus.co/
 - type: DeveloperPortal
@@ -206,6 +259,56 @@ common:
   url: https://github.com/voltus
 - type: LinkedIn
   url: https://www.linkedin.com/company/voltus-inc./
+- type: OpenAPI
+  url: openapi/voltus-openapi.yml
+  name: Voltus API (harvested from the developer portal build)
+- type: Overlay
+  url: overlays/voltus-openapi-overlay.yaml
+- type: Examples
+  url: examples/voltus-examples.yml
+- type: Conventions
+  url: conventions/voltus-conventions.yml
+- type: ErrorCatalog
+  url: errors/voltus-problem-types.yml
+- type: RateLimits
+  url: rate-limits/voltus-rate-limits.yml
+- type: Sandbox
+  url: sandbox/voltus-sandbox.yml
+  name: Sandbox and test-data profile
+- type: Lifecycle
+  url: lifecycle/voltus-lifecycle.yml
+- type: Deprecation
+  url: https://api.voltus.co/docs/changelog/deprecated-field-drop-by
+  name: Published deprecation notice (drop_by superseded by commitment)
+- type: ChangeLog
+  url: changelog/voltus-changelog.yml
+  name: Structured changelog
+- type: Conformance
+  url: conformance/voltus-conformance.yml
+- type: Webhooks
+  url: asyncapi/voltus-webhooks.yml
+- type: DataModel
+  url: data-model/voltus-data-model.yml
+- type: Packages
+  url: packages/voltus-packages.yml
+- type: LLMsTxt
+  url: llms/voltus-llms.txt
+- type: AgentSkill
+  url: skills/_index.yml
+  name: Voltus agent skills
+- type: Arazzo
+  url: arazzo/_index.yml
+  name: Voltus workflow catalog
+- type: SourceCode
+  url: https://github.com/voltusdev/voltus-api-examples
+  name: Voltus API examples (Python)
+- type: GitHubOrganization
+  url: https://github.com/voltusdev
+- type: Login
+  url: https://cashdash.voltus.co/
+  name: Cash Dash customer portal
+- type: Twitter
+  url: https://twitter.com/voltusinc
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com

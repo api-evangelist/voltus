@@ -1,0 +1,71 @@
+generated: '2026-07-27'
+method: searched
+source: openapi/voltus-openapi.yml
+docs: https://api.voltus.co/docs/openapi/voltus-api-reference
+description: >-
+  Voltus authenticates the REST API with a single static API key in a custom
+  header, and the OpenADR 2.0a VTN with mutual TLS. There is no OAuth, no OpenID
+  Connect, no scopes and no self-serve key issuance - keys come from a Voltus
+  account manager and are entitled to specific sites. A public sandbox key is
+  published in the docs and works, anonymously, against sandbox.voltus.co only.
+summary:
+  types:
+  - apiKey
+  - mutualTLS
+  api_key_in:
+  - header
+  oauth2_flows: []
+  scopes: none
+schemes:
+- name: X-Voltus-API-Key
+  type: apiKey
+  in: header
+  parameter: X-Voltus-API-Key
+  sources:
+  - openapi/voltus-openapi.yml
+  docs: https://api.voltus.co/docs/openapi/voltus-api-reference
+  description: >-
+    "The API uses API key authentication. API keys are provided by your account
+    manager. Each request must include an X-Voltus-API-Key header where the value
+    is your API key." Applied globally - every one of the ten published
+    operations also declares X-Voltus-API-Key as a required header parameter.
+  issuance: Voltus account manager, after a commercial agreement.
+  scoping: >-
+    Production keys are configured for specific sites; contact Voltus support to
+    add or remove sites from a key.
+  environments:
+  - {name: production, base_url: 'https://api.voltus.co/2022-04-15', key: issued by Voltus}
+  - {name: sandbox-public, base_url: 'https://sandbox.voltus.co/2022-04-15', key: secret, published: true, published_at: 'https://api.voltus.co/docs/concepts/public-credentials'}
+  - {name: sandbox-keyed, base_url: 'https://sandbox.voltus.co/2022-04-15', key: issued by Voltus, note: 'required for the POST /scenarios dispatch simulations'}
+- name: OpenADR mutual TLS
+  type: mutualTLS
+  sources:
+  - https://api.voltus.co/docs/tutorials/openadr
+  docs: https://api.voltus.co/docs/concepts/openadr
+  description: >-
+    The OpenADR 2.0a VTN authenticates VENs with mutual TLS. The partner emails
+    an X.509 Certificate Signing Request to api-support@voltus.co with Common
+    Name YOUR_VEN_ID@openadr.voltus.co; Voltus returns a signed client
+    certificate (encrypted zip plus a one-time password link) that the VEN
+    presents on every request.
+  endpoints:
+  - https://openadr.voltus.co/vtn/YOUR_VEN_ID/OpenADR2/Simple/EiEvent
+  - https://openadr-sandbox.voltus.co/vtn/YOUR_VEN_ID/OpenADR2/Simple/EiEvent
+removed_schemes:
+- name: 'Authorization: Bearer'
+  removed_in: '2022-04-15'
+  replacement: X-Voltus-API-Key header
+  source: https://api.voltus.co/docs/openapi/voltus-api-reference
+not_supported:
+  oauth2: true
+  openid_connect: true
+  scopes: true
+  evidence: >-
+    https://voltus.co/.well-known/openid-configuration and
+    https://api.voltus.co/.well-known/openid-configuration both return 404, and
+    /.well-known/oauth-authorization-server returns 404 (probed 2026-07-27).
+    No scopes or permissions reference page exists, so no scopes/ artifact is emitted.
+failure_modes:
+- {status: 400, meaning: header absent, body: '{"message":"\"X-Voltus-API-Key\" is missing from header","type":"Bad Request"}'}
+- {status: 401, meaning: 'key not entitled - what production returns to the public sandbox key', body: '{"message":"Permission denied","type":"Unauthorized"}'}
+- {status: 403, meaning: 'declared in the spec as "Unauthorized: Forbidden response."'}

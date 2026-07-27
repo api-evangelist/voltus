@@ -1,0 +1,25 @@
+generated: '2026-07-27'
+method: generated
+source: openapi/voltus-openapi.yml + https://api.voltus.co/docs/
+note: >-
+  Voltus publishes no AGENTS.md or agent skills of its own (checked across all 84
+  docs pages, 2026-07-27). These are generated from the harvested OpenAPI and the
+  provider's own tutorials; every operationId referenced exists verbatim in
+  openapi/voltus-openapi.yml.
+skills:
+  - file: voltus-dispatch-integration.md
+    name: Receive and act on Voltus grid dispatches
+    api: openapi/voltus-openapi.yml
+    operations: ['voltus#get-sites', 'voltus#get-dispatches', 'voltus#get-dispatch']
+  - file: voltus-webhook-dispatch-listener.md
+    name: Register a Voltus webhook and handle dispatch callbacks
+    api: openapi/voltus-openapi.yml
+    operations: ['voltus#post-webhook', 'voltus#get-webhooks', 'voltus#delete-webhook', 'voltus#get-dispatch']
+  - file: voltus-telemetry-reporting.md
+    name: Report and read Voltus site telemetry
+    api: openapi/voltus-openapi.yml
+    operations: ['voltus#get-sites', 'voltus#post-telemetry', 'voltus#post-controllable-load', 'voltus#get-telemetry-kw']
+  - file: voltus-sandbox-certification.md
+    name: Certify a Voltus integration through the sandbox
+    api: openapi/voltus-openapi.yml
+    operations: ['voltus#get-dispatches', 'voltus#get-dispatch', 'voltus#post-dispatch']
