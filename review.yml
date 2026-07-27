@@ -1,0 +1,299 @@
+aid: voltus
+name: Voltus
+review:
+  question: >-
+    Does Voltus operate under an energy consumer-data mandate, and does it expose
+    a real, documented, reachable public API surface?
+  answer: >-
+    No mandate applies; yes to a real public API surface. Voltus is a curtailment
+    service provider / VPP aggregator, not a utility or metering data holder, so
+    Green Button, the Consumer Data Right and smart-meter data mandates do not
+    reach it. It nevertheless runs one of the better developer portals in the
+    energy sector, with an anonymous working sandbox, while production stays
+    behind a commercial partnership.
+  date: '2026-07-27'
+  reviewer: API Evangelist
+  homeMarket: United States
+mandate:
+  regime: none
+  regimeNote: >-
+    No consumer energy-data obligation applies to Voltus. It is a demand-response
+    aggregator (curtailment service provider) registered in wholesale markets,
+    not a distribution utility, retailer or metering data holder. Green Button /
+    ESPI obligations in the United States are voluntary and attach to utilities,
+    not to aggregators. Ontario's Green Button regulation (O. Reg. 633/21) binds
+    Ontario utilities; Voltus participates in the IESO market as a market
+    participant, which is a market-participation obligation and not a data right.
+    Australia's CDR energy rules and UK DCC smart-meter infrastructure are both
+    out of scope for a US aggregator.
+  status: not-applicable
+  statusNote: >-
+    Recorded as not-applicable rather than none because the distinction matters:
+    there is no obligation that Voltus is failing to implement — there is simply
+    no obligation. No CDR register entry, no Green Button register/Alliance
+    listing, and no ESPI base URI were sought or found for Voltus, and none would
+    be expected. The regulated obligations Voltus does carry (ISO/RTO tariff
+    registration, telemetry and measurement-and-verification requirements in
+    AESO, CAISO, ERCOT, IESO, ISO-NE, MISO, NYISO, PJM and SPP; FERC Order 2222
+    DER aggregation participation) are market-participation rules, not consumer
+    data rights, and are deliberately NOT counted as a data mandate here.
+  claimsVsImplementation: >-
+    Voltus makes no data-mandate compliance claim on its public site, so there is
+    nothing to disprove. What it does claim — a public sandbox, OpenADR 2.0a
+    support, and REST dispatch/telemetry APIs — was verified by live HTTP calls
+    rather than taken from marketing copy. See probes[] below.
+dataStandard:
+  implemented: OpenADR 2.0a (Simple HTTP PULL profile), plus a proprietary versioned REST API
+  detail: >-
+    Voltus states verbatim that it "supports OpenADR2.0a via Simple HTTP (PULL)"
+    and that "Voltus provides a VTN, and our partners run one or more VENs".
+    Partners poll
+    https://openadr.voltus.co/vtn/YOUR_VEN_ID/OpenADR2/Simple/EiEvent and reply
+    with an oadrCreatedEvent. This is the only recognised open standard in the
+    stack. Everything else — sites, dispatches, telemetry, webhooks — is a
+    Voltus-proprietary REST shape, date-versioned as /2022-04-15.
+  notFound:
+  - Green Button / NAESB ESPI — no reference anywhere on voltus.co or api.voltus.co
+  - Consumer Data Standards (energy) — not applicable, no reference
+  - IEEE 2030.5 (SEP2) — no reference found
+  - IEC CIM 61968/61970 — no reference found
+  - OCPP / OCPI (EV charging) — no reference found, despite Voltus enrolling EV/transportation load
+consumerVsMarketData:
+  consumer_data_api: true
+  consumerDetail: >-
+    Qualified yes. Voltus exposes individual site-level electricity usage through
+    a documented API — GET /telemetry/kw returns interval readings for up to 10
+    sites per request over up to a 90-day window (10,000 data points per site),
+    and GET /sites returns the enrolled facilities and their meters. This is real
+    customer energy-usage data reachable over an API by a party other than the
+    end customer (a channel partner, OEM or DER owner acting for that customer).
+    But it is NOT a consumer data right: it is account-scoped to whatever the
+    Voltus-issued API key is entitled to, consent is obtained out of band via a
+    signed Letter of Authorization per site plus a commercial agreement, and
+    there is no accreditation scheme, no consent dashboard API, and no
+    standards-conformant (Green Button / CDR) representation of the data. It is
+    platform data under contract, not mandated data under a right.
+  market_data_open: false
+  marketDetail: >-
+    Voltus publishes no open grid, market or system data. Nothing on voltus.co or
+    api.voltus.co returns market data anonymously. The only anonymously reachable
+    endpoint is the sandbox, and the sandbox serves fixed synthetic fixtures
+    (sites "Site 1"/"Site 2" with ids "asdf"/"lkjh"; a canned MISO Operating
+    Reserves dispatch), not live market data. Voltus consumes ISO/RTO market data
+    from AESO, CAISO, ERCOT, IESO, ISO-NE, MISO, NYISO, PJM and SPP; it does not
+    republish any of it openly. Reports at voltus.co/reports are marketing
+    downloads, not data feeds.
+  theSplit: >-
+    Voltus inverts the utility pattern. A typical US utility has a compliance
+    consumer-data story and no product API; Voltus has a genuinely good product
+    API carrying customer-level energy data and zero open market data. The
+    openness is at the WRONG end for a data-rights analysis: the docs and sandbox
+    are wide open, the data behind them is entirely commercial.
+accessGate:
+  gate: partner-only
+  gated: true
+  whatADeveloperMustDo: >-
+    To read the docs and call the sandbox: nothing. api.voltus.co/docs is a
+    public Docusaurus portal with no login, and
+    api.voltus.co/docs/concepts/public-credentials publishes working credentials
+    — base URL https://sandbox.voltus.co with header "X-Voltus-API-Key: secret".
+    That was confirmed live: GET https://sandbox.voltus.co/2022-04-15/sites
+    returned HTTP 200 with a JSON site list, and
+    /2022-04-15/dispatches returned HTTP 200 with a canned MISO dispatch. The
+    Voltus developer page states "You will not require an API key" for the
+    sandbox and that you can "Get started with real sample code, even before the
+    partnership agreement is signed".
+    To reach production: a commercial relationship. GET
+    https://api.voltus.co/2022-04-15/sites with no header returned HTTP 400
+    ("X-Voltus-API-Key is missing from header"); with the published sandbox key
+    it returned HTTP 401 ("Permission denied"). There is no self-serve signup,
+    no developer account creation, and no pricing page for the API. The
+    onboarding path documented at
+    api.voltus.co/docs/concepts/start-earning-with-voltus is: Voltus "obtains a
+    signed Letter of Authorization and utility bill for each site", a kick-off
+    meeting, software integration (REST or OpenADR 2.0a), a verification
+    dispatch, then market registration. Production keys are issued by Voltus.
+    Support is api-support@voltus.co.
+  selfServeSandbox: true
+  productionSelfServe: false
+authModel:
+  production:
+  - scheme: API key in a custom header
+    header: X-Voltus-API-Key
+    baseURL: https://api.voltus.co/2022-04-15
+    note: >-
+      The reference states the current version is "api.voltus.co/2022-04-15" and
+      that the 2022-04-15 version introduced the "New Authorization header
+      X-Voltus-API-Key" and "Removed support for Authorization: Bearer header".
+      Previous version listed: api.voltus.co/2020-12-30.
+  - scheme: Mutual TLS (client certificate)
+    endpoint: https://openadr.voltus.co/vtn/YOUR_VEN_ID/OpenADR2/Simple/EiEvent
+    note: >-
+      For the OpenADR 2.0a VTN the partner sends Voltus a Certificate Signing
+      Request and includes the returned client certificate with every request.
+  sandbox:
+  - scheme: API key in a custom header, published publicly
+    header: 'X-Voltus-API-Key: secret'
+    baseURL: https://sandbox.voltus.co
+  oauth:
+    openidConfiguration: >-
+      https://voltus.co/.well-known/openid-configuration returned HTTP 404 and
+      https://api.voltus.co/.well-known/openid-configuration returned HTTP 404.
+      No OAuth2 or OpenID Connect surface is published.
+  rateLimits: >-
+    Not documented as a page, but observed live in response headers:
+    x-ratelimit-limit 301 on api.voltus.co and 101 on sandbox.voltus.co, with
+    x-ratelimit-remaining and x-ratelimit-reset.
+downloadableContracts:
+  openapiHarvested: false
+  specsCount: 0
+  finding: >-
+    Voltus generates its API reference from an OpenAPI document — the docs bundle
+    references the build-time source path "src/openapi3.yaml" and the reference
+    pages are produced by the Docusaurus OpenAPI plugin — but no machine-readable
+    contract is served anywhere. Every candidate path 404s (see probes[]).
+    Nothing was written to openapi/ because nothing real was retrievable; the
+    endpoint inventory below was taken verbatim from the site's own generated
+    sidebar/route data rather than reconstructed into a spec, so that no invented
+    schema enters the record.
+  endpointsDocumented:
+  - GET /dispatches — "Returns a list of dispatches."
+  - POST /dispatches — "Creates a test dispatch."
+  - GET /dispatch — "Retrieves the dispatch with the given ID."
+  - GET /sites — "Returns a list of your sites."
+  - POST /telemetry
+  - POST /telemetry/controllable-load — "Posts controllable load."
+  - GET /telemetry/kw — "Returns a list of telemetry readings for one or more sites. The maximum number of sites per request is 10. The maximum request interval is 90 days, with a limit of 10,000 total data points per site."
+  - GET /webhooks — "Returns a list of all webhooks that have been created."
+  - POST /webhooks
+  - DELETE /webhooks/{id} — "Permanently deletes a webhook. It cannot be undone."
+probes:
+  date: '2026-07-27'
+  results:
+  - url: https://voltus.co
+    status: 200
+    note: Redirects to https://www.voltus.co/
+  - url: https://www.voltus.co/about
+    status: 200
+    note: 'HQ 2443 Fillmore Street, #380-3427 San Francisco, CA 94115; "8.5 GW of distributed energy resources", "22,000+ sites", nine North American markets.'
+  - url: https://www.voltus.co/developers/api
+    status: 200
+    note: Public developer landing page; "You will not require an API key" for the sandbox.
+  - url: https://www.voltus.co/technology
+    status: 200
+    note: Voltapp, AI Adjuster, Cash Dash, 30-second interval data. No standards named.
+  - url: https://api.voltus.co
+    status: 200
+    note: Redirects to /docs — Docusaurus v3.9.2 "Voltus API Portal". This is the real developer portal.
+  - url: https://api.voltus.co/docs/
+    status: 200
+    note: Portal index; support contact api-support@voltus.co.
+  - url: https://api.voltus.co/docs/openapi/voltus-api-reference
+    status: 200
+    note: 'Current version api.voltus.co/2022-04-15; header X-Voltus-API-Key; Bearer removed; previous version api.voltus.co/2020-12-30.'
+  - url: https://api.voltus.co/docs/concepts/public-credentials
+    status: 200
+    note: 'Publishes working sandbox credentials: https://sandbox.voltus.co with "X-Voltus-API-Key: secret".'
+  - url: https://api.voltus.co/docs/concepts/openadr
+    status: 200
+    note: OpenADR 2.0a Simple HTTP PULL, Voltus is the VTN, partners run VENs, mTLS via CSR.
+  - url: https://api.voltus.co/docs/concepts/start-earning-with-voltus
+    status: 200
+    note: Signed Letter of Authorization and utility bill per site; kick-off; integration; verification dispatch; market registration.
+  - url: https://api.voltus.co/docs/changelog
+    status: 200
+    note: Live changelog with RSS and Atom feeds; 17 pages of entries.
+  - url: https://api.voltus.co/sitemap.xml
+    status: 200
+    note: 85 doc URLs including 16 /docs/openapi/* reference pages.
+  - url: https://sandbox.voltus.co/2022-04-15/sites
+    status: 200
+    note: 'Called anonymously with the published key. Body: {"sites":[{"name":"Site 1","id":"asdf",...},{"name":"Site 2","id":"lkjh",...}],"page":0,"perPage":0}. x-ratelimit-limit 101.'
+  - url: https://sandbox.voltus.co/2022-04-15/dispatches
+    status: 200
+    note: Returned a canned dispatch on program "MISO - Operating Reserves", program_type ancillary_services, with per-site drop_by and commitment.
+  - url: https://api.voltus.co/2022-04-15/sites
+    status: 400
+    note: 'No auth header: {"message":"\"X-Voltus-API-Key\" is missing from header","type":"Bad Request"}. x-ratelimit-limit 301.'
+  - url: https://api.voltus.co/2022-04-15/sites
+    status: 401
+    note: 'With the public sandbox key: {"message":"Permission denied","type":"Unauthorized"} — production is genuinely gated.'
+  - url: https://openadr.voltus.co
+    status: 000
+    note: Connection could not be established over plain HTTPS; consistent with an mTLS-only VTN endpoint.
+  - url: https://api.voltus.co/openapi.json
+    status: 404
+  - url: https://api.voltus.co/swagger.json
+    status: 404
+  - url: https://api.voltus.co/redoc
+    status: 404
+  - url: https://api.voltus.co/openapi3.yaml
+    status: 404
+    note: Build-time source path "src/openapi3.yaml" appears in the docs JS bundle but is not served.
+  - url: https://api.voltus.co/openapi/openapi3.yaml
+    status: 404
+  - url: https://api.voltus.co/.well-known/openid-configuration
+    status: 404
+  - url: https://voltus.co/.well-known/openid-configuration
+    status: 404
+  - url: https://voltus.co/.well-known/security.txt
+    status: 404
+  - url: https://voltus.co/developers
+    status: 404
+  - url: https://voltus.co/api
+    status: 404
+  - url: https://voltus.co/docs
+    status: 404
+  - url: https://developer.voltus.co
+    status: 000
+    note: Does not resolve.
+  - url: https://developers.voltus.co
+    status: 000
+    note: Does not resolve.
+  - url: https://docs.voltus.co
+    status: 000
+    note: Does not resolve. The portal lives at api.voltus.co/docs instead.
+  - url: https://data.voltus.co
+    status: 000
+    note: Does not resolve. No open-data subdomain.
+  - url: https://status.voltus.co
+    status: 000
+    note: Does not resolve. No public status page found.
+  - url: https://trust.voltus.co
+    status: 000
+    note: Does not resolve. No trust centre found.
+  - url: https://api.github.com/orgs/voltus
+    status: 200
+    note: 'GitHub org "Voltus", blog https://voltus.co, created 2014-10-20, 1 public repo (voltus/postgres-docker). No SDKs or spec repo published.'
+sources:
+- url: https://api.voltus.co/docs/
+  type: DeveloperPortal
+- url: https://api.voltus.co/docs/openapi/voltus-api-reference
+  type: APIReference
+- url: https://api.voltus.co/docs/concepts/public-credentials
+  type: Sandbox
+- url: https://api.voltus.co/docs/concepts/openadr
+  type: Documentation
+- url: https://api.voltus.co/docs/concepts/start-earning-with-voltus
+  type: Documentation
+- url: https://www.voltus.co/developers/api
+  type: Documentation
+- url: https://www.voltus.co/about
+  type: Website
+findings:
+  summary: >-
+    Voltus is the flexibility-layer counter-example in the energy sector. It has
+    no consumer-data mandate of any kind and therefore nothing to comply with,
+    yet it ships a better developer experience than almost any mandated utility:
+    a public portal, tutorials, a changelog with RSS, and a live anonymous
+    sandbox that answers real requests with published credentials. The catch is
+    that the openness stops at the fixture data. Production is partner-only,
+    proven by a 401 from the very key the vendor publishes, and the data behind
+    it — site telemetry, dispatch commitments — reaches partners through a signed
+    Letter of Authorization and a commercial agreement, not through a data right.
+    The one open standard in the stack is OpenADR 2.0a over mutual TLS; there is
+    no Green Button, no ESPI, no CIM, no IEEE 2030.5. And despite consuming nine
+    North American wholesale markets, Voltus republishes none of that data
+    openly. A mandate would have produced a standardised, accredited, consented
+    surface and probably worse docs; the absence of a mandate produced excellent
+    docs and a proprietary, contractual surface.
