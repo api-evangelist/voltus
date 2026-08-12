@@ -223,6 +223,8 @@ apis:
   - type: Conformance
     url: conformance/voltus-conformance.yml
 common:
+- type: MCPServer
+  url: mcp/voltus-mcp.yml
 - type: AgenticAccess
   url: agentic-access/voltus-agentic-access.yml
 - type: DomainSecurity
