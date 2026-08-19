@@ -1,0 +1,338 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Voltus API Reference",
+    "version": "2022-04-15"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-Voltus-API-Key",
+      "value": "{{X-Voltus-API-Key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Dispatches",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "voltus#get-dispatches",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.voltus.co/2022-04-15/dispatches",
+            "headers": [
+              {
+                "name": "X-Voltus-API-Key",
+                "value": "API_KEY"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "X-Voltus-API-Key",
+              "value": "{{X-Voltus-API-Key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Returns a list of dispatches.\n\nBy default, the list dispatches endpoint returns all dispatch events from the previous 24 hours. This endpoint is commonly used to implement a polling pattern to listen for new dispatch notifications.\n\nIf you would like to implement a polling pattern to check for new dispatches, we recommend the following approach:\n\n1. Make requests to this endpoint every 30 seconds in a loop. You may make requests more quickly if you'd like, but if you need very fast response time"
+        },
+        {
+          "info": {
+            "name": "voltus#post-dispatch",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.voltus.co/2022-04-15/dispatches",
+            "headers": [
+              {
+                "name": "X-Voltus-API-Key",
+                "value": "API_KEY"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-Voltus-API-Key",
+              "value": "{{X-Voltus-API-Key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Creates a test dispatch.\n\nCreate a new dispatch object. Upon sending a successful request, a new dispatch object will be persisted. The new dispatch will be returned in the response to `GET /dispatches` for the appropriate time-frame, and will also be available at its ID-specific path. If you have a webhook registered for the `dispatch.create` event type, it will be triggered. This type of dispatch will not trigger any customer communications such as email, SMS, or phone calls.\n\nIf you plan to u"
+        },
+        {
+          "info": {
+            "name": "voltus#get-dispatch",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.voltus.co/2022-04-15/dispatches/:id",
+            "headers": [
+              {
+                "name": "X-Voltus-API-Key",
+                "value": "API_KEY"
+              }
+            ],
+            "params": [
+              {
+                "name": "id",
+                "value": "12345678asdfghjk",
+                "type": "path",
+                "description": "The dispatch ID"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "X-Voltus-API-Key",
+              "value": "{{X-Voltus-API-Key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Retrieves the dispatch with the given ID.\n\nCan be used to explicitly check for the status of an individual dispatch."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Sites",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "voltus#get-sites",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.voltus.co/2022-04-15/sites",
+            "headers": [
+              {
+                "name": "X-Voltus-API-Key",
+                "value": "API_KEY"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "X-Voltus-API-Key",
+              "value": "{{X-Voltus-API-Key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Returns a list of your sites.\n\nThe sites endpoint is important because a given API key will only get dispatch notifications that include sites visible to the account. You should make sure that all expected sites are returned by this endpoint.\n\nSites include `id` and `customer_location_id` fields that can be used to identify sites in a dispatch communication. A site's `name` value may change, and should not be used as a static identifier.\n\nAll sites will be returned in a single request. The value"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Telemetry",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "voltus#post-telemetry",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.voltus.co/2022-04-15/telemetry",
+            "headers": [
+              {
+                "name": "X-Voltus-API-Key",
+                "value": "API_KEY"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-Voltus-API-Key",
+              "value": "{{X-Voltus-API-Key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "This endpoint is intended for bulk-data submission and can receive many telemetry points in the same request. You can also post non-contiguous intervals, intervals for multiple meters, and intervals that have been submitted before, all without issue. We'll handle the de-duplication of double-submitted points, and you can take this into consideration when implementing retry and failure logic.\n\nThere is a limit on the number of telemetry points per request. We recommend keeping requests to 2048 po"
+        },
+        {
+          "info": {
+            "name": "voltus#post-controllable-load",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.voltus.co/2022-04-15/telemetry/controllable-load",
+            "headers": [
+              {
+                "name": "X-Voltus-API-Key",
+                "value": "API_KEY"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-Voltus-API-Key",
+              "value": "{{X-Voltus-API-Key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Posts controllable load.\n\nControllable load is an estimated kW value based on the nameplate energy usage (or actual energy usage) of equipment currently under the control by your integration’s software. Example Use Case: If your software loses network connection to control the equipment, even if the equipment is still running, the value should decrease."
+        },
+        {
+          "info": {
+            "name": "voltus#get-telemetry-kw",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.voltus.co/2022-04-15/telemetry/kw",
+            "headers": [
+              {
+                "name": "X-Voltus-API-Key",
+                "value": "API_KEY"
+              }
+            ],
+            "params": [
+              {
+                "name": "start_time",
+                "value": "",
+                "type": "query",
+                "description": "An RFC3339 compatible string that denotes the beginning (exclusive) of the requested interval. Must be aligned to 30 seconds"
+              },
+              {
+                "name": "end_time",
+                "value": "",
+                "type": "query",
+                "description": "An RFC3339 compatible string that denotes the end (inclusive) of the requested interval. Defaults to 24 hours ahead of start_time if omitted. Must be aligned to 30 seconds."
+              },
+              {
+                "name": "interval_seconds",
+                "value": "1800",
+                "type": "query",
+                "description": "Interval width desired, in seconds. Defaults to 30. Use one of 30, 60, 300, 900, 1800, 3600, 21600."
+              },
+              {
+                "name": "site_id",
+                "value": "xv1w4,yd4g",
+                "type": "query",
+                "description": "ID of a site. For multiple sites, add multiple instances of this parameter."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "X-Voltus-API-Key",
+              "value": "{{X-Voltus-API-Key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Returns a list of telemetry readings for one or more sites. The maximum number of sites per request is 10. The maximum request interval is 90 days, with a limit of 10,000 total data points per site.\n\nThis endpoint returns data that was available at the time of request, if the site's telemetry is delayed recent data may be incomplete. This is particularly important when fetching data for a larger interval. If fetching data for an hour (3600 seconds), we recommend waiting at least 20 minutes in mo"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Webhooks",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "voltus#get-webhooks",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.voltus.co/2022-04-15/webhooks",
+            "headers": [
+              {
+                "name": "X-Voltus-API-Key",
+                "value": "API_KEY"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "X-Voltus-API-Key",
+              "value": "{{X-Voltus-API-Key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Returns a list of all webhooks that have been created.\n\nAll webhooks will be returned in a single request. The values of `page` and `per_page` have been reserved for future use, but should be ignored at present."
+        },
+        {
+          "info": {
+            "name": "voltus#post-webhook",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.voltus.co/2022-04-15/webhooks",
+            "headers": [
+              {
+                "name": "X-Voltus-API-Key",
+                "value": "API_KEY"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-Voltus-API-Key",
+              "value": "{{X-Voltus-API-Key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Create a webhook by providing the events you'd like to listen for, and the URL where you'd like to receive notifications. When a webhook is created, we will send a test request to the provided URL with this payload:\n\n```json\n{\n  \"event\": {\n    \"name\": \"\"\n  },\n  \"resource\": \"\"\n}\n```\n\nYour handler should respond with a 2xx status code. If it does not succeed, the webhook creation request will fail."
+        },
+        {
+          "info": {
+            "name": "voltus#delete-webhook",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.voltus.co/2022-04-15/webhooks/:id",
+            "headers": [
+              {
+                "name": "X-Voltus-API-Key",
+                "value": "API_KEY"
+              }
+            ],
+            "params": [
+              {
+                "name": "id",
+                "value": "dsft58ga",
+                "type": "path",
+                "description": "Unique identifier for this webhook"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "X-Voltus-API-Key",
+              "value": "{{X-Voltus-API-Key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Permanently deletes a webhook. It cannot be undone."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

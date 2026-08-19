@@ -1,0 +1,4764 @@
+{
+  "item": [
+    {
+      "id": "a0206403-c73b-4344-b3e1-b9a6bf14ef92",
+      "name": "Dispatches",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "ed43b6e8-8bc3-4456-a13d-722ba3a1dfb9",
+          "name": "voltus#post-dispatch",
+          "request": {
+            "name": "voltus#post-dispatch",
+            "description": {
+              "content": "Creates a test dispatch.\n\nCreate a new dispatch object. Upon sending a successful request, a new dispatch object will be persisted. The new dispatch will be returned in the response to `GET /dispatches` for the appropriate time-frame, and will also be available at its ID-specific path. If you have a webhook registered for the `dispatch.create` event type, it will be triggered. This type of dispatch will not trigger any customer communications such as email, SMS, or phone calls.\n\nIf you plan to use this endpoint, you should use the `dispatch.test` field to distinguish between a Voltus-initiated dispatch and a dispatch created through this endpoint. Dispatches created through this endpoint will have `test=true`.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "2022-04-15",
+                "dispatches"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) API key used to perform authorization",
+                "key": "X-Voltus-API-Key",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-Voltus-API-Key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"start_time\": \"<string>\",\n  \"end_time\": \"<string>\",\n  \"program_id\": \"<long>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "41c6e621-fc04-4a04-93ba-991f186ec4ce",
+              "name": "OK response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "2022-04-15",
+                    "dispatches"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Voltus-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API key used to perform authorization",
+                    "key": "X-Voltus-API-Key",
+                    "value": "API_KEY"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"end_time\": \"2024-12-22T06:04:02Z\",\n  \"program_id\": 867,\n  \"start_time\": \"2024-12-22T05:04:02Z\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "eb887582-54cd-4665-bcef-303439e605de",
+              "name": "Bad Request: Bad Request response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "2022-04-15",
+                    "dispatches"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Voltus-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API key used to perform authorization",
+                    "key": "X-Voltus-API-Key",
+                    "value": "API_KEY"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"end_time\": \"2024-12-22T06:04:02Z\",\n  \"program_id\": 867,\n  \"start_time\": \"2024-12-22T05:04:02Z\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Do not pass go, do not collect $100.\",\n  \"type\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ad66c497-855f-43e5-9c33-debabf6309e6",
+              "name": "Unauthorized: Forbidden response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "2022-04-15",
+                    "dispatches"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Voltus-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API key used to perform authorization",
+                    "key": "X-Voltus-API-Key",
+                    "value": "API_KEY"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"end_time\": \"2024-12-22T06:04:02Z\",\n  \"program_id\": 867,\n  \"start_time\": \"2024-12-22T05:04:02Z\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Do not pass go, do not collect $100.\",\n  \"type\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "42813684-76fd-418f-bee6-b9580f9a7f5e",
+              "name": "Not Found: Not Found response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "2022-04-15",
+                    "dispatches"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Voltus-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API key used to perform authorization",
+                    "key": "X-Voltus-API-Key",
+                    "value": "API_KEY"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"end_time\": \"2024-12-22T06:04:02Z\",\n  \"program_id\": 867,\n  \"start_time\": \"2024-12-22T05:04:02Z\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Do not pass go, do not collect $100.\",\n  \"type\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a6990b20-ee7a-4231-84e3-f838cfc61b83",
+              "name": "Content Too Large: Request Entity Too Large response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "2022-04-15",
+                    "dispatches"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Voltus-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API key used to perform authorization",
+                    "key": "X-Voltus-API-Key",
+                    "value": "API_KEY"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"end_time\": \"2024-12-22T06:04:02Z\",\n  \"program_id\": 867,\n  \"start_time\": \"2024-12-22T05:04:02Z\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Request Entity Too Large",
+              "code": 413,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Do not pass go, do not collect $100.\",\n  \"type\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "44b7eb48-caf5-4f55-8911-5b09466923e8",
+              "name": "Too Many Requests: Too Many Requests response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "2022-04-15",
+                    "dispatches"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Voltus-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API key used to perform authorization",
+                    "key": "X-Voltus-API-Key",
+                    "value": "API_KEY"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"end_time\": \"2024-12-22T06:04:02Z\",\n  \"program_id\": 867,\n  \"start_time\": \"2024-12-22T05:04:02Z\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Do not pass go, do not collect $100.\",\n  \"type\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "95ecbcdf-9bce-46e2-9122-b69ee1182991",
+              "name": "Internal Server Error: Internal Server Error response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "2022-04-15",
+                    "dispatches"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Voltus-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API key used to perform authorization",
+                    "key": "X-Voltus-API-Key",
+                    "value": "API_KEY"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"end_time\": \"2024-12-22T06:04:02Z\",\n  \"program_id\": 867,\n  \"start_time\": \"2024-12-22T05:04:02Z\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Do not pass go, do not collect $100.\",\n  \"type\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b26ffca5-ec69-436f-abb8-7659ac8369fe",
+          "name": "voltus#get-dispatches",
+          "request": {
+            "name": "voltus#get-dispatches",
+            "description": {
+              "content": "Returns a list of dispatches.\n\nBy default, the list dispatches endpoint returns all dispatch events from the previous 24 hours. This endpoint is commonly used to implement a polling pattern to listen for new dispatch notifications.\n\nIf you would like to implement a polling pattern to check for new dispatches, we recommend the following approach:\n\n1. Make requests to this endpoint every 30 seconds in a loop. You may make requests more quickly if you'd like, but if you need very fast response times, we recommend using [Webhooks](./webhooks) instead. Excessive polling requests made to this endpoint may result in a `429 - Too Many Requests` response.\n2. When you make a request, check for new dispatches in the response body. Each dispatch has a unique `id` attribute that can be used for identification.\n3. Check each new dispatch's `start_time`, list of `sites`, and `test` value to see if, when, and how you need to respond.\n4. If you need to respond, begin curtailment for the affected sites.\n5. On subsequent requests, make sure you're checking for any updates that have been made to the active dispatch. `end_time` could be populated or be updated, and in extremely rare cases, the dispatch may be cancelled. If the dispatch is cancelled, the `authorized` attribute will be set to `false`.\n6. Once the dispatch `end_time` has passed, curtailment can stop as long as there are no other dispatches that require continued curtailment.\n\n**NOTES**:\n\n- Sites can be involved in multiple overlapping dispatches at the same time. Do not stop curtailment for a given site until all the active dispatches for that site have reached their end time (or the dispatch(es) have been canceled). If two events are scheduled at the same time and one is shorter than the other, the site must continue to curtail for the full duration of the second event, e.g. for Dispatch A from 9:00-10:00 and Dispatch B from 9:00-11:00, site must curtail from 9:00-11:00.\n- Dispatches can be scheduled back-to-back, e.g. Dispatch A from 9:00-10:00 and Dispatch B from 10:00-11:00. If your system will be pre-curtailing (e.g. starting the load drop 5 min before start time to ensure performance), make sure that your system does not ignore the second dispatch, and continues to curtail through the end of the second event.\n- A single dispatch can contain multiple sites. All sites listed must curtail during the dispatch time period.\n- All dispatches will be returned in a single request. While the fields `page` and `per_page` have been reserved for future use, their values should be ignored.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "2022-04-15",
+                "dispatches"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) API key used to perform authorization",
+                "key": "X-Voltus-API-Key",
+                "value": "<string>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-Voltus-API-Key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "cccef021-69ed-4499-ab77-5114f6e1df50",
+              "name": "OK response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "2022-04-15",
+                    "dispatches"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Voltus-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API key used to perform authorization",
+                    "key": "X-Voltus-API-Key",
+                    "value": "API_KEY"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"dispatches\": [\n    {\n      \"authorized\": true,\n      \"creation_time\": \"2024-02-02T08:00:00Z\",\n      \"end_time\": \"2024-02-02T10:00:00Z\",\n      \"id\": \"5j94\",\n      \"metadata\": {\n        \"dispatch_source\": \"manual_test\"\n      },\n      \"modification_number\": 0,\n      \"program\": {\n        \"id\": 867,\n        \"market\": \"CAISO\",\n        \"name\": \"CAISO Operating Reserves\",\n        \"program_type\": \"ancillary_services\",\n        \"timezone\": \"US/Pacific\"\n      },\n      \"sites\": [\n        {\n          \"commitment\": 1248,\n          \"customer_location_id\": \"site102\",\n          \"drop_by\": 1248,\n          \"id\": \"yd4g\",\n          \"name\": \"The coolest site\"\n        },\n        {\n          \"commitment\": 5.3,\n          \"customer_location_id\": \"\",\n          \"drop_by\": 5.3,\n          \"id\": \"40wl\",\n          \"name\": \"Just an ok site\"\n        }\n      ],\n      \"start_time\": \"2024-02-02T09:00:00Z\",\n      \"test\": false\n    },\n    {\n      \"authorized\": true,\n      \"creation_time\": \"2024-02-02T09:00:00Z\",\n      \"id\": \"zg1p\",\n      \"modification_number\": 0,\n      \"program\": {\n        \"id\": 1092,\n        \"market\": \"ERCOT\",\n        \"name\": \"ERCOT - Non-Spin\",\n        \"program_type\": \"ancillary_services\",\n        \"timezone\": \"US/Central\"\n      },\n      \"sites\": [\n        {\n          \"commitment\": null,\n          \"customer_location_id\": \"site101\",\n          \"drop_by\": null,\n          \"id\": \"xv1w4\",\n          \"name\": \"A cool site\"\n        },\n        {\n          \"commitment\": null,\n          \"customer_location_id\": \"site102\",\n          \"drop_by\": null,\n          \"id\": \"yd4g\",\n          \"name\": \"The coolest site\"\n        }\n      ],\n      \"start_time\": \"2024-02-02T10:00:00Z\",\n      \"test\": false\n    },\n    {\n      \"authorized\": true,\n      \"creation_time\": \"2024-01-15T20:00:00Z\",\n      \"end_time\": \"2024-01-15T22:00:00Z\",\n      \"id\": \"ez4p\",\n      \"modification_number\": 0,\n      \"program\": {\n        \"id\": 700,\n        \"market\": \"\",\n        \"name\": \"Voltus Communications Test\",\n        \"program_type\": \"capacity\",\n        \"timezone\": \"US/Eastern\"\n      },\n      \"sites\": [\n        {\n          \"commitment\": 0,\n          \"customer_location_id\": \"site101\",\n          \"drop_by\": 0,\n          \"id\": \"xv1w4\",\n          \"name\": \"A cool site\"\n        },\n        {\n          \"commitment\": 0,\n          \"customer_location_id\": \"site102\",\n          \"drop_by\": 0,\n          \"id\": \"yd4g\",\n          \"name\": \"The coolest site\"\n        },\n        {\n          \"commitment\": 0,\n          \"customer_location_id\": \"\",\n          \"drop_by\": 0,\n          \"id\": \"40wl\",\n          \"name\": \"Just an ok site\"\n        },\n        {\n          \"commitment\": 0,\n          \"customer_location_id\": \"\",\n          \"drop_by\": 0,\n          \"id\": \"6rnp\",\n          \"name\": \"A decent site\"\n        }\n      ],\n      \"start_time\": \"2024-01-15T21:00:00Z\",\n      \"test\": true\n    }\n  ],\n  \"page\": 0,\n  \"perPage\": 0\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "048576ec-9400-49ce-94a6-eb2675f35366",
+              "name": "Bad Request: Bad Request response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "2022-04-15",
+                    "dispatches"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Voltus-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API key used to perform authorization",
+                    "key": "X-Voltus-API-Key",
+                    "value": "API_KEY"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Do not pass go, do not collect $100.\",\n  \"type\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1f4d844c-808a-4a61-ab61-a12b8d171759",
+              "name": "Unauthorized: Forbidden response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "2022-04-15",
+                    "dispatches"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Voltus-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API key used to perform authorization",
+                    "key": "X-Voltus-API-Key",
+                    "value": "API_KEY"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Do not pass go, do not collect $100.\",\n  \"type\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9bdf5732-5c3a-4bc9-b8de-2da3e0f67b35",
+              "name": "Not Found: Not Found response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "2022-04-15",
+                    "dispatches"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Voltus-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API key used to perform authorization",
+                    "key": "X-Voltus-API-Key",
+                    "value": "API_KEY"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Do not pass go, do not collect $100.\",\n  \"type\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c3cfa7df-c763-4cb8-8734-ff68f1d9e4d8",
+              "name": "Content Too Large: Request Entity Too Large response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "2022-04-15",
+                    "dispatches"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Voltus-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API key used to perform authorization",
+                    "key": "X-Voltus-API-Key",
+                    "value": "API_KEY"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Request Entity Too Large",
+              "code": 413,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Do not pass go, do not collect $100.\",\n  \"type\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "278156c2-ab71-4d92-9092-a4eb64833a3b",
+              "name": "Too Many Requests: Too Many Requests response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "2022-04-15",
+                    "dispatches"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Voltus-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API key used to perform authorization",
+                    "key": "X-Voltus-API-Key",
+                    "value": "API_KEY"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Do not pass go, do not collect $100.\",\n  \"type\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2e9900e1-6eaa-4847-b69d-d8ed5c2aa3b4",
+              "name": "Internal Server Error: Internal Server Error response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "2022-04-15",
+                    "dispatches"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Voltus-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API key used to perform authorization",
+                    "key": "X-Voltus-API-Key",
+                    "value": "API_KEY"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Do not pass go, do not collect $100.\",\n  \"type\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7208356e-9568-4dc9-ad44-13d2d84a79ea",
+          "name": "voltus#get-dispatch",
+          "request": {
+            "name": "voltus#get-dispatch",
+            "description": {
+              "content": "Retrieves the dispatch with the given ID.\n\nCan be used to explicitly check for the status of an individual dispatch.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "2022-04-15",
+                "dispatches",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) The dispatch ID"
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) API key used to perform authorization",
+                "key": "X-Voltus-API-Key",
+                "value": "<string>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-Voltus-API-Key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "746c96b7-b62f-4f22-a103-08cc14e1cee9",
+              "name": "OK response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "2022-04-15",
+                    "dispatches",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The dispatch ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Voltus-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API key used to perform authorization",
+                    "key": "X-Voltus-API-Key",
+                    "value": "API_KEY"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"authorized\": true,\n  \"creation_time\": \"2024-02-02T08:00:00Z\",\n  \"end_time\": \"2024-02-02T10:00:00Z\",\n  \"id\": \"5j94\",\n  \"metadata\": {\n    \"dispatch_source\": \"manual_test\"\n  },\n  \"modification_number\": 0,\n  \"program\": {\n    \"id\": 867,\n    \"market\": \"CAISO\",\n    \"name\": \"CAISO Operating Reserves\",\n    \"program_type\": \"ancillary_services\",\n    \"timezone\": \"US/Pacific\"\n  },\n  \"sites\": [\n    {\n      \"commitment\": 1248,\n      \"customer_location_id\": \"site102\",\n      \"drop_by\": 1248,\n      \"id\": \"yd4g\",\n      \"name\": \"The coolest site\"\n    },\n    {\n      \"commitment\": 5.3,\n      \"customer_location_id\": \"\",\n      \"drop_by\": 5.3,\n      \"id\": \"40wl\",\n      \"name\": \"Just an ok site\"\n    }\n  ],\n  \"start_time\": \"2024-02-02T09:00:00Z\",\n  \"test\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a6d6393a-8292-4850-9c01-a34c5c3f2038",
+              "name": "Bad Request: Bad Request response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "2022-04-15",
+                    "dispatches",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The dispatch ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Voltus-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API key used to perform authorization",
+                    "key": "X-Voltus-API-Key",
+                    "value": "API_KEY"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Do not pass go, do not collect $100.\",\n  \"type\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "048fcae8-6838-493e-b996-5dda75844736",
+              "name": "Unauthorized: Forbidden response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "2022-04-15",
+                    "dispatches",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The dispatch ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Voltus-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API key used to perform authorization",
+                    "key": "X-Voltus-API-Key",
+                    "value": "API_KEY"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Do not pass go, do not collect $100.\",\n  \"type\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "919210c9-35a2-4d2b-9009-88b75624e534",
+              "name": "Not Found: Not Found response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "2022-04-15",
+                    "dispatches",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The dispatch ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Voltus-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API key used to perform authorization",
+                    "key": "X-Voltus-API-Key",
+                    "value": "API_KEY"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Do not pass go, do not collect $100.\",\n  \"type\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "99d93a8d-4e26-44b6-a449-27ec42f3adf4",
+              "name": "Content Too Large: Request Entity Too Large response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "2022-04-15",
+                    "dispatches",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The dispatch ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Voltus-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API key used to perform authorization",
+                    "key": "X-Voltus-API-Key",
+                    "value": "API_KEY"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Request Entity Too Large",
+              "code": 413,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Do not pass go, do not collect $100.\",\n  \"type\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "75179880-4a88-4586-a0ac-59e685798aa4",
+              "name": "Too Many Requests: Too Many Requests response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "2022-04-15",
+                    "dispatches",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The dispatch ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Voltus-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API key used to perform authorization",
+                    "key": "X-Voltus-API-Key",
+                    "value": "API_KEY"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Do not pass go, do not collect $100.\",\n  \"type\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b181698b-fbc9-4040-8d12-3292211f22ee",
+              "name": "Internal Server Error: Internal Server Error response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "2022-04-15",
+                    "dispatches",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The dispatch ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Voltus-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API key used to perform authorization",
+                    "key": "X-Voltus-API-Key",
+                    "value": "API_KEY"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Do not pass go, do not collect $100.\",\n  \"type\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "4c599ef6-d073-4a0e-8ef3-6ee7118d5033",
+      "name": "Sites",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "c048f963-a386-4f56-9f9d-3d6d07059a31",
+          "name": "voltus#get-sites",
+          "request": {
+            "name": "voltus#get-sites",
+            "description": {
+              "content": "Returns a list of your sites.\n\nThe sites endpoint is important because a given API key will only get dispatch notifications that include sites visible to the account. You should make sure that all expected sites are returned by this endpoint.\n\nSites include `id` and `customer_location_id` fields that can be used to identify sites in a dispatch communication. A site's `name` value may change, and should not be used as a static identifier.\n\nAll sites will be returned in a single request. The values of `page` and `per_page` have been reserved for future use, but should be ignored at present.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "2022-04-15",
+                "sites"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) API key used to perform authorization",
+                "key": "X-Voltus-API-Key",
+                "value": "<string>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-Voltus-API-Key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "64deed98-8dd0-4016-9e6d-738d89e99250",
+              "name": "OK response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "2022-04-15",
+                    "sites"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Voltus-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API key used to perform authorization",
+                    "key": "X-Voltus-API-Key",
+                    "value": "API_KEY"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"page\": 0,\n  \"perPage\": 0,\n  \"sites\": [\n    {\n      \"customer_location_id\": \"site101\",\n      \"id\": \"xv1w4\",\n      \"meters\": [\n        {\n          \"asset_type\": \"load\",\n          \"id\": \"wpv31\",\n          \"name\": \"Primary Meter\"\n        },\n        {\n          \"asset_type\": \"generator\",\n          \"id\": \"yvve\",\n          \"name\": \"Generator\"\n        }\n      ],\n      \"name\": \"A cool site\"\n    },\n    {\n      \"customer_location_id\": \"site102\",\n      \"id\": \"yd4g\",\n      \"meters\": [\n        {\n          \"asset_type\": \"poi\",\n          \"id\": \"njj1\",\n          \"name\": \"The best meter\"\n        }\n      ],\n      \"name\": \"The coolest site\"\n    },\n    {\n      \"customer_location_id\": \"\",\n      \"id\": \"40wl\",\n      \"meters\": [],\n      \"name\": \"Just an ok site\"\n    },\n    {\n      \"customer_location_id\": \"\",\n      \"id\": \"6rnp\",\n      \"meters\": [\n        {\n          \"asset_type\": \"poi\",\n          \"id\": \"2j3y\",\n          \"name\": \"The sites meter name\"\n        }\n      ],\n      \"name\": \"A decent site\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6b7a0ca0-4132-401d-a542-d8dc93a4f63d",
+              "name": "Bad Request: Bad Request response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "2022-04-15",
+                    "sites"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Voltus-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API key used to perform authorization",
+                    "key": "X-Voltus-API-Key",
+                    "value": "API_KEY"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Do not pass go, do not collect $100.\",\n  \"type\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1158ac98-fce8-4011-aa66-32ca745c7415",
+              "name": "Unauthorized: Forbidden response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "2022-04-15",
+                    "sites"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Voltus-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API key used to perform authorization",
+                    "key": "X-Voltus-API-Key",
+                    "value": "API_KEY"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Do not pass go, do not collect $100.\",\n  \"type\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "545fece3-b530-4c93-ad66-4d213a02b52e",
+              "name": "Not Found: Not Found response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "2022-04-15",
+                    "sites"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Voltus-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API key used to perform authorization",
+                    "key": "X-Voltus-API-Key",
+                    "value": "API_KEY"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Do not pass go, do not collect $100.\",\n  \"type\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "702d6242-3829-4aa6-b9bb-7ad10d14d5d8",
+              "name": "Content Too Large: Request Entity Too Large response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "2022-04-15",
+                    "sites"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Voltus-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API key used to perform authorization",
+                    "key": "X-Voltus-API-Key",
+                    "value": "API_KEY"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Request Entity Too Large",
+              "code": 413,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Do not pass go, do not collect $100.\",\n  \"type\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c6a07bc0-5f65-4ce6-b74c-4f844f7570f8",
+              "name": "Too Many Requests: Too Many Requests response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "2022-04-15",
+                    "sites"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Voltus-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API key used to perform authorization",
+                    "key": "X-Voltus-API-Key",
+                    "value": "API_KEY"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Do not pass go, do not collect $100.\",\n  \"type\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fc9ab649-7577-4477-9bb1-f55f5f64a262",
+              "name": "Internal Server Error: Internal Server Error response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "2022-04-15",
+                    "sites"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Voltus-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API key used to perform authorization",
+                    "key": "X-Voltus-API-Key",
+                    "value": "API_KEY"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Do not pass go, do not collect $100.\",\n  \"type\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "54422344-7658-4792-9c9e-d73c67cdef62",
+      "name": "Telemetry",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "80dcf236-e969-47d9-9edb-e56e3d2a1c94",
+          "name": "voltus#post-telemetry",
+          "request": {
+            "name": "voltus#post-telemetry",
+            "description": {
+              "content": "This endpoint is intended for bulk-data submission and can receive many telemetry points in the same request. You can also post non-contiguous intervals, intervals for multiple meters, and intervals that have been submitted before, all without issue. We'll handle the de-duplication of double-submitted points, and you can take this into consideration when implementing retry and failure logic.\n\nThere is a limit on the number of telemetry points per request. We recommend keeping requests to 2048 points or fewer. Requests that exceed the maximum will receive a `413 Content Too Large` response — split the data into smaller batches and retry.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "2022-04-15",
+                "telemetry"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) API key used to perform authorization",
+                "key": "X-Voltus-API-Key",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-Voltus-API-Key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"telemetry\": [\n    {\n      \"timestamp\": \"<string>\",\n      \"interval_seconds\": \"<long>\",\n      \"kW\": \"<float>\",\n      \"meter_id\": \"<string>\",\n      \"site_id\": \"<string>\",\n      \"units\": \"<string>\",\n      \"value\": \"<float>\"\n    },\n    {\n      \"timestamp\": \"<string>\",\n      \"interval_seconds\": \"<long>\",\n      \"kW\": \"<float>\",\n      \"meter_id\": \"<string>\",\n      \"site_id\": \"<string>\",\n      \"units\": \"<string>\",\n      \"value\": \"<float>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "070332b3-fad8-49ba-9d5b-2d87bf2d672e",
+              "name": "OK response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "2022-04-15",
+                    "telemetry"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Voltus-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API key used to perform authorization",
+                    "key": "X-Voltus-API-Key",
+                    "value": "API_KEY"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"telemetry\": [\n    {\n      \"interval_seconds\": 30,\n      \"meter_id\": \"wpv31\",\n      \"timestamp\": \"2024-01-02T09:00:00Z\",\n      \"units\": \"kW\",\n      \"value\": 0.2\n    },\n    {\n      \"interval_seconds\": 30,\n      \"meter_id\": \"wpv31\",\n      \"timestamp\": \"2024-01-02T09:00:30Z\",\n      \"units\": \"kW\",\n      \"value\": 0.25\n    },\n    {\n      \"interval_seconds\": 60,\n      \"site_id\": \"yd4g\",\n      \"timestamp\": \"2024-01-02T09:00:00Z\",\n      \"units\": \"kW\",\n      \"value\": 0.5\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "1a802dc9-de5e-4b65-9ac9-68f8e3a4467a",
+              "name": "Bad Request: Bad Request response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "2022-04-15",
+                    "telemetry"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Voltus-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API key used to perform authorization",
+                    "key": "X-Voltus-API-Key",
+                    "value": "API_KEY"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"telemetry\": [\n    {\n      \"interval_seconds\": 30,\n      \"meter_id\": \"wpv31\",\n      \"timestamp\": \"2024-01-02T09:00:00Z\",\n      \"units\": \"kW\",\n      \"value\": 0.2\n    },\n    {\n      \"interval_seconds\": 30,\n      \"meter_id\": \"wpv31\",\n      \"timestamp\": \"2024-01-02T09:00:30Z\",\n      \"units\": \"kW\",\n      \"value\": 0.25\n    },\n    {\n      \"interval_seconds\": 60,\n      \"site_id\": \"yd4g\",\n      \"timestamp\": \"2024-01-02T09:00:00Z\",\n      \"units\": \"kW\",\n      \"value\": 0.5\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Do not pass go, do not collect $100.\",\n  \"type\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ac4a364c-1cc2-43d9-8223-bacad9601ca3",
+              "name": "Unauthorized: Forbidden response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "2022-04-15",
+                    "telemetry"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Voltus-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API key used to perform authorization",
+                    "key": "X-Voltus-API-Key",
+                    "value": "API_KEY"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"telemetry\": [\n    {\n      \"interval_seconds\": 30,\n      \"meter_id\": \"wpv31\",\n      \"timestamp\": \"2024-01-02T09:00:00Z\",\n      \"units\": \"kW\",\n      \"value\": 0.2\n    },\n    {\n      \"interval_seconds\": 30,\n      \"meter_id\": \"wpv31\",\n      \"timestamp\": \"2024-01-02T09:00:30Z\",\n      \"units\": \"kW\",\n      \"value\": 0.25\n    },\n    {\n      \"interval_seconds\": 60,\n      \"site_id\": \"yd4g\",\n      \"timestamp\": \"2024-01-02T09:00:00Z\",\n      \"units\": \"kW\",\n      \"value\": 0.5\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Do not pass go, do not collect $100.\",\n  \"type\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "13093f9f-4a60-4b1c-a3d0-a07041c15673",
+              "name": "Not Found: Not Found response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "2022-04-15",
+                    "telemetry"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Voltus-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API key used to perform authorization",
+                    "key": "X-Voltus-API-Key",
+                    "value": "API_KEY"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"telemetry\": [\n    {\n      \"interval_seconds\": 30,\n      \"meter_id\": \"wpv31\",\n      \"timestamp\": \"2024-01-02T09:00:00Z\",\n      \"units\": \"kW\",\n      \"value\": 0.2\n    },\n    {\n      \"interval_seconds\": 30,\n      \"meter_id\": \"wpv31\",\n      \"timestamp\": \"2024-01-02T09:00:30Z\",\n      \"units\": \"kW\",\n      \"value\": 0.25\n    },\n    {\n      \"interval_seconds\": 60,\n      \"site_id\": \"yd4g\",\n      \"timestamp\": \"2024-01-02T09:00:00Z\",\n      \"units\": \"kW\",\n      \"value\": 0.5\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Do not pass go, do not collect $100.\",\n  \"type\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9e92a5b0-da50-45b8-ab82-4abbeaf92411",
+              "name": "Content Too Large: Request Entity Too Large response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "2022-04-15",
+                    "telemetry"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Voltus-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API key used to perform authorization",
+                    "key": "X-Voltus-API-Key",
+                    "value": "API_KEY"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"telemetry\": [\n    {\n      \"interval_seconds\": 30,\n      \"meter_id\": \"wpv31\",\n      \"timestamp\": \"2024-01-02T09:00:00Z\",\n      \"units\": \"kW\",\n      \"value\": 0.2\n    },\n    {\n      \"interval_seconds\": 30,\n      \"meter_id\": \"wpv31\",\n      \"timestamp\": \"2024-01-02T09:00:30Z\",\n      \"units\": \"kW\",\n      \"value\": 0.25\n    },\n    {\n      \"interval_seconds\": 60,\n      \"site_id\": \"yd4g\",\n      \"timestamp\": \"2024-01-02T09:00:00Z\",\n      \"units\": \"kW\",\n      \"value\": 0.5\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Request Entity Too Large",
+              "code": 413,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Do not pass go, do not collect $100.\",\n  \"type\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "948468ed-83a0-4d11-b0e6-d93a12d7d6a5",
+              "name": "Too Many Requests: Too Many Requests response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "2022-04-15",
+                    "telemetry"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Voltus-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API key used to perform authorization",
+                    "key": "X-Voltus-API-Key",
+                    "value": "API_KEY"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"telemetry\": [\n    {\n      \"interval_seconds\": 30,\n      \"meter_id\": \"wpv31\",\n      \"timestamp\": \"2024-01-02T09:00:00Z\",\n      \"units\": \"kW\",\n      \"value\": 0.2\n    },\n    {\n      \"interval_seconds\": 30,\n      \"meter_id\": \"wpv31\",\n      \"timestamp\": \"2024-01-02T09:00:30Z\",\n      \"units\": \"kW\",\n      \"value\": 0.25\n    },\n    {\n      \"interval_seconds\": 60,\n      \"site_id\": \"yd4g\",\n      \"timestamp\": \"2024-01-02T09:00:00Z\",\n      \"units\": \"kW\",\n      \"value\": 0.5\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Do not pass go, do not collect $100.\",\n  \"type\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e7c4f4fc-a4ec-48c0-8ab0-9baefd4944cc",
+              "name": "Internal Server Error: Internal Server Error response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "2022-04-15",
+                    "telemetry"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Voltus-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API key used to perform authorization",
+                    "key": "X-Voltus-API-Key",
+                    "value": "API_KEY"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"telemetry\": [\n    {\n      \"interval_seconds\": 30,\n      \"meter_id\": \"wpv31\",\n      \"timestamp\": \"2024-01-02T09:00:00Z\",\n      \"units\": \"kW\",\n      \"value\": 0.2\n    },\n    {\n      \"interval_seconds\": 30,\n      \"meter_id\": \"wpv31\",\n      \"timestamp\": \"2024-01-02T09:00:30Z\",\n      \"units\": \"kW\",\n      \"value\": 0.25\n    },\n    {\n      \"interval_seconds\": 60,\n      \"site_id\": \"yd4g\",\n      \"timestamp\": \"2024-01-02T09:00:00Z\",\n      \"units\": \"kW\",\n      \"value\": 0.5\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Do not pass go, do not collect $100.\",\n  \"type\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ff61cb4f-209a-4836-a26a-66bece673864",
+          "name": "voltus#post-controllable-load",
+          "request": {
+            "name": "voltus#post-controllable-load",
+            "description": {
+              "content": "Posts controllable load.\n\nControllable load is an estimated kW value based on the nameplate energy usage (or actual energy usage) of equipment currently under the control by your integration’s software. Example Use Case: If your software loses network connection to control the equipment, even if the equipment is still running, the value should decrease.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "2022-04-15",
+                "telemetry",
+                "controllable-load"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) API key used to perform authorization",
+                "key": "X-Voltus-API-Key",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-Voltus-API-Key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"controllable_load\": [\n    {\n      \"timestamp\": \"<string>\",\n      \"site_id\": \"<string>\",\n      \"interval_seconds\": \"<long>\",\n      \"value\": \"<float>\",\n      \"units\": \"<string>\"\n    },\n    {\n      \"timestamp\": \"<string>\",\n      \"site_id\": \"<string>\",\n      \"interval_seconds\": \"<long>\",\n      \"value\": \"<float>\",\n      \"units\": \"<string>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "385f157e-46a3-427f-8941-56a9281f7d22",
+              "name": "OK response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "2022-04-15",
+                    "telemetry",
+                    "controllable-load"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Voltus-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API key used to perform authorization",
+                    "key": "X-Voltus-API-Key",
+                    "value": "API_KEY"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"controllable_load\": [\n    {\n      \"interval_seconds\": 30,\n      \"site_id\": \"yd4g\",\n      \"timestamp\": \"2024-01-02T09:00:00Z\",\n      \"units\": \"kW\",\n      \"value\": 0.2\n    },\n    {\n      \"interval_seconds\": 30,\n      \"site_id\": \"yd4g\",\n      \"timestamp\": \"2024-01-02T09:00:30Z\",\n      \"units\": \"kW\",\n      \"value\": 0.25\n    },\n    {\n      \"interval_seconds\": 60,\n      \"site_id\": \"yd4g\",\n      \"timestamp\": \"2024-01-02T09:00:00Z\",\n      \"units\": \"kW\",\n      \"value\": 0.5\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "c848ca41-6056-48ea-9e6c-110e8879a9d7",
+              "name": "Bad Request: Bad Request response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "2022-04-15",
+                    "telemetry",
+                    "controllable-load"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Voltus-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API key used to perform authorization",
+                    "key": "X-Voltus-API-Key",
+                    "value": "API_KEY"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"controllable_load\": [\n    {\n      \"interval_seconds\": 30,\n      \"site_id\": \"yd4g\",\n      \"timestamp\": \"2024-01-02T09:00:00Z\",\n      \"units\": \"kW\",\n      \"value\": 0.2\n    },\n    {\n      \"interval_seconds\": 30,\n      \"site_id\": \"yd4g\",\n      \"timestamp\": \"2024-01-02T09:00:30Z\",\n      \"units\": \"kW\",\n      \"value\": 0.25\n    },\n    {\n      \"interval_seconds\": 60,\n      \"site_id\": \"yd4g\",\n      \"timestamp\": \"2024-01-02T09:00:00Z\",\n      \"units\": \"kW\",\n      \"value\": 0.5\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Do not pass go, do not collect $100.\",\n  \"type\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7c17cb64-15d6-4f63-885b-1fe6ffe32875",
+              "name": "Unauthorized: Forbidden response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "2022-04-15",
+                    "telemetry",
+                    "controllable-load"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Voltus-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API key used to perform authorization",
+                    "key": "X-Voltus-API-Key",
+                    "value": "API_KEY"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"controllable_load\": [\n    {\n      \"interval_seconds\": 30,\n      \"site_id\": \"yd4g\",\n      \"timestamp\": \"2024-01-02T09:00:00Z\",\n      \"units\": \"kW\",\n      \"value\": 0.2\n    },\n    {\n      \"interval_seconds\": 30,\n      \"site_id\": \"yd4g\",\n      \"timestamp\": \"2024-01-02T09:00:30Z\",\n      \"units\": \"kW\",\n      \"value\": 0.25\n    },\n    {\n      \"interval_seconds\": 60,\n      \"site_id\": \"yd4g\",\n      \"timestamp\": \"2024-01-02T09:00:00Z\",\n      \"units\": \"kW\",\n      \"value\": 0.5\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Do not pass go, do not collect $100.\",\n  \"type\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "743ba00a-ae67-46bf-843d-969e9500fd35",
+              "name": "Not Found: Not Found response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "2022-04-15",
+                    "telemetry",
+                    "controllable-load"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Voltus-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API key used to perform authorization",
+                    "key": "X-Voltus-API-Key",
+                    "value": "API_KEY"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"controllable_load\": [\n    {\n      \"interval_seconds\": 30,\n      \"site_id\": \"yd4g\",\n      \"timestamp\": \"2024-01-02T09:00:00Z\",\n      \"units\": \"kW\",\n      \"value\": 0.2\n    },\n    {\n      \"interval_seconds\": 30,\n      \"site_id\": \"yd4g\",\n      \"timestamp\": \"2024-01-02T09:00:30Z\",\n      \"units\": \"kW\",\n      \"value\": 0.25\n    },\n    {\n      \"interval_seconds\": 60,\n      \"site_id\": \"yd4g\",\n      \"timestamp\": \"2024-01-02T09:00:00Z\",\n      \"units\": \"kW\",\n      \"value\": 0.5\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Do not pass go, do not collect $100.\",\n  \"type\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "81ccfb4c-bf03-449f-9ac2-54b6a7e74f7a",
+              "name": "Content Too Large: Request Entity Too Large response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "2022-04-15",
+                    "telemetry",
+                    "controllable-load"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Voltus-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API key used to perform authorization",
+                    "key": "X-Voltus-API-Key",
+                    "value": "API_KEY"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"controllable_load\": [\n    {\n      \"interval_seconds\": 30,\n      \"site_id\": \"yd4g\",\n      \"timestamp\": \"2024-01-02T09:00:00Z\",\n      \"units\": \"kW\",\n      \"value\": 0.2\n    },\n    {\n      \"interval_seconds\": 30,\n      \"site_id\": \"yd4g\",\n      \"timestamp\": \"2024-01-02T09:00:30Z\",\n      \"units\": \"kW\",\n      \"value\": 0.25\n    },\n    {\n      \"interval_seconds\": 60,\n      \"site_id\": \"yd4g\",\n      \"timestamp\": \"2024-01-02T09:00:00Z\",\n      \"units\": \"kW\",\n      \"value\": 0.5\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Request Entity Too Large",
+              "code": 413,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Do not pass go, do not collect $100.\",\n  \"type\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "873a15bd-deb3-49a8-867f-d4f07deeed59",
+              "name": "Too Many Requests: Too Many Requests response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "2022-04-15",
+                    "telemetry",
+                    "controllable-load"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Voltus-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API key used to perform authorization",
+                    "key": "X-Voltus-API-Key",
+                    "value": "API_KEY"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"controllable_load\": [\n    {\n      \"interval_seconds\": 30,\n      \"site_id\": \"yd4g\",\n      \"timestamp\": \"2024-01-02T09:00:00Z\",\n      \"units\": \"kW\",\n      \"value\": 0.2\n    },\n    {\n      \"interval_seconds\": 30,\n      \"site_id\": \"yd4g\",\n      \"timestamp\": \"2024-01-02T09:00:30Z\",\n      \"units\": \"kW\",\n      \"value\": 0.25\n    },\n    {\n      \"interval_seconds\": 60,\n      \"site_id\": \"yd4g\",\n      \"timestamp\": \"2024-01-02T09:00:00Z\",\n      \"units\": \"kW\",\n      \"value\": 0.5\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Do not pass go, do not collect $100.\",\n  \"type\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c1f8d652-5f01-48ed-8307-9c17c4a0b676",
+              "name": "Internal Server Error: Internal Server Error response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "2022-04-15",
+                    "telemetry",
+                    "controllable-load"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Voltus-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API key used to perform authorization",
+                    "key": "X-Voltus-API-Key",
+                    "value": "API_KEY"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"controllable_load\": [\n    {\n      \"interval_seconds\": 30,\n      \"site_id\": \"yd4g\",\n      \"timestamp\": \"2024-01-02T09:00:00Z\",\n      \"units\": \"kW\",\n      \"value\": 0.2\n    },\n    {\n      \"interval_seconds\": 30,\n      \"site_id\": \"yd4g\",\n      \"timestamp\": \"2024-01-02T09:00:30Z\",\n      \"units\": \"kW\",\n      \"value\": 0.25\n    },\n    {\n      \"interval_seconds\": 60,\n      \"site_id\": \"yd4g\",\n      \"timestamp\": \"2024-01-02T09:00:00Z\",\n      \"units\": \"kW\",\n      \"value\": 0.5\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Do not pass go, do not collect $100.\",\n  \"type\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "15b0ced2-7136-42bb-a047-301b37cc5476",
+          "name": "voltus#get-telemetry-kw",
+          "request": {
+            "name": "voltus#get-telemetry-kw",
+            "description": {
+              "content": "Returns a list of telemetry readings for one or more sites. The maximum number of sites per request is 10. The maximum request interval is 90 days, with a limit of 10,000 total data points per site.\n\nThis endpoint returns data that was available at the time of request, if the site's telemetry is delayed recent data may be incomplete. This is particularly important when fetching data for a larger interval. If fetching data for an hour (3600 seconds), we recommend waiting at least 20 minutes in most cases after the end of that interval to be sure data has been fully submitted. When in doubt, you can also fetch data for a smaller interval length which will give a better picture of what data is actually available.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "2022-04-15",
+                "telemetry",
+                "kw"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "start_time",
+                  "value": "<dateTime>",
+                  "description": "(Required) An RFC3339 compatible string that denotes the beginning (exclusive) of the requested interval. Must be aligned to 30 seconds"
+                },
+                {
+                  "disabled": false,
+                  "key": "end_time",
+                  "value": "<dateTime>",
+                  "description": "An RFC3339 compatible string that denotes the end (inclusive) of the requested interval. Defaults to 24 hours ahead of start_time if omitted. Must be aligned to 30 seconds."
+                },
+                {
+                  "disabled": false,
+                  "key": "interval_seconds",
+                  "value": "<integer>",
+                  "description": "Interval width desired, in seconds. Defaults to 30. Use one of 30, 60, 300, 900, 1800, 3600, 21600."
+                },
+                {
+                  "disabled": false,
+                  "key": "site_id",
+                  "value": "<string>",
+                  "description": "(Required) ID of a site. For multiple sites, add multiple instances of this parameter."
+                },
+                {
+                  "disabled": false,
+                  "key": "site_id",
+                  "value": "<string>",
+                  "description": "(Required) ID of a site. For multiple sites, add multiple instances of this parameter."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) API key used to perform authorization",
+                "key": "X-Voltus-API-Key",
+                "value": "<string>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-Voltus-API-Key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "1a08e7d5-9f60-47d4-a052-0cb97b490bb5",
+              "name": "OK response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "2022-04-15",
+                    "telemetry",
+                    "kw"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start_time",
+                      "value": "2020-08-22T05:00:30Z"
+                    },
+                    {
+                      "key": "end_time",
+                      "value": "2020-08-22T05:00:30Z"
+                    },
+                    {
+                      "key": "interval_seconds",
+                      "value": "1800"
+                    },
+                    {
+                      "key": "site_id",
+                      "value": "xv1w4"
+                    },
+                    {
+                      "key": "site_id",
+                      "value": "yd4g"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Voltus-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API key used to perform authorization",
+                    "key": "X-Voltus-API-Key",
+                    "value": "API_KEY"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"sites\": [\n      {\n        \"meters\": [\n          {\n            \"meter_id\": \"wpv31\",\n            \"telemetry\": [\n              {\n                \"interval_seconds\": 30,\n                \"timestamp\": \"2024-01-02T09:00:00Z\",\n                \"units\": \"kW\",\n                \"value\": 0.2\n              }\n            ]\n          },\n          {\n            \"meter_id\": \"wpv31\",\n            \"telemetry\": [\n              {\n                \"interval_seconds\": 30,\n                \"timestamp\": \"2024-01-02T09:00:30Z\",\n                \"units\": \"kW\",\n                \"value\": 0.25\n              }\n            ]\n          }\n        ],\n        \"site_id\": \"xv1w4\"\n      },\n      {\n        \"meters\": [\n          {\n            \"meter_id\": \"njj1\",\n            \"telemetry\": [\n              {\n                \"interval_seconds\": 60,\n                \"timestamp\": \"2024-01-02T09:00:00Z\",\n                \"units\": \"kW\",\n                \"value\": 0.5\n              }\n            ]\n          }\n        ],\n        \"site_id\": \"yd4g\"\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "892476cc-2766-4fdb-a9ad-c28072909d61",
+              "name": "Bad Request: Bad Request response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "2022-04-15",
+                    "telemetry",
+                    "kw"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start_time",
+                      "value": "2020-08-22T05:00:30Z"
+                    },
+                    {
+                      "key": "end_time",
+                      "value": "2020-08-22T05:00:30Z"
+                    },
+                    {
+                      "key": "interval_seconds",
+                      "value": "1800"
+                    },
+                    {
+                      "key": "site_id",
+                      "value": "xv1w4"
+                    },
+                    {
+                      "key": "site_id",
+                      "value": "yd4g"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Voltus-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API key used to perform authorization",
+                    "key": "X-Voltus-API-Key",
+                    "value": "API_KEY"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Do not pass go, do not collect $100.\",\n  \"type\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fc8a06eb-2d38-4f6c-a3c4-0cf7c2233e30",
+              "name": "Unauthorized: Forbidden response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "2022-04-15",
+                    "telemetry",
+                    "kw"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start_time",
+                      "value": "2020-08-22T05:00:30Z"
+                    },
+                    {
+                      "key": "end_time",
+                      "value": "2020-08-22T05:00:30Z"
+                    },
+                    {
+                      "key": "interval_seconds",
+                      "value": "1800"
+                    },
+                    {
+                      "key": "site_id",
+                      "value": "xv1w4"
+                    },
+                    {
+                      "key": "site_id",
+                      "value": "yd4g"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Voltus-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API key used to perform authorization",
+                    "key": "X-Voltus-API-Key",
+                    "value": "API_KEY"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Do not pass go, do not collect $100.\",\n  \"type\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c9d63c67-67d4-4323-9f34-c5a1d4e26bd6",
+              "name": "Not Found: Not Found response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "2022-04-15",
+                    "telemetry",
+                    "kw"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start_time",
+                      "value": "2020-08-22T05:00:30Z"
+                    },
+                    {
+                      "key": "end_time",
+                      "value": "2020-08-22T05:00:30Z"
+                    },
+                    {
+                      "key": "interval_seconds",
+                      "value": "1800"
+                    },
+                    {
+                      "key": "site_id",
+                      "value": "xv1w4"
+                    },
+                    {
+                      "key": "site_id",
+                      "value": "yd4g"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Voltus-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API key used to perform authorization",
+                    "key": "X-Voltus-API-Key",
+                    "value": "API_KEY"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Do not pass go, do not collect $100.\",\n  \"type\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fa91026d-05ff-4d03-8c24-b3f1e78d2501",
+              "name": "Content Too Large: Request Entity Too Large response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "2022-04-15",
+                    "telemetry",
+                    "kw"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start_time",
+                      "value": "2020-08-22T05:00:30Z"
+                    },
+                    {
+                      "key": "end_time",
+                      "value": "2020-08-22T05:00:30Z"
+                    },
+                    {
+                      "key": "interval_seconds",
+                      "value": "1800"
+                    },
+                    {
+                      "key": "site_id",
+                      "value": "xv1w4"
+                    },
+                    {
+                      "key": "site_id",
+                      "value": "yd4g"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Voltus-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API key used to perform authorization",
+                    "key": "X-Voltus-API-Key",
+                    "value": "API_KEY"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Request Entity Too Large",
+              "code": 413,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Do not pass go, do not collect $100.\",\n  \"type\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a0a53c32-d42e-4f34-a078-8776c7c37cad",
+              "name": "Too Many Requests: Too Many Requests response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "2022-04-15",
+                    "telemetry",
+                    "kw"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start_time",
+                      "value": "2020-08-22T05:00:30Z"
+                    },
+                    {
+                      "key": "end_time",
+                      "value": "2020-08-22T05:00:30Z"
+                    },
+                    {
+                      "key": "interval_seconds",
+                      "value": "1800"
+                    },
+                    {
+                      "key": "site_id",
+                      "value": "xv1w4"
+                    },
+                    {
+                      "key": "site_id",
+                      "value": "yd4g"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Voltus-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API key used to perform authorization",
+                    "key": "X-Voltus-API-Key",
+                    "value": "API_KEY"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Do not pass go, do not collect $100.\",\n  \"type\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3514dbae-fa7d-49b9-b71b-d9b1ccc70b18",
+              "name": "Internal Server Error: Internal Server Error response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "2022-04-15",
+                    "telemetry",
+                    "kw"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start_time",
+                      "value": "2020-08-22T05:00:30Z"
+                    },
+                    {
+                      "key": "end_time",
+                      "value": "2020-08-22T05:00:30Z"
+                    },
+                    {
+                      "key": "interval_seconds",
+                      "value": "1800"
+                    },
+                    {
+                      "key": "site_id",
+                      "value": "xv1w4"
+                    },
+                    {
+                      "key": "site_id",
+                      "value": "yd4g"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Voltus-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API key used to perform authorization",
+                    "key": "X-Voltus-API-Key",
+                    "value": "API_KEY"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Do not pass go, do not collect $100.\",\n  \"type\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "8c51f022-7b7a-4b1e-a12f-9784e60d73dc",
+      "name": "Webhooks",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "c9281cc0-d7fa-4f3f-9201-c8b01e09d0ca",
+          "name": "voltus#get-webhooks",
+          "request": {
+            "name": "voltus#get-webhooks",
+            "description": {
+              "content": "Returns a list of all webhooks that have been created.\n\nAll webhooks will be returned in a single request. The values of `page` and `per_page` have been reserved for future use, but should be ignored at present.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "2022-04-15",
+                "webhooks"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) API key used to perform authorization",
+                "key": "X-Voltus-API-Key",
+                "value": "<string>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-Voltus-API-Key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "87d9f96a-7881-4557-ab3f-54ee96ffec5a",
+              "name": "OK response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "2022-04-15",
+                    "webhooks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Voltus-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API key used to perform authorization",
+                    "key": "X-Voltus-API-Key",
+                    "value": "API_KEY"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"page\": 0,\n  \"perPage\": 0,\n  \"webhooks\": []\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5374131d-a509-4dc5-957d-78f188e9700f",
+              "name": "Bad Request: Bad Request response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "2022-04-15",
+                    "webhooks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Voltus-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API key used to perform authorization",
+                    "key": "X-Voltus-API-Key",
+                    "value": "API_KEY"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Do not pass go, do not collect $100.\",\n  \"type\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "726bc255-d057-48e4-a3ca-ec8636fea9a7",
+              "name": "Unauthorized: Forbidden response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "2022-04-15",
+                    "webhooks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Voltus-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API key used to perform authorization",
+                    "key": "X-Voltus-API-Key",
+                    "value": "API_KEY"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Do not pass go, do not collect $100.\",\n  \"type\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6e627892-5a69-444c-8e28-a0623cdd20b5",
+              "name": "Not Found: Not Found response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "2022-04-15",
+                    "webhooks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Voltus-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API key used to perform authorization",
+                    "key": "X-Voltus-API-Key",
+                    "value": "API_KEY"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Do not pass go, do not collect $100.\",\n  \"type\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "077c53fe-bc81-408b-a1bd-f90be3667762",
+              "name": "Content Too Large: Request Entity Too Large response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "2022-04-15",
+                    "webhooks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Voltus-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API key used to perform authorization",
+                    "key": "X-Voltus-API-Key",
+                    "value": "API_KEY"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Request Entity Too Large",
+              "code": 413,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Do not pass go, do not collect $100.\",\n  \"type\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ec50c646-0169-4e6d-997b-6cf1eb52c212",
+              "name": "Too Many Requests: Too Many Requests response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "2022-04-15",
+                    "webhooks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Voltus-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API key used to perform authorization",
+                    "key": "X-Voltus-API-Key",
+                    "value": "API_KEY"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Do not pass go, do not collect $100.\",\n  \"type\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "00d3b6f4-ba22-4a57-9ede-87ff40f05b7a",
+              "name": "Internal Server Error: Internal Server Error response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "2022-04-15",
+                    "webhooks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Voltus-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API key used to perform authorization",
+                    "key": "X-Voltus-API-Key",
+                    "value": "API_KEY"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Do not pass go, do not collect $100.\",\n  \"type\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "513bab6f-6869-4b94-aac5-dfa4a4cfd2be",
+          "name": "voltus#post-webhook",
+          "request": {
+            "name": "voltus#post-webhook",
+            "description": {
+              "content": "Create a webhook by providing the events you'd like to listen for, and the URL where you'd like to receive notifications. When a webhook is created, we will send a test request to the provided URL with this payload:\n\n```json\n{\n  \"event\": {\n    \"name\": \"\"\n  },\n  \"resource\": \"\"\n}\n```\n\nYour handler should respond with a 2xx status code. If it does not succeed, the webhook creation request will fail.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "2022-04-15",
+                "webhooks"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) API key used to perform authorization",
+                "key": "X-Voltus-API-Key",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-Voltus-API-Key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"url\": \"<string>\",\n  \"events\": [\n    {\n      \"name\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "176e975f-5c1b-4682-b324-4fff9992ccbf",
+              "name": "OK response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "2022-04-15",
+                    "webhooks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Voltus-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API key used to perform authorization",
+                    "key": "X-Voltus-API-Key",
+                    "value": "API_KEY"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"events\": [\n    {\n      \"name\": \"dispatch.create\"\n    },\n    {\n      \"name\": \"dispatch.update\"\n    }\n  ],\n  \"url\": \"https://example.com/listeners/voltus\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"events\": [\n    {\n      \"name\": \"dispatch.create\"\n    },\n    {\n      \"name\": \"dispatch.update\"\n    }\n  ],\n  \"id\": \"dsft58ga\",\n  \"url\": \"https://example.com/listeners/voltus\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "db794087-c172-4c18-a47e-3143fd0d7720",
+              "name": "Bad Request: Bad Request response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "2022-04-15",
+                    "webhooks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Voltus-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API key used to perform authorization",
+                    "key": "X-Voltus-API-Key",
+                    "value": "API_KEY"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"events\": [\n    {\n      \"name\": \"dispatch.create\"\n    },\n    {\n      \"name\": \"dispatch.update\"\n    }\n  ],\n  \"url\": \"https://example.com/listeners/voltus\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Do not pass go, do not collect $100.\",\n  \"type\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "49b9862b-94ab-440c-89eb-55e6add6e93c",
+              "name": "Unauthorized: Forbidden response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "2022-04-15",
+                    "webhooks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Voltus-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API key used to perform authorization",
+                    "key": "X-Voltus-API-Key",
+                    "value": "API_KEY"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"events\": [\n    {\n      \"name\": \"dispatch.create\"\n    },\n    {\n      \"name\": \"dispatch.update\"\n    }\n  ],\n  \"url\": \"https://example.com/listeners/voltus\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Do not pass go, do not collect $100.\",\n  \"type\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "04d733af-71ca-410f-9a4e-b641899731da",
+              "name": "Not Found: Not Found response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "2022-04-15",
+                    "webhooks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Voltus-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API key used to perform authorization",
+                    "key": "X-Voltus-API-Key",
+                    "value": "API_KEY"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"events\": [\n    {\n      \"name\": \"dispatch.create\"\n    },\n    {\n      \"name\": \"dispatch.update\"\n    }\n  ],\n  \"url\": \"https://example.com/listeners/voltus\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Do not pass go, do not collect $100.\",\n  \"type\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3df5720f-97fb-4a6a-94d5-51bd77ecdf54",
+              "name": "Content Too Large: Request Entity Too Large response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "2022-04-15",
+                    "webhooks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Voltus-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API key used to perform authorization",
+                    "key": "X-Voltus-API-Key",
+                    "value": "API_KEY"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"events\": [\n    {\n      \"name\": \"dispatch.create\"\n    },\n    {\n      \"name\": \"dispatch.update\"\n    }\n  ],\n  \"url\": \"https://example.com/listeners/voltus\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Request Entity Too Large",
+              "code": 413,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Do not pass go, do not collect $100.\",\n  \"type\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bfd644ee-6446-4b62-b689-fdb0a0719a6a",
+              "name": "Too Many Requests: Too Many Requests response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "2022-04-15",
+                    "webhooks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Voltus-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API key used to perform authorization",
+                    "key": "X-Voltus-API-Key",
+                    "value": "API_KEY"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"events\": [\n    {\n      \"name\": \"dispatch.create\"\n    },\n    {\n      \"name\": \"dispatch.update\"\n    }\n  ],\n  \"url\": \"https://example.com/listeners/voltus\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Do not pass go, do not collect $100.\",\n  \"type\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "db622cb4-d80b-4343-b8c5-38eb60db3b2c",
+              "name": "Internal Server Error: Internal Server Error response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "2022-04-15",
+                    "webhooks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Voltus-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API key used to perform authorization",
+                    "key": "X-Voltus-API-Key",
+                    "value": "API_KEY"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"events\": [\n    {\n      \"name\": \"dispatch.create\"\n    },\n    {\n      \"name\": \"dispatch.update\"\n    }\n  ],\n  \"url\": \"https://example.com/listeners/voltus\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Do not pass go, do not collect $100.\",\n  \"type\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "8036478d-5289-4c68-85da-0612320756e8",
+          "name": "voltus#delete-webhook",
+          "request": {
+            "name": "voltus#delete-webhook",
+            "description": {
+              "content": "Permanently deletes a webhook. It cannot be undone.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "2022-04-15",
+                "webhooks",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) Unique identifier for this webhook"
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) API key used to perform authorization",
+                "key": "X-Voltus-API-Key",
+                "value": "<string>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-Voltus-API-Key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "641070b1-c5d9-4bf9-9a54-da47e1bac47c",
+              "name": "OK response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "2022-04-15",
+                    "webhooks",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique identifier for this webhook"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Voltus-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API key used to perform authorization",
+                    "key": "X-Voltus-API-Key",
+                    "value": "API_KEY"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"events\": [\n    {\n      \"name\": \"dispatch.create\"\n    },\n    {\n      \"name\": \"dispatch.update\"\n    }\n  ],\n  \"id\": \"dsft58ga\",\n  \"url\": \"https://example.com/listeners/voltus\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "641d2f25-4397-430d-9cc9-599ec3e87c0e",
+              "name": "Bad Request: Bad Request response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "2022-04-15",
+                    "webhooks",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique identifier for this webhook"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Voltus-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API key used to perform authorization",
+                    "key": "X-Voltus-API-Key",
+                    "value": "API_KEY"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Do not pass go, do not collect $100.\",\n  \"type\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b10012a9-ef07-468d-bf4a-41daefd7075b",
+              "name": "Unauthorized: Forbidden response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "2022-04-15",
+                    "webhooks",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique identifier for this webhook"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Voltus-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API key used to perform authorization",
+                    "key": "X-Voltus-API-Key",
+                    "value": "API_KEY"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Do not pass go, do not collect $100.\",\n  \"type\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c517fa31-a0ff-498d-bcc5-19cf416d56c9",
+              "name": "Not Found: Not Found response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "2022-04-15",
+                    "webhooks",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique identifier for this webhook"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Voltus-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API key used to perform authorization",
+                    "key": "X-Voltus-API-Key",
+                    "value": "API_KEY"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Do not pass go, do not collect $100.\",\n  \"type\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0de58044-f504-4148-a3e3-db56792780ba",
+              "name": "Content Too Large: Request Entity Too Large response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "2022-04-15",
+                    "webhooks",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique identifier for this webhook"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Voltus-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API key used to perform authorization",
+                    "key": "X-Voltus-API-Key",
+                    "value": "API_KEY"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Request Entity Too Large",
+              "code": 413,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Do not pass go, do not collect $100.\",\n  \"type\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a466022a-3d22-4fc1-8449-72ff7babe51d",
+              "name": "Too Many Requests: Too Many Requests response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "2022-04-15",
+                    "webhooks",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique identifier for this webhook"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Voltus-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API key used to perform authorization",
+                    "key": "X-Voltus-API-Key",
+                    "value": "API_KEY"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Do not pass go, do not collect $100.\",\n  \"type\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "77ba1b3c-6a4b-4452-bbcf-301e79d897c1",
+              "name": "Internal Server Error: Internal Server Error response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "2022-04-15",
+                    "webhooks",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique identifier for this webhook"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Voltus-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API key used to perform authorization",
+                    "key": "X-Voltus-API-Key",
+                    "value": "API_KEY"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Do not pass go, do not collect $100.\",\n  \"type\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.voltus.co",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "X-Voltus-API-Key"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "82c14cb5-fcd6-48d6-85f0-5eb9de0cf992",
+    "name": "Voltus API Reference",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Welcome to the Voltus API Reference.\n\nThe live production API hostname is `api.voltus.co`.\n\n## Versioning\n\nWe use date-based versioning. `api.voltus.co` will always redirect to the latest version.\n\n**Current version: api.voltus.co/2022-04-15**\n\n<details>\n  <summary>Changelog</summary>\n\n- Renamed \"Facilities\" to \"Sites\n- Entity IDs are now strings instead of ints\n- New Authorization header `X-Voltus-API-Key`\n- Removed support for `Authorization: Bearer` header\n</details>\n\n### Previous versions:\n\n- api.voltus.co/2020-12-30\n\n## Authentication\n\nThe API uses [API key authentication](https://swagger.io/docs/specification/authentication/api-keys/). API keys are provided by your account manager. Each request must include an `X-Voltus-API-Key` header where the value is your API key. Code examples for each endpoint will demonstrate how this header can be added in various languages.\n\n## Errors\n\nExample error responses\n\n```json\n{\n  \"message\": \"A create webhook request must contain an 'events' field\",\n  \"type\": \"Bad Request\"\n}\n\n{\n  \"message\": \"Permission denied\",\n  \"type\": \"Unauthorized\"\n}\n```\n\nVoltus uses conventional HTTP response codes to indicate the success or failure of an API request. In general: Codes in the `2xx` range indicate success. Codes in the `4xx` range indicate an error that failed given the information provided (e.g., a required parameter was omitted, an api key has been revoked, etc.). Codes in the `5xx` range indicate an error with Voltus's servers (these are rare).\n\n### Attributes\n\n- `message` (string) A human-readable message providing more details about the error.\n\n- `type` (string) The error type. These types will always match the name of the name of the http status code that is used in the response. One of `Unauthorized`, `Bad Request`, `Content Too Large`, `Internal Server Error`, `Too Many Requests` or `Not Found`.",
+      "type": "text/plain"
+    }
+  }
+}

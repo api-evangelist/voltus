@@ -2,15 +2,12 @@ generated: '2026-07-27'
 method: derived
 status: candidate
 source: openapi/voltus-openapi.yml
-description: >-
-  Voltus operates NO MCP server. The official MCP registry returns nothing for
-  "voltus", npm has no Voltus MCP package, and the docs never mention MCP or
-  agents (checked 2026-07-27). The tool set below is a DERIVED CANDIDATE - what
-  an MCP server over the Voltus API would expose, one tool per published
-  operation, with each tool's input contract inherited from that operation's
-  parameters/requestBody in the harvested OpenAPI. It is a design artifact, not a
-  Voltus product, and no MCPServer pointer is wired into apis.yml because no
-  server exists.
+description: Voltus operates NO MCP server. The official MCP registry returns nothing for "voltus", npm
+  has no Voltus MCP package, and the docs never mention MCP or agents (checked 2026-07-27). The tool set
+  below is a DERIVED CANDIDATE - what an MCP server over the Voltus API would expose, one tool per published
+  operation, with each tool's input contract inherited from that operation's parameters/requestBody in
+  the harvested OpenAPI. It is a design artifact, not a Voltus product, and no MCPServer pointer is wired
+  into apis.yml because no server exists.
 server:
   name: voltus
   transport: http
@@ -19,57 +16,69 @@ server:
 auth_model_if_built:
   scheme: apiKey
   header: X-Voltus-API-Key
-  note: >-
-    A static, account-scoped key with no scopes and no OAuth means an MCP server
-    over Voltus would hold full account authority. Dispatch creation is a
-    grid-control action - see agentic-access/voltus-agentic-access.yml, which
-    classifies POST /dispatches as safety-critical with human-in-the-loop
-    required.
+  note: A static, account-scoped key with no scopes and no OAuth means an MCP server over Voltus would
+    hold full account authority. Dispatch creation is a grid-control action - see agentic-access/voltus-agentic-access.yml,
+    which classifies POST /dispatches as safety-critical with human-in-the-loop required.
 tools:
-  - name: list_sites
-    description: List the sites (facilities) enrolled under the calling account, with their meters.
-    source_operation: 'openapi/voltus-openapi.yml#voltus#get-sites'
-    read_only: true
-  - name: list_dispatches
-    description: List grid dispatches for enrolled sites.
-    source_operation: 'openapi/voltus-openapi.yml#voltus#get-dispatches'
-    read_only: true
-  - name: get_dispatch
-    description: Retrieve a single dispatch by id.
-    source_operation: 'openapi/voltus-openapi.yml#voltus#get-dispatch'
-    read_only: true
-  - name: create_test_dispatch
-    description: Create a test dispatch (start_time, end_time, optional program_id).
-    source_operation: 'openapi/voltus-openapi.yml#voltus#post-dispatch'
-    read_only: false
-    consequence: safety-critical
-    note: Issues a curtailment instruction to real sites. Should require human approval.
-  - name: get_telemetry_kw
-    description: Read interval telemetry for up to 10 sites over up to 90 days.
-    source_operation: 'openapi/voltus-openapi.yml#voltus#get-telemetry-kw'
-    read_only: true
-  - name: post_telemetry
-    description: Submit interval energy telemetry readings.
-    source_operation: 'openapi/voltus-openapi.yml#voltus#post-telemetry'
-    read_only: false
-  - name: post_controllable_load
-    description: Submit aggregate controllable-load kW for a site.
-    source_operation: 'openapi/voltus-openapi.yml#voltus#post-controllable-load'
-    read_only: false
-  - name: list_webhooks
-    description: List registered dispatch webhooks.
-    source_operation: 'openapi/voltus-openapi.yml#voltus#get-webhooks'
-    read_only: true
-  - name: create_webhook
-    description: Register an HTTPS callback for dispatch.create / dispatch.update.
-    source_operation: 'openapi/voltus-openapi.yml#voltus#post-webhook'
-    read_only: false
-  - name: delete_webhook
-    description: Permanently delete a webhook.
-    source_operation: 'openapi/voltus-openapi.yml#voltus#delete-webhook'
-    read_only: false
-    note: Irreversible - "It cannot be undone."
+- name: list_sites
+  description: List the sites (facilities) enrolled under the calling account, with their meters.
+  source_operation: openapi/voltus-openapi.yml#voltus#get-sites
+  read_only: true
+- name: list_dispatches
+  description: List grid dispatches for enrolled sites.
+  source_operation: openapi/voltus-openapi.yml#voltus#get-dispatches
+  read_only: true
+- name: get_dispatch
+  description: Retrieve a single dispatch by id.
+  source_operation: openapi/voltus-openapi.yml#voltus#get-dispatch
+  read_only: true
+- name: create_test_dispatch
+  description: Create a test dispatch (start_time, end_time, optional program_id).
+  source_operation: openapi/voltus-openapi.yml#voltus#post-dispatch
+  read_only: false
+  consequence: safety-critical
+  note: Issues a curtailment instruction to real sites. Should require human approval.
+- name: get_telemetry_kw
+  description: Read interval telemetry for up to 10 sites over up to 90 days.
+  source_operation: openapi/voltus-openapi.yml#voltus#get-telemetry-kw
+  read_only: true
+- name: post_telemetry
+  description: Submit interval energy telemetry readings.
+  source_operation: openapi/voltus-openapi.yml#voltus#post-telemetry
+  read_only: false
+- name: post_controllable_load
+  description: Submit aggregate controllable-load kW for a site.
+  source_operation: openapi/voltus-openapi.yml#voltus#post-controllable-load
+  read_only: false
+- name: list_webhooks
+  description: List registered dispatch webhooks.
+  source_operation: openapi/voltus-openapi.yml#voltus#get-webhooks
+  read_only: true
+- name: create_webhook
+  description: Register an HTTPS callback for dispatch.create / dispatch.update.
+  source_operation: openapi/voltus-openapi.yml#voltus#post-webhook
+  read_only: false
+- name: delete_webhook
+  description: Permanently delete a webhook.
+  source_operation: openapi/voltus-openapi.yml#voltus#delete-webhook
+  read_only: false
+  note: Irreversible - "It cannot be undone."
 searched:
-  - {registry: 'registry.modelcontextprotocol.io', query: voltus, result: 0 servers, date: '2026-07-27'}
-  - {registry: npm, query: 'voltus mcp', result: no first-party package, date: '2026-07-27'}
-  - {source: 'https://api.voltus.co/docs/ (84 pages)', result: no mention of MCP, agents or tools, date: '2026-07-27'}
+- registry: registry.modelcontextprotocol.io
+  query: voltus
+  result: 0 servers
+  date: '2026-07-27'
+- registry: npm
+  query: voltus mcp
+  result: no first-party package
+  date: '2026-07-27'
+- source: https://api.voltus.co/docs/ (84 pages)
+  result: no mention of MCP
+  agents or tools: null
+  date: '2026-07-27'
+deployment:
+  mode: none
+  verified: derived
+  tools: 10
+  checked: '2026-08-12'
+  source: catalog MCP census
