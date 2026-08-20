@@ -170,6 +170,10 @@ apis:
   humanURL: https://api.voltus.co/docs/openapi/webhooks
   baseURL: https://api.voltus.co/2022-04-15
   tags:
+  - Webhook
+  - Dispatch
+  - Notification
+  tags_raw:
   - Webhooks
   - Dispatch
   - Notifications
