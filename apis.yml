@@ -47,167 +47,16 @@ created: '2026-07-27'
 modified: '2026-07-27'
 specificationVersion: '0.23'
 apis:
-- aid: voltus:voltus-dispatches-api
-  name: Voltus Dispatches API
-  description: >-
-    Grid dispatch events for enrolled sites — list dispatches, retrieve a single
-    dispatch by ID, and create a test dispatch. Documented operations are GET
-    /dispatches ("Returns a list of dispatches."), POST /dispatches ("Creates a
-    test dispatch.") and GET /dispatches/{id} ("Retrieves the dispatch with the
-    given ID."). Dispatch objects carry program, market (e.g. MISO),
-    program_type, start/end time, modification_number, optional metadata and
-    per-site drop_by (deprecated) and commitment values. Verified live against
-    the public sandbox, with the full operation contracts harvested into
-    openapi/voltus-openapi.yml.
-  humanURL: https://api.voltus.co/docs/openapi/dispatches
-  baseURL: https://api.voltus.co/2022-04-15
-  tags:
-  - Demand Response
-  - Dispatch
-  - Energy Markets
-  properties:
-  - type: APIReference
-    url: https://api.voltus.co/docs/openapi/dispatches
-  - type: Documentation
-    url: https://api.voltus.co/docs/concepts/demand_response
-  - type: Tutorials
-    url: https://api.voltus.co/docs/tutorials/create-a-dispatch-integration
-  - type: Tutorials
-    url: https://api.voltus.co/docs/tutorials/get-sandbox-dispatches
-  - type: Tutorials
-    url: https://api.voltus.co/docs/tutorials/test-your-dispatch-integration
-  - type: Sandbox
-    url: https://api.voltus.co/docs/concepts/public-credentials
-  - type: Authentication
-    url: https://api.voltus.co/docs/openapi/voltus-api-reference
-  - type: ChangeLog
-    url: https://api.voltus.co/docs/changelog
-  - type: OpenAPI
-    url: openapi/voltus-openapi.yml
-  - type: Examples
-    url: examples/voltus-get-dispatches-200.json
-  - type: Arazzo
-    name: Poll dispatches and curtail enrolled sites
-    url: arazzo/voltus-poll-dispatches-and-curtail.yml
-  - type: AgentSkill
-    name: Receive and act on Voltus grid dispatches
-    url: skills/voltus-dispatch-integration.md
-- aid: voltus:voltus-sites-api
-  name: Voltus Sites API
-  description: >-
-    Read the sites (facilities) enrolled with Voltus under the calling account,
-    with their meters. The single documented operation is GET /sites ("Returns a
-    list of your sites."), returning site name, id and customer_location_id, with
-    an asset_type field on each meter object added 2026-07-01. Verified live
-    against the public sandbox.
-  humanURL: https://api.voltus.co/docs/openapi/sites
-  baseURL: https://api.voltus.co/2022-04-15
-  tags:
-  - Sites
-  - Metering
-  - DER
-  properties:
-  - type: APIReference
-    url: https://api.voltus.co/docs/openapi/sites
-  - type: Tutorials
-    url: https://api.voltus.co/docs/tutorials/first-api-request-get-sites
-  - type: Sandbox
-    url: https://api.voltus.co/docs/concepts/public-credentials
-  - type: ChangeLog
-    url: https://api.voltus.co/docs/changelog/meter-asset-type
-  - type: OpenAPI
-    url: openapi/voltus-openapi.yml
-  - type: Examples
-    url: examples/voltus-get-sites-200.json
-  - type: DataModel
-    url: data-model/voltus-data-model.yml
-- aid: voltus:voltus-telemetry-api
-  name: Voltus Telemetry API
-  description: >-
-    Submit and retrieve interval energy telemetry for enrolled sites. Documented
-    operations are POST /telemetry, POST /telemetry/controllable-load ("Posts
-    controllable load.") and GET /telemetry/kw ("Returns a list of telemetry
-    readings for one or more sites. The maximum number of sites per request is
-    10. The maximum request interval is 90 days, with a limit of 10,000 total
-    data points per site."). This is the site-level customer energy-usage
-    surface — account-scoped to the API key holder, not a Green Button or
-    Consumer Data Right style consented third-party feed.
-  humanURL: https://api.voltus.co/docs/openapi/telemetry
-  baseURL: https://api.voltus.co/2022-04-15
-  tags:
-  - Telemetry
-  - Metering
-  - Electricity
-  - Flexibility
-  properties:
-  - type: APIReference
-    url: https://api.voltus.co/docs/openapi/telemetry
-  - type: Tutorials
-    url: https://api.voltus.co/docs/tutorials/get-telemetry
-  - type: Tutorials
-    url: https://api.voltus.co/docs/tutorials/send-telemetry
-  - type: Sandbox
-    url: https://api.voltus.co/docs/concepts/public-credentials
-  - type: ChangeLog
-    url: https://api.voltus.co/docs/changelog/telemetry-controllable-load
-  - type: OpenAPI
-    url: openapi/voltus-openapi.yml
-  - type: RateLimits
-    url: rate-limits/voltus-rate-limits.yml
-  - type: Arazzo
-    name: Report telemetry and read it back
-    url: arazzo/voltus-report-and-read-telemetry.yml
-  - type: AgentSkill
-    name: Report and read Voltus site telemetry
-    url: skills/voltus-telemetry-reporting.md
-- aid: voltus:voltus-webhooks-api
-  name: Voltus Webhooks API
-  description: >-
-    Register HTTP callbacks so Voltus can push dispatch notifications instead of
-    the partner polling. Documented operations are GET /webhooks ("Returns a list
-    of all webhooks that have been created."), POST /webhooks and DELETE
-    /webhooks/{id} ("Permanently deletes a webhook. It cannot be undone.").
-  humanURL: https://api.voltus.co/docs/openapi/webhooks
-  baseURL: https://api.voltus.co/2022-04-15
-  tags:
-  - Webhook
-  - Dispatch
-  - Notification
-  tags_raw:
-  - Webhooks
-  - Dispatch
-  - Notifications
-  properties:
-  - type: APIReference
-    url: https://api.voltus.co/docs/openapi/webhooks
-  - type: Webhooks
-    url: https://api.voltus.co/docs/openapi/webhooks
-  - type: Documentation
-    url: https://api.voltus.co/docs/tutorials/create-a-dispatch-integration
-  - type: OpenAPI
-    url: openapi/voltus-openapi.yml
-  - type: Webhooks
-    url: asyncapi/voltus-webhooks.yml
-  - type: Examples
-    url: examples/voltus-dispatch-webhook-payload.json
-  - type: Arazzo
-    name: Register a dispatch webhook and verify it
-    url: arazzo/voltus-register-webhook-and-verify.yml
-  - type: AgentSkill
-    name: Register a Voltus webhook and handle dispatch callbacks
-    url: skills/voltus-webhook-dispatch-listener.md
 - aid: voltus:voltus-openadr-vtn
   name: Voltus OpenADR 2.0a VTN
   description: >-
-    Standards-based alternative to the REST dispatch integration. Voltus states
-    it "supports OpenADR2.0a via Simple HTTP (PULL)" and that "Voltus provides a
-    VTN, and our partners run one or more VENs". Partners poll
-    https://openadr.voltus.co/vtn/YOUR_VEN_ID/OpenADR2/Simple/EiEvent (recommended
-    once per minute) and reply with an oadrCreatedEvent acknowledgement.
-    Authentication is mutual TLS — the partner submits a Certificate Signing
-    Request to Voltus and presents the returned client certificate. The host is
-    not anonymously reachable (connection refused on a bare HTTPS GET), which is
-    consistent with an mTLS-only endpoint.
+    Standards-based alternative to the REST dispatch integration. Voltus states it "supports OpenADR2.0a
+    via Simple HTTP (PULL)" and that "Voltus provides a VTN, and our partners run one or more VENs". Partners
+    poll https://openadr.voltus.co/vtn/YOUR_VEN_ID/OpenADR2/Simple/EiEvent (recommended once per minute)
+    and reply with an oadrCreatedEvent acknowledgement. Authentication is mutual TLS — the partner submits
+    a Certificate Signing Request to Voltus and presents the returned client certificate. The host is
+    not anonymously reachable (connection refused on a bare HTTPS GET), which is consistent with an mTLS-only
+    endpoint.
   humanURL: https://api.voltus.co/docs/concepts/openadr
   baseURL: https://openadr.voltus.co
   tags:
@@ -226,7 +75,269 @@ apis:
     url: authentication/voltus-authentication.yml
   - type: Conformance
     url: conformance/voltus-conformance.yml
+- aid: voltus:voltus-dispatches-api
+  name: Voltus Dispatches API
+  description: The Dispatches API from Voltus — 2 operation(s) for dispatches.
+  humanURL: https://api.voltus.co/docs/openapi/dispatches
+  baseURL: https://api.voltus.co/2022-04-15
+  tags:
+  - Dispatches
+  properties:
+  - type: OpenAPI
+    url: openapi/voltus-dispatches-api-openapi.yml
+  - type: APIReference
+    url: https://api.voltus.co/docs/openapi/dispatches
+  - type: Documentation
+    url: https://api.voltus.co/docs/concepts/demand_response
+  - type: Tutorials
+    url: https://api.voltus.co/docs/tutorials/create-a-dispatch-integration
+  - type: Tutorials
+    url: https://api.voltus.co/docs/tutorials/get-sandbox-dispatches
+  - type: Tutorials
+    url: https://api.voltus.co/docs/tutorials/test-your-dispatch-integration
+  - type: Sandbox
+    url: https://api.voltus.co/docs/concepts/public-credentials
+  - type: Authentication
+    url: https://api.voltus.co/docs/openapi/voltus-api-reference
+  - type: ChangeLog
+    url: https://api.voltus.co/docs/changelog
+  - type: Examples
+    url: examples/voltus-get-dispatches-200.json
+  - type: Arazzo
+    url: arazzo/voltus-poll-dispatches-and-curtail.yml
+  - type: APIReference
+    url: https://api.voltus.co/docs/openapi/sites
+  - type: Tutorials
+    url: https://api.voltus.co/docs/tutorials/first-api-request-get-sites
+  - type: ChangeLog
+    url: https://api.voltus.co/docs/changelog/meter-asset-type
+  - type: Examples
+    url: examples/voltus-get-sites-200.json
+  - type: DataModel
+    url: data-model/voltus-data-model.yml
+  - type: APIReference
+    url: https://api.voltus.co/docs/openapi/telemetry
+  - type: Tutorials
+    url: https://api.voltus.co/docs/tutorials/get-telemetry
+  - type: Tutorials
+    url: https://api.voltus.co/docs/tutorials/send-telemetry
+  - type: ChangeLog
+    url: https://api.voltus.co/docs/changelog/telemetry-controllable-load
+  - type: RateLimits
+    url: rate-limits/voltus-rate-limits.yml
+  - type: Arazzo
+    url: arazzo/voltus-report-and-read-telemetry.yml
+  - type: APIReference
+    url: https://api.voltus.co/docs/openapi/webhooks
+  - type: Webhooks
+    url: https://api.voltus.co/docs/openapi/webhooks
+  - type: Documentation
+    url: https://api.voltus.co/docs/tutorials/create-a-dispatch-integration
+  - type: Webhooks
+    url: asyncapi/voltus-webhooks.yml
+  - type: Examples
+    url: examples/voltus-dispatch-webhook-payload.json
+  - type: Arazzo
+    url: arazzo/voltus-register-webhook-and-verify.yml
+- aid: voltus:voltus-sites-api
+  name: Voltus Sites API
+  description: The Sites API from Voltus — 1 operation(s) for sites.
+  humanURL: https://api.voltus.co/docs/openapi/dispatches
+  baseURL: https://api.voltus.co/2022-04-15
+  tags:
+  - Sites
+  properties:
+  - type: OpenAPI
+    url: openapi/voltus-sites-api-openapi.yml
+  - type: APIReference
+    url: https://api.voltus.co/docs/openapi/dispatches
+  - type: Documentation
+    url: https://api.voltus.co/docs/concepts/demand_response
+  - type: Tutorials
+    url: https://api.voltus.co/docs/tutorials/create-a-dispatch-integration
+  - type: Tutorials
+    url: https://api.voltus.co/docs/tutorials/get-sandbox-dispatches
+  - type: Tutorials
+    url: https://api.voltus.co/docs/tutorials/test-your-dispatch-integration
+  - type: Sandbox
+    url: https://api.voltus.co/docs/concepts/public-credentials
+  - type: Authentication
+    url: https://api.voltus.co/docs/openapi/voltus-api-reference
+  - type: ChangeLog
+    url: https://api.voltus.co/docs/changelog
+  - type: Examples
+    url: examples/voltus-get-dispatches-200.json
+  - type: Arazzo
+    url: arazzo/voltus-poll-dispatches-and-curtail.yml
+  - type: APIReference
+    url: https://api.voltus.co/docs/openapi/sites
+  - type: Tutorials
+    url: https://api.voltus.co/docs/tutorials/first-api-request-get-sites
+  - type: ChangeLog
+    url: https://api.voltus.co/docs/changelog/meter-asset-type
+  - type: Examples
+    url: examples/voltus-get-sites-200.json
+  - type: DataModel
+    url: data-model/voltus-data-model.yml
+  - type: APIReference
+    url: https://api.voltus.co/docs/openapi/telemetry
+  - type: Tutorials
+    url: https://api.voltus.co/docs/tutorials/get-telemetry
+  - type: Tutorials
+    url: https://api.voltus.co/docs/tutorials/send-telemetry
+  - type: ChangeLog
+    url: https://api.voltus.co/docs/changelog/telemetry-controllable-load
+  - type: RateLimits
+    url: rate-limits/voltus-rate-limits.yml
+  - type: Arazzo
+    url: arazzo/voltus-report-and-read-telemetry.yml
+  - type: APIReference
+    url: https://api.voltus.co/docs/openapi/webhooks
+  - type: Webhooks
+    url: https://api.voltus.co/docs/openapi/webhooks
+  - type: Documentation
+    url: https://api.voltus.co/docs/tutorials/create-a-dispatch-integration
+  - type: Webhooks
+    url: asyncapi/voltus-webhooks.yml
+  - type: Examples
+    url: examples/voltus-dispatch-webhook-payload.json
+  - type: Arazzo
+    url: arazzo/voltus-register-webhook-and-verify.yml
+- aid: voltus:voltus-telemetry-api
+  name: Voltus Telemetry API
+  description: The Telemetry API from Voltus — 3 operation(s) for telemetry.
+  humanURL: https://api.voltus.co/docs/openapi/dispatches
+  baseURL: https://api.voltus.co/2022-04-15
+  tags:
+  - Telemetry
+  properties:
+  - type: OpenAPI
+    url: openapi/voltus-telemetry-api-openapi.yml
+  - type: APIReference
+    url: https://api.voltus.co/docs/openapi/dispatches
+  - type: Documentation
+    url: https://api.voltus.co/docs/concepts/demand_response
+  - type: Tutorials
+    url: https://api.voltus.co/docs/tutorials/create-a-dispatch-integration
+  - type: Tutorials
+    url: https://api.voltus.co/docs/tutorials/get-sandbox-dispatches
+  - type: Tutorials
+    url: https://api.voltus.co/docs/tutorials/test-your-dispatch-integration
+  - type: Sandbox
+    url: https://api.voltus.co/docs/concepts/public-credentials
+  - type: Authentication
+    url: https://api.voltus.co/docs/openapi/voltus-api-reference
+  - type: ChangeLog
+    url: https://api.voltus.co/docs/changelog
+  - type: Examples
+    url: examples/voltus-get-dispatches-200.json
+  - type: Arazzo
+    url: arazzo/voltus-poll-dispatches-and-curtail.yml
+  - type: APIReference
+    url: https://api.voltus.co/docs/openapi/sites
+  - type: Tutorials
+    url: https://api.voltus.co/docs/tutorials/first-api-request-get-sites
+  - type: ChangeLog
+    url: https://api.voltus.co/docs/changelog/meter-asset-type
+  - type: Examples
+    url: examples/voltus-get-sites-200.json
+  - type: DataModel
+    url: data-model/voltus-data-model.yml
+  - type: APIReference
+    url: https://api.voltus.co/docs/openapi/telemetry
+  - type: Tutorials
+    url: https://api.voltus.co/docs/tutorials/get-telemetry
+  - type: Tutorials
+    url: https://api.voltus.co/docs/tutorials/send-telemetry
+  - type: ChangeLog
+    url: https://api.voltus.co/docs/changelog/telemetry-controllable-load
+  - type: RateLimits
+    url: rate-limits/voltus-rate-limits.yml
+  - type: Arazzo
+    url: arazzo/voltus-report-and-read-telemetry.yml
+  - type: APIReference
+    url: https://api.voltus.co/docs/openapi/webhooks
+  - type: Webhooks
+    url: https://api.voltus.co/docs/openapi/webhooks
+  - type: Documentation
+    url: https://api.voltus.co/docs/tutorials/create-a-dispatch-integration
+  - type: Webhooks
+    url: asyncapi/voltus-webhooks.yml
+  - type: Examples
+    url: examples/voltus-dispatch-webhook-payload.json
+  - type: Arazzo
+    url: arazzo/voltus-register-webhook-and-verify.yml
+- aid: voltus:voltus-webhooks-api
+  name: Voltus Webhooks API
+  description: The Webhooks API from Voltus — 2 operation(s) for webhooks.
+  humanURL: https://api.voltus.co/docs/openapi/dispatches
+  baseURL: https://api.voltus.co/2022-04-15
+  tags:
+  - Webhooks
+  properties:
+  - type: OpenAPI
+    url: openapi/voltus-webhooks-api-openapi.yml
+  - type: APIReference
+    url: https://api.voltus.co/docs/openapi/dispatches
+  - type: Documentation
+    url: https://api.voltus.co/docs/concepts/demand_response
+  - type: Tutorials
+    url: https://api.voltus.co/docs/tutorials/create-a-dispatch-integration
+  - type: Tutorials
+    url: https://api.voltus.co/docs/tutorials/get-sandbox-dispatches
+  - type: Tutorials
+    url: https://api.voltus.co/docs/tutorials/test-your-dispatch-integration
+  - type: Sandbox
+    url: https://api.voltus.co/docs/concepts/public-credentials
+  - type: Authentication
+    url: https://api.voltus.co/docs/openapi/voltus-api-reference
+  - type: ChangeLog
+    url: https://api.voltus.co/docs/changelog
+  - type: Examples
+    url: examples/voltus-get-dispatches-200.json
+  - type: Arazzo
+    url: arazzo/voltus-poll-dispatches-and-curtail.yml
+  - type: APIReference
+    url: https://api.voltus.co/docs/openapi/sites
+  - type: Tutorials
+    url: https://api.voltus.co/docs/tutorials/first-api-request-get-sites
+  - type: ChangeLog
+    url: https://api.voltus.co/docs/changelog/meter-asset-type
+  - type: Examples
+    url: examples/voltus-get-sites-200.json
+  - type: DataModel
+    url: data-model/voltus-data-model.yml
+  - type: APIReference
+    url: https://api.voltus.co/docs/openapi/telemetry
+  - type: Tutorials
+    url: https://api.voltus.co/docs/tutorials/get-telemetry
+  - type: Tutorials
+    url: https://api.voltus.co/docs/tutorials/send-telemetry
+  - type: ChangeLog
+    url: https://api.voltus.co/docs/changelog/telemetry-controllable-load
+  - type: RateLimits
+    url: rate-limits/voltus-rate-limits.yml
+  - type: Arazzo
+    url: arazzo/voltus-report-and-read-telemetry.yml
+  - type: APIReference
+    url: https://api.voltus.co/docs/openapi/webhooks
+  - type: Webhooks
+    url: https://api.voltus.co/docs/openapi/webhooks
+  - type: Documentation
+    url: https://api.voltus.co/docs/tutorials/create-a-dispatch-integration
+  - type: Webhooks
+    url: asyncapi/voltus-webhooks.yml
+  - type: Examples
+    url: examples/voltus-dispatch-webhook-payload.json
+  - type: Arazzo
+    url: arazzo/voltus-register-webhook-and-verify.yml
 common:
+- type: AgentSkill
+  url: skills/voltus-dispatch-integration.md
+- type: AgentSkill
+  url: skills/voltus-telemetry-reporting.md
+- type: AgentSkill
+  url: skills/voltus-webhook-dispatch-listener.md
 - type: MCPServer
   url: mcp/voltus-mcp.yml
 - type: AgenticAccess
