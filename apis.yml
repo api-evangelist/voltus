@@ -29,6 +29,18 @@ description: >-
   plugin, and the real operation objects (parameters, request bodies, response
   schemas, examples) were recovered verbatim from the published build and
   assembled into openapi/voltus-openapi.yml: 10 operations across 8 paths.
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 image: https://api.voltus.co/img/voltus.png
 tags:
 - Energy
