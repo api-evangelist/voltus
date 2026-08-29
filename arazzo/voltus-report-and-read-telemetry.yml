@@ -7,97 +7,100 @@ info:
     read interval kW back within Voltus's documented limits (10 sites, 90 days,
     10,000 points per site).
 sourceDescriptions:
-  - name: voltus
-    url: ../openapi/voltus-openapi.yml
-    type: openapi
+- name: sitesApi
+  url: ../openapi/voltus-sites-api-openapi.yml
+  type: openapi
+- name: telemetryApi
+  url: ../openapi/voltus-telemetry-api-openapi.yml
+  type: openapi
 workflows:
-  - workflowId: report-and-read-telemetry
-    summary: Resolve a site, post telemetry, post controllable load, then read kW back.
-    inputs:
-      type: object
-      required: [apiKey, startTime, endTime]
-      properties:
-        apiKey:
-          type: string
-          default: secret
-        startTime:
-          type: string
-          description: RFC 3339, aligned to 30 seconds. Exclusive lower bound on read-back.
-        endTime:
-          type: string
-          description: RFC 3339, aligned to 30 seconds. Inclusive upper bound.
-        intervalSeconds:
-          type: integer
-          description: One of 30, 60, 300, 900, 1800, 3600, 21600.
-          default: 3600
-    steps:
-      - stepId: list-sites
-        description: Resolve site and meter ids.
-        operationId: 'voltus#get-sites'
-        parameters:
-          - name: X-Voltus-API-Key
-            in: header
-            value: $inputs.apiKey
-        successCriteria:
-          - condition: $statusCode == 200
-        outputs:
-          siteId: $response.body#/sites/0/id
-      - stepId: post-telemetry
-        description: Submit a metered interval reading.
-        operationId: 'voltus#post-telemetry'
-        parameters:
-          - name: X-Voltus-API-Key
-            in: header
-            value: $inputs.apiKey
-        requestBody:
-          contentType: application/json
-          payload:
-            telemetry:
-              - site_id: $steps.list-sites.outputs.siteId
-                timestamp: $inputs.startTime
-                interval_seconds: 30
-                units: kW
-                value: 0.2
-        successCriteria:
-          - condition: $statusCode == 200
-      - stepId: post-controllable-load
-        description: Submit the aggregate kW your integration controls at that site.
-        operationId: 'voltus#post-controllable-load'
-        parameters:
-          - name: X-Voltus-API-Key
-            in: header
-            value: $inputs.apiKey
-        requestBody:
-          contentType: application/json
-          payload:
-            controllable_load:
-              - site_id: $steps.list-sites.outputs.siteId
-                timestamp: $inputs.startTime
-                interval_seconds: 30
-                units: kW
-                value: 0.2
-        successCriteria:
-          - condition: $statusCode == 200
-      - stepId: get-telemetry-kw
-        description: Read interval kW back for the site.
-        operationId: 'voltus#get-telemetry-kw'
-        parameters:
-          - name: start_time
-            in: query
-            value: $inputs.startTime
-          - name: end_time
-            in: query
-            value: $inputs.endTime
-          - name: interval_seconds
-            in: query
-            value: $inputs.intervalSeconds
-          - name: site_id
-            in: query
-            value: $steps.list-sites.outputs.siteId
-          - name: X-Voltus-API-Key
-            in: header
-            value: $inputs.apiKey
-        successCriteria:
-          - condition: $statusCode == 200
+- workflowId: report-and-read-telemetry
+  summary: Resolve a site, post telemetry, post controllable load, then read kW back.
+  inputs:
+    type: object
+    required: [apiKey, startTime, endTime]
+    properties:
+      apiKey:
+        type: string
+        default: secret
+      startTime:
+        type: string
+        description: RFC 3339, aligned to 30 seconds. Exclusive lower bound on read-back.
+      endTime:
+        type: string
+        description: RFC 3339, aligned to 30 seconds. Inclusive upper bound.
+      intervalSeconds:
+        type: integer
+        description: One of 30, 60, 300, 900, 1800, 3600, 21600.
+        default: 3600
+  steps:
+  - stepId: list-sites
+    description: Resolve site and meter ids.
+    operationId: 'voltus#get-sites'
+    parameters:
+    - name: X-Voltus-API-Key
+      in: header
+      value: $inputs.apiKey
+    successCriteria:
+    - condition: $statusCode == 200
     outputs:
-      siteId: $steps.list-sites.outputs.siteId
+      siteId: $response.body#/sites/0/id
+  - stepId: post-telemetry
+    description: Submit a metered interval reading.
+    operationId: 'voltus#post-telemetry'
+    parameters:
+    - name: X-Voltus-API-Key
+      in: header
+      value: $inputs.apiKey
+    requestBody:
+      contentType: application/json
+      payload:
+        telemetry:
+        - site_id: $steps.list-sites.outputs.siteId
+          timestamp: $inputs.startTime
+          interval_seconds: 30
+          units: kW
+          value: 0.2
+    successCriteria:
+    - condition: $statusCode == 200
+  - stepId: post-controllable-load
+    description: Submit the aggregate kW your integration controls at that site.
+    operationId: 'voltus#post-controllable-load'
+    parameters:
+    - name: X-Voltus-API-Key
+      in: header
+      value: $inputs.apiKey
+    requestBody:
+      contentType: application/json
+      payload:
+        controllable_load:
+        - site_id: $steps.list-sites.outputs.siteId
+          timestamp: $inputs.startTime
+          interval_seconds: 30
+          units: kW
+          value: 0.2
+    successCriteria:
+    - condition: $statusCode == 200
+  - stepId: get-telemetry-kw
+    description: Read interval kW back for the site.
+    operationId: 'voltus#get-telemetry-kw'
+    parameters:
+    - name: start_time
+      in: query
+      value: $inputs.startTime
+    - name: end_time
+      in: query
+      value: $inputs.endTime
+    - name: interval_seconds
+      in: query
+      value: $inputs.intervalSeconds
+    - name: site_id
+      in: query
+      value: $steps.list-sites.outputs.siteId
+    - name: X-Voltus-API-Key
+      in: header
+      value: $inputs.apiKey
+    successCriteria:
+    - condition: $statusCode == 200
+  outputs:
+    siteId: $steps.list-sites.outputs.siteId

@@ -1,7 +1,7 @@
-generated: '2026-07-27'
-method: generated
-source: openapi/voltus-openapi.yml
-note: >-
+x-generated: '2026-07-27'
+x-method: generated
+x-source: openapi/voltus-openapi.yml
+x-note: >-
   Native Arazzo workflows over Voltus's own operations. Every operationId is
   verified verbatim against openapi/voltus-openapi.yml. Inputs default to the
   public sandbox credential so a fork runs immediately against
