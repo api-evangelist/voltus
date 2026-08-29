@@ -344,6 +344,9 @@ apis:
   - type: Arazzo
     url: arazzo/voltus-register-webhook-and-verify.yml
 common:
+- type: CapabilityMap
+  url: capabilities/voltus-capability-edges.yml
+  name: Voltus Business Capability Map
 - type: AgentSkill
   url: skills/voltus-dispatch-integration.md
 - type: AgentSkill

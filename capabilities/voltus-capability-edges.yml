@@ -1,0 +1,26 @@
+slug: voltus
+provider: Voltus
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Power & Water Utilities
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 1
+edges:
+- tag: Dispatches
+  spec_file: voltus-dispatches-api-openapi.yml
+  capability_id: BC-3840.30
+  capability_id_l1: BC-3840
+  capability_name: Demand Response Operations
+  confidence: 0.78
+  evidence: POST /2022-04-15/dispatches, GET /2022-04-15/dispatches — vendor 'aggregates commercial, industrial,
+    residential and transportation loads and batteries into wholesale electricity markets'
+  reason: Dispatch objects on a VPP/DER platform are demand-response event dispatches issued to aggregated
+    loads; this is demand-side response dispatch operations. Some ambiguity between VPP aggregation dispatch
+    (.20) and demand response (.30).
