@@ -1,0 +1,1177 @@
+openapi: 3.2.0
+info:
+  title: Voltus API Reference Telemetry API
+  description: "Welcome to the Voltus API Reference.\n\nThe live production API hostname is `api.voltus.co`.\n\n## Versioning\n\nWe use date-based versioning. `api.voltus.co` will always redirect to the latest version.\n\n**Current version: api.voltus.co/2022-04-15**\n\n<details>\n  <summary>Changelog</summary>\n\n- Renamed \"Facilities\" to \"Sites\n- Entity IDs are now strings instead of ints\n- New Authorization header `X-Voltus-API-Key`\n- Removed support for `Authorization: Bearer` header\n</details>\n\n### Previous versions:\n\n- api.voltus.co/2020-12-30\n\n## Authentication\n\nThe API uses [API key authentication](https://swagger.io/docs/specification/authentication/api-keys/). API keys are provided by your account manager. Each request must include an `X-Voltus-API-Key` header where the value is your API key. Code examples for each endpoint will demonstrate how this header can be added in various languages.\n\n## Errors\n\nExample error responses\n\n```json\n{\n  \"message\": \"A create webhook request must contain an 'events' field\",\n  \"type\": \"Bad Request\"\n}\n\n{\n  \"message\": \"Permission denied\",\n  \"type\": \"Unauthorized\"\n}\n```\n\nVoltus uses conventional HTTP response codes to indicate the success or failure of an API request. In general: Codes in the `2xx` range indicate success. Codes in the `4xx` range indicate an error that failed given the information provided (e.g., a required parameter was omitted, an api key has been revoked, etc.). Codes in the `5xx` range indicate an error with Voltus's servers (these are rare).\n\n### Attributes\n\n- `message` (string) A human-readable message providing more details about the error.\n\n- `type` (string) The error type. These types will always match the name of the name of the http status code that is used in the response. One of `Unauthorized`, `Bad Request`, `Content Too Large`, `Internal Server Error`, `Too Many Requests` or `Not Found`."
+  version: '2022-04-15'
+servers:
+- url: https://api.voltus.co
+security:
+- X-Voltus-API-Key: []
+tags:
+- name: Telemetry
+paths:
+  /2022-04-15/telemetry:
+    post:
+      tags:
+      - Telemetry
+      description: 'This endpoint is intended for bulk-data submission and can receive many telemetry points in the same request. You can also post non-contiguous intervals, intervals for multiple meters, and intervals that have been submitted before, all without issue. We''ll handle the de-duplication of double-submitted points, and you can take this into consideration when implementing retry and failure logic.
+
+
+        There is a limit on the number of telemetry points per request. We recommend keeping requests to 2048 points or fewer. Requests that exceed the maximum will receive a `413 Content Too Large` response — split the data into smaller batches and retry.'
+      operationId: voltus#post-telemetry
+      parameters:
+      - name: X-Voltus-API-Key
+        in: header
+        description: API key used to perform authorization
+        allowEmptyValue: true
+        required: true
+        schema:
+          type: string
+          description: API key used to perform authorization
+          example: API_KEY
+        example: API_KEY
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                telemetry:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      interval_seconds:
+                        type: integer
+                        description: Number of seconds in this interval. This must be divisible by 30 and the maximum value is 300 - requests where any interval violates these rules will fail completely and will need to be corrected and resubmitted. E.g. If you are posting the total `kWh` consumed in 5 minutes of data this value will be 300.
+                        example: 30
+                        format: int64
+                      kW:
+                        description: DEPRECATED. Please use 'value' and 'units' instead. Average instantaneous power reading for this interval
+                        example: 0.2
+                        format: float
+                        type: number
+                        deprecated: true
+                      meter_id:
+                        type: string
+                        description: ID of the meter that you're writing telemetry for. Cannot be used with site_id. Can be found with the /sites endpoint.
+                        example: wpv31
+                      site_id:
+                        type: string
+                        description: ID of the site that you're writing telemetry for. The site must only have one meter. Cannot be used with meter_id. Can be found with the /sites endpoint.
+                        example: yd4g
+                      timestamp:
+                        type: string
+                        description: The timestamp of the END of this telemetry interval in RFC3339 format. E.g. If the timestamp is 10:30 and the interval_seconds is 60 seconds, this interval is for 10:29-10:30.
+                        example: '2020-12-22T05:04:02Z'
+                      units:
+                        type: string
+                        description: The units of the measurement. Currently support kW and kWh. Must be ommitted if using deprecated field 'KW'. When submitting telemetry for a battery meter, request must include `kW` units representing battery power and `kWh` units representing battery state of charge. For all other meters, one request must use the same units for all intervals.
+                        example: kW
+                        enum:
+                        - kW
+                        - kWh
+                      value:
+                        type: number
+                        description: The value of the telemetry measurement for this interval. A positive value represents load. For meters capable of export to the grid (solar net metering, for example), exported energy is represented by a negative value. Must be omitted if using deprecated field `kW`
+                        example: 0.2
+                        format: float
+                    example:
+                      interval_seconds: 30
+                      kW: 0.2
+                      meter_id: wpv31
+                      site_id: yd4g
+                      timestamp: '2020-12-22T05:04:02Z'
+                      units: kW
+                      value: 0.2
+                    required:
+                    - timestamp
+                    - interval_seconds
+                    title: Telemetry
+                  example:
+                  - interval_seconds: 30
+                    meter_id: wpv31
+                    timestamp: '2024-01-02T09:00:00Z'
+                    units: kW
+                    value: 0.2
+                  - interval_seconds: 30
+                    meter_id: wpv31
+                    timestamp: '2024-01-02T09:00:30Z'
+                    units: kW
+                    value: 0.25
+                  - interval_seconds: 60
+                    site_id: yd4g
+                    timestamp: '2024-01-02T09:00:00Z'
+                    units: kW
+                    value: 0.5
+              example:
+                telemetry:
+                - interval_seconds: 30
+                  meter_id: wpv31
+                  timestamp: '2024-01-02T09:00:00Z'
+                  units: kW
+                  value: 0.2
+                - interval_seconds: 30
+                  meter_id: wpv31
+                  timestamp: '2024-01-02T09:00:30Z'
+                  units: kW
+                  value: 0.25
+                - interval_seconds: 60
+                  site_id: yd4g
+                  timestamp: '2024-01-02T09:00:00Z'
+                  units: kW
+                  value: 0.5
+              required:
+              - telemetry
+              title: PostTelemetryRequestBody
+            example:
+              telemetry:
+              - interval_seconds: 30
+                meter_id: wpv31
+                timestamp: '2024-01-02T09:00:00Z'
+                units: kW
+                value: 0.2
+              - interval_seconds: 30
+                meter_id: wpv31
+                timestamp: '2024-01-02T09:00:30Z'
+                units: kW
+                value: 0.25
+              - interval_seconds: 60
+                site_id: yd4g
+                timestamp: '2024-01-02T09:00:00Z'
+                units: kW
+                value: 0.5
+      responses:
+        '200':
+          description: OK response.
+        '400':
+          description: 'Bad Request: Bad Request response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`, `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '403':
+          description: 'Unauthorized: Forbidden response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`, `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '404':
+          description: 'Not Found: Not Found response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`, `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '413':
+          description: 'Content Too Large: Request Entity Too Large response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`, `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '429':
+          description: 'Too Many Requests: Too Many Requests response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`, `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '500':
+          description: 'Internal Server Error: Internal Server Error response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`, `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+      security:
+      - X-Voltus-API-Key: []
+  /2022-04-15/telemetry/controllable-load:
+    post:
+      tags:
+      - Telemetry
+      description: 'Posts controllable load.
+
+
+        Controllable load is an estimated kW value based on the nameplate energy usage (or actual energy usage) of equipment currently under the control by your integration’s software. Example Use Case: If your software loses network connection to control the equipment, even if the equipment is still running, the value should decrease.'
+      operationId: voltus#post-controllable-load
+      parameters:
+      - name: X-Voltus-API-Key
+        in: header
+        description: API key used to perform authorization
+        allowEmptyValue: true
+        required: true
+        schema:
+          type: string
+          description: API key used to perform authorization
+          example: API_KEY
+        example: API_KEY
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                controllable_load:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      interval_seconds:
+                        type: integer
+                        description: Number of seconds in this interval. This must be divisible by 30 and the maximum value is 300 - requests where any interval violates these rules will fail completely and will need to be corrected and resubmitted. E.g. If you are posting the total kW controllable for a 5 minute period this value will be 300.
+                        example: 30
+                        format: int64
+                      site_id:
+                        type: string
+                        description: ID of the site that you're writing telemetry for. Can be found with the /sites endpoint.
+                        example: yd4g
+                      timestamp:
+                        type: string
+                        description: The timestamp of the END of this telemetry interval in RFC3339 format. E.g. If the timestamp is 10:30 and the interval_seconds is 60 seconds, this interval is for 10:29-10:30.
+                        example: '2020-12-22T05:04:02Z'
+                      units:
+                        type: string
+                        description: The units of the measurement. Currently support kW. One request must use the same units for all intervals.
+                        example: kW
+                        enum:
+                        - kW
+                      value:
+                        type: number
+                        description: The value of the controllable load measurement for this interval.
+                        example: 0.2
+                        format: float
+                    example:
+                      interval_seconds: 30
+                      site_id: yd4g
+                      timestamp: '2020-12-22T05:04:02Z'
+                      units: kW
+                      value: 0.2
+                    required:
+                    - timestamp
+                    - site_id
+                    - interval_seconds
+                    - value
+                    - units
+                    title: ControllableLoadKwReading
+                  example:
+                  - interval_seconds: 30
+                    site_id: yd4g
+                    timestamp: '2024-01-02T09:00:00Z'
+                    units: kW
+                    value: 0.2
+                  - interval_seconds: 30
+                    site_id: yd4g
+                    timestamp: '2024-01-02T09:00:30Z'
+                    units: kW
+                    value: 0.25
+                  - interval_seconds: 60
+                    site_id: yd4g
+                    timestamp: '2024-01-02T09:00:00Z'
+                    units: kW
+                    value: 0.5
+              example:
+                controllable_load:
+                - interval_seconds: 30
+                  site_id: yd4g
+                  timestamp: '2024-01-02T09:00:00Z'
+                  units: kW
+                  value: 0.2
+                - interval_seconds: 30
+                  site_id: yd4g
+                  timestamp: '2024-01-02T09:00:30Z'
+                  units: kW
+                  value: 0.25
+                - interval_seconds: 60
+                  site_id: yd4g
+                  timestamp: '2024-01-02T09:00:00Z'
+                  units: kW
+                  value: 0.5
+              required:
+              - controllable_load
+              title: PostControllableLoadRequestBody
+            example:
+              controllable_load:
+              - interval_seconds: 30
+                site_id: yd4g
+                timestamp: '2024-01-02T09:00:00Z'
+                units: kW
+                value: 0.2
+              - interval_seconds: 30
+                site_id: yd4g
+                timestamp: '2024-01-02T09:00:30Z'
+                units: kW
+                value: 0.25
+              - interval_seconds: 60
+                site_id: yd4g
+                timestamp: '2024-01-02T09:00:00Z'
+                units: kW
+                value: 0.5
+      responses:
+        '200':
+          description: OK response.
+        '400':
+          description: 'Bad Request: Bad Request response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`, `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '403':
+          description: 'Unauthorized: Forbidden response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`, `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '404':
+          description: 'Not Found: Not Found response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`, `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '413':
+          description: 'Content Too Large: Request Entity Too Large response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`, `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '429':
+          description: 'Too Many Requests: Too Many Requests response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`, `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '500':
+          description: 'Internal Server Error: Internal Server Error response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`, `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+      security:
+      - X-Voltus-API-Key: []
+  /2022-04-15/telemetry/kw:
+    get:
+      tags:
+      - Telemetry
+      description: 'Returns a list of telemetry readings for one or more sites. The maximum number of sites per request is 10. The maximum request interval is 90 days, with a limit of 10,000 total data points per site.
+
+
+        This endpoint returns data that was available at the time of request, if the site''s telemetry is delayed recent data may be incomplete. This is particularly important when fetching data for a larger interval. If fetching data for an hour (3600 seconds), we recommend waiting at least 20 minutes in most cases after the end of that interval to be sure data has been fully submitted. When in doubt, you can also fetch data for a smaller interval length which will give a better picture of what data is actually available.'
+      operationId: voltus#get-telemetry-kw
+      parameters:
+      - name: start_time
+        in: query
+        description: An RFC3339 compatible string that denotes the beginning (exclusive) of the requested interval. Must be aligned to 30 seconds
+        allowEmptyValue: true
+        required: true
+        schema:
+          type: string
+          description: An RFC3339 compatible string that denotes the beginning (exclusive) of the requested interval. Must be aligned to 30 seconds
+          example: '2020-08-22T05:00:30Z'
+          format: date-time
+        examples:
+          default:
+            summary: default
+            value: '2020-08-22T05:00:30Z'
+      - name: end_time
+        in: query
+        description: An RFC3339 compatible string that denotes the end (inclusive) of the requested interval. Defaults to 24 hours ahead of start_time if omitted. Must be aligned to 30 seconds.
+        allowEmptyValue: true
+        schema:
+          type: string
+          description: An RFC3339 compatible string that denotes the end (inclusive) of the requested interval. Defaults to 24 hours ahead of start_time if omitted. Must be aligned to 30 seconds.
+          example: '2020-08-22T05:00:30Z'
+          format: date-time
+        examples:
+          default:
+            summary: default
+            value: '2020-08-22T05:00:30Z'
+      - name: interval_seconds
+        in: query
+        description: Interval width desired, in seconds. Defaults to 30. Use one of 30, 60, 300, 900, 1800, 3600, 21600.
+        allowEmptyValue: true
+        schema:
+          type: integer
+          description: Interval width desired, in seconds. Defaults to 30. Use one of 30, 60, 300, 900, 1800, 3600, 21600.
+          example: 3600
+          enum:
+          - 30
+          - 60
+          - 300
+          - 900
+          - 1800
+          - 3600
+          - 21600
+        example: 1800
+      - name: site_id
+        in: query
+        description: ID of a site. For multiple sites, add multiple instances of this parameter.
+        allowEmptyValue: true
+        required: true
+        schema:
+          type: array
+          items:
+            type: string
+            example: Aliquam eaque eius ab.
+          description: ID of a site. For multiple sites, add multiple instances of this parameter.
+          example:
+          - xv1w4
+          - yd4g
+        example:
+        - xv1w4
+        - yd4g
+      - name: X-Voltus-API-Key
+        in: header
+        description: API key used to perform authorization
+        allowEmptyValue: true
+        required: true
+        schema:
+          type: string
+          description: API key used to perform authorization
+          example: API_KEY
+        example: API_KEY
+      responses:
+        '200':
+          description: OK response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      sites:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            meters:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  meter_id:
+                                    type: string
+                                    description: ID of the meter
+                                    example: wpv31
+                                  telemetry:
+                                    type: array
+                                    items:
+                                      type: object
+                                      properties:
+                                        interval_seconds:
+                                          type: integer
+                                          description: Number of seconds in this interval.
+                                          example: 30
+                                          format: int64
+                                        timestamp:
+                                          type: string
+                                          description: The timestamp of the END of this telemetry interval in RFC3339 format. E.g. If the timestamp is 10:30:00, this interval is for 10:29:30-10:30:00.
+                                          example: '2020-12-22T05:04:02Z'
+                                        units:
+                                          type: string
+                                          description: The units of the measurement. Currently supports kw.
+                                          example: kW
+                                          enum:
+                                          - kW
+                                        value:
+                                          type: number
+                                          description: The value of the telemetry measurement for this interval. A positive value represents load. For meters capable of export to the grid (solar net metering, for example), exported energy is represented by a negative value.
+                                          example: 0.2
+                                          format: float
+                                      example:
+                                        interval_seconds: 30
+                                        timestamp: '2020-12-22T05:04:02Z'
+                                        units: kW
+                                        value: 0.2
+                                      required:
+                                      - interval_seconds
+                                      - timestamp
+                                      - units
+                                      title: TelemetryKwReading
+                                    description: A list of readings.
+                                    example:
+                                    - interval_seconds: 30
+                                      timestamp: '2020-12-22T05:04:02Z'
+                                      units: kW
+                                      value: 0.2
+                                    - interval_seconds: 30
+                                      timestamp: '2020-12-22T05:04:02Z'
+                                      units: kW
+                                      value: 0.2
+                                    - interval_seconds: 30
+                                      timestamp: '2020-12-22T05:04:02Z'
+                                      units: kW
+                                      value: 0.2
+                                    - interval_seconds: 30
+                                      timestamp: '2020-12-22T05:04:02Z'
+                                      units: kW
+                                      value: 0.2
+                                example:
+                                  meter_id: wpv31
+                                  telemetry:
+                                  - interval_seconds: 30
+                                    timestamp: '2020-12-22T05:04:02Z'
+                                    units: kW
+                                    value: 0.2
+                                  - interval_seconds: 30
+                                    timestamp: '2020-12-22T05:04:02Z'
+                                    units: kW
+                                    value: 0.2
+                                  - interval_seconds: 30
+                                    timestamp: '2020-12-22T05:04:02Z'
+                                    units: kW
+                                    value: 0.2
+                                  - interval_seconds: 30
+                                    timestamp: '2020-12-22T05:04:02Z'
+                                    units: kW
+                                    value: 0.2
+                                required:
+                                - meter_id
+                                - telemetry
+                                title: TelemetryKwMeters
+                              description: Array of meters with list of readings in each.
+                              example:
+                              - meter_id: wpv31
+                                telemetry:
+                                - interval_seconds: 30
+                                  timestamp: '2020-12-22T05:04:02Z'
+                                  units: kW
+                                  value: 0.2
+                                - interval_seconds: 30
+                                  timestamp: '2020-12-22T05:04:02Z'
+                                  units: kW
+                                  value: 0.2
+                                - interval_seconds: 30
+                                  timestamp: '2020-12-22T05:04:02Z'
+                                  units: kW
+                                  value: 0.2
+                                - interval_seconds: 30
+                                  timestamp: '2020-12-22T05:04:02Z'
+                                  units: kW
+                                  value: 0.2
+                              - meter_id: wpv31
+                                telemetry:
+                                - interval_seconds: 30
+                                  timestamp: '2020-12-22T05:04:02Z'
+                                  units: kW
+                                  value: 0.2
+                                - interval_seconds: 30
+                                  timestamp: '2020-12-22T05:04:02Z'
+                                  units: kW
+                                  value: 0.2
+                                - interval_seconds: 30
+                                  timestamp: '2020-12-22T05:04:02Z'
+                                  units: kW
+                                  value: 0.2
+                                - interval_seconds: 30
+                                  timestamp: '2020-12-22T05:04:02Z'
+                                  units: kW
+                                  value: 0.2
+                              - meter_id: wpv31
+                                telemetry:
+                                - interval_seconds: 30
+                                  timestamp: '2020-12-22T05:04:02Z'
+                                  units: kW
+                                  value: 0.2
+                                - interval_seconds: 30
+                                  timestamp: '2020-12-22T05:04:02Z'
+                                  units: kW
+                                  value: 0.2
+                                - interval_seconds: 30
+                                  timestamp: '2020-12-22T05:04:02Z'
+                                  units: kW
+                                  value: 0.2
+                                - interval_seconds: 30
+                                  timestamp: '2020-12-22T05:04:02Z'
+                                  units: kW
+                                  value: 0.2
+                              - meter_id: wpv31
+                                telemetry:
+                                - interval_seconds: 30
+                                  timestamp: '2020-12-22T05:04:02Z'
+                                  units: kW
+                                  value: 0.2
+                                - interval_seconds: 30
+                                  timestamp: '2020-12-22T05:04:02Z'
+                                  units: kW
+                                  value: 0.2
+                                - interval_seconds: 30
+                                  timestamp: '2020-12-22T05:04:02Z'
+                                  units: kW
+                                  value: 0.2
+                                - interval_seconds: 30
+                                  timestamp: '2020-12-22T05:04:02Z'
+                                  units: kW
+                                  value: 0.2
+                            site_id:
+                              type: string
+                              description: ID of the site
+                              example: xv1w4
+                          example:
+                            meters:
+                            - meter_id: wpv31
+                              telemetry:
+                              - interval_seconds: 30
+                                timestamp: '2020-12-22T05:04:02Z'
+                                units: kW
+                                value: 0.2
+                              - interval_seconds: 30
+                                timestamp: '2020-12-22T05:04:02Z'
+                                units: kW
+                                value: 0.2
+                              - interval_seconds: 30
+                                timestamp: '2020-12-22T05:04:02Z'
+                                units: kW
+                                value: 0.2
+                              - interval_seconds: 30
+                                timestamp: '2020-12-22T05:04:02Z'
+                                units: kW
+                                value: 0.2
+                            - meter_id: wpv31
+                              telemetry:
+                              - interval_seconds: 30
+                                timestamp: '2020-12-22T05:04:02Z'
+                                units: kW
+                                value: 0.2
+                              - interval_seconds: 30
+                                timestamp: '2020-12-22T05:04:02Z'
+                                units: kW
+                                value: 0.2
+                              - interval_seconds: 30
+                                timestamp: '2020-12-22T05:04:02Z'
+                                units: kW
+                                value: 0.2
+                              - interval_seconds: 30
+                                timestamp: '2020-12-22T05:04:02Z'
+                                units: kW
+                                value: 0.2
+                            - meter_id: wpv31
+                              telemetry:
+                              - interval_seconds: 30
+                                timestamp: '2020-12-22T05:04:02Z'
+                                units: kW
+                                value: 0.2
+                              - interval_seconds: 30
+                                timestamp: '2020-12-22T05:04:02Z'
+                                units: kW
+                                value: 0.2
+                              - interval_seconds: 30
+                                timestamp: '2020-12-22T05:04:02Z'
+                                units: kW
+                                value: 0.2
+                              - interval_seconds: 30
+                                timestamp: '2020-12-22T05:04:02Z'
+                                units: kW
+                                value: 0.2
+                            - meter_id: wpv31
+                              telemetry:
+                              - interval_seconds: 30
+                                timestamp: '2020-12-22T05:04:02Z'
+                                units: kW
+                                value: 0.2
+                              - interval_seconds: 30
+                                timestamp: '2020-12-22T05:04:02Z'
+                                units: kW
+                                value: 0.2
+                              - interval_seconds: 30
+                                timestamp: '2020-12-22T05:04:02Z'
+                                units: kW
+                                value: 0.2
+                              - interval_seconds: 30
+                                timestamp: '2020-12-22T05:04:02Z'
+                                units: kW
+                                value: 0.2
+                            site_id: xv1w4
+                          required:
+                          - site_id
+                          - meters
+                          title: TelemetryKwSite
+                        description: Array of readings for requested sites.
+                        example:
+                        - meters:
+                          - meter_id: wpv31
+                            telemetry:
+                            - interval_seconds: 30
+                              timestamp: '2024-01-02T09:00:00Z'
+                              units: kW
+                              value: 0.2
+                          - meter_id: wpv31
+                            telemetry:
+                            - interval_seconds: 30
+                              timestamp: '2024-01-02T09:00:30Z'
+                              units: kW
+                              value: 0.25
+                          site_id: xv1w4
+                        - meters:
+                          - meter_id: njj1
+                            telemetry:
+                            - interval_seconds: 60
+                              timestamp: '2024-01-02T09:00:00Z'
+                              units: kW
+                              value: 0.5
+                          site_id: yd4g
+                    example:
+                      sites:
+                      - meters:
+                        - meter_id: wpv31
+                          telemetry:
+                          - interval_seconds: 30
+                            timestamp: '2024-01-02T09:00:00Z'
+                            units: kW
+                            value: 0.2
+                        - meter_id: wpv31
+                          telemetry:
+                          - interval_seconds: 30
+                            timestamp: '2024-01-02T09:00:30Z'
+                            units: kW
+                            value: 0.25
+                        site_id: xv1w4
+                      - meters:
+                        - meter_id: njj1
+                          telemetry:
+                          - interval_seconds: 60
+                            timestamp: '2024-01-02T09:00:00Z'
+                            units: kW
+                            value: 0.5
+                        site_id: yd4g
+                    required:
+                    - sites
+                    title: TelemetryKwData
+                example:
+                  data:
+                    sites:
+                    - meters:
+                      - meter_id: wpv31
+                        telemetry:
+                        - interval_seconds: 30
+                          timestamp: '2024-01-02T09:00:00Z'
+                          units: kW
+                          value: 0.2
+                      - meter_id: wpv31
+                        telemetry:
+                        - interval_seconds: 30
+                          timestamp: '2024-01-02T09:00:30Z'
+                          units: kW
+                          value: 0.25
+                      site_id: xv1w4
+                    - meters:
+                      - meter_id: njj1
+                        telemetry:
+                        - interval_seconds: 60
+                          timestamp: '2024-01-02T09:00:00Z'
+                          units: kW
+                          value: 0.5
+                      site_id: yd4g
+                required:
+                - data
+                title: TelemetryKwResponse
+              example:
+                data:
+                  sites:
+                  - meters:
+                    - meter_id: wpv31
+                      telemetry:
+                      - interval_seconds: 30
+                        timestamp: '2024-01-02T09:00:00Z'
+                        units: kW
+                        value: 0.2
+                    - meter_id: wpv31
+                      telemetry:
+                      - interval_seconds: 30
+                        timestamp: '2024-01-02T09:00:30Z'
+                        units: kW
+                        value: 0.25
+                    site_id: xv1w4
+                  - meters:
+                    - meter_id: njj1
+                      telemetry:
+                      - interval_seconds: 60
+                        timestamp: '2024-01-02T09:00:00Z'
+                        units: kW
+                        value: 0.5
+                    site_id: yd4g
+        '400':
+          description: 'Bad Request: Bad Request response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`, `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '403':
+          description: 'Unauthorized: Forbidden response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`, `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '404':
+          description: 'Not Found: Not Found response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`, `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '413':
+          description: 'Content Too Large: Request Entity Too Large response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`, `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '429':
+          description: 'Too Many Requests: Too Many Requests response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`, `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '500':
+          description: 'Internal Server Error: Internal Server Error response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`, `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+      security:
+      - X-Voltus-API-Key: []
+components:
+  securitySchemes:
+    X-Voltus-API-Key:
+      type: apiKey
+      name: X-Voltus-API-Key
+      in: header

@@ -1,0 +1,386 @@
+openapi: 3.2.0
+info:
+  title: Voltus API Reference Sites API
+  description: "Welcome to the Voltus API Reference.\n\nThe live production API hostname is `api.voltus.co`.\n\n## Versioning\n\nWe use date-based versioning. `api.voltus.co` will always redirect to the latest version.\n\n**Current version: api.voltus.co/2022-04-15**\n\n<details>\n  <summary>Changelog</summary>\n\n- Renamed \"Facilities\" to \"Sites\n- Entity IDs are now strings instead of ints\n- New Authorization header `X-Voltus-API-Key`\n- Removed support for `Authorization: Bearer` header\n</details>\n\n### Previous versions:\n\n- api.voltus.co/2020-12-30\n\n## Authentication\n\nThe API uses [API key authentication](https://swagger.io/docs/specification/authentication/api-keys/). API keys are provided by your account manager. Each request must include an `X-Voltus-API-Key` header where the value is your API key. Code examples for each endpoint will demonstrate how this header can be added in various languages.\n\n## Errors\n\nExample error responses\n\n```json\n{\n  \"message\": \"A create webhook request must contain an 'events' field\",\n  \"type\": \"Bad Request\"\n}\n\n{\n  \"message\": \"Permission denied\",\n  \"type\": \"Unauthorized\"\n}\n```\n\nVoltus uses conventional HTTP response codes to indicate the success or failure of an API request. In general: Codes in the `2xx` range indicate success. Codes in the `4xx` range indicate an error that failed given the information provided (e.g., a required parameter was omitted, an api key has been revoked, etc.). Codes in the `5xx` range indicate an error with Voltus's servers (these are rare).\n\n### Attributes\n\n- `message` (string) A human-readable message providing more details about the error.\n\n- `type` (string) The error type. These types will always match the name of the name of the http status code that is used in the response. One of `Unauthorized`, `Bad Request`, `Content Too Large`, `Internal Server Error`, `Too Many Requests` or `Not Found`."
+  version: '2022-04-15'
+servers:
+- url: https://api.voltus.co
+security:
+- X-Voltus-API-Key: []
+tags:
+- name: Sites
+paths:
+  /2022-04-15/sites:
+    get:
+      tags:
+      - Sites
+      description: 'Returns a list of your sites.
+
+
+        The sites endpoint is important because a given API key will only get dispatch notifications that include sites visible to the account. You should make sure that all expected sites are returned by this endpoint.
+
+
+        Sites include `id` and `customer_location_id` fields that can be used to identify sites in a dispatch communication. A site''s `name` value may change, and should not be used as a static identifier.
+
+
+        All sites will be returned in a single request. The values of `page` and `per_page` have been reserved for future use, but should be ignored at present.'
+      operationId: voltus#get-sites
+      parameters:
+      - name: X-Voltus-API-Key
+        in: header
+        description: API key used to perform authorization
+        allowEmptyValue: true
+        required: true
+        schema:
+          type: string
+          description: API key used to perform authorization
+          example: API_KEY
+        example: API_KEY
+      responses:
+        '200':
+          description: OK response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  page:
+                    type: integer
+                    description: Page number. Reserved for future use, should ignore for now.
+                    example: 1
+                    format: int64
+                  perPage:
+                    type: integer
+                    description: Number of items per page. Reserved for future use, should ignore for now.
+                    example: 50
+                    format: int64
+                  sites:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        customer_location_id:
+                          type: string
+                          description: An identifier for this site provided by a customer. This can be any identifier supplied by the site owner, such as a store number.
+                          example: site101
+                        id:
+                          type: string
+                          description: Primary key of the site
+                          example: xv1w4
+                        meters:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              asset_type:
+                                type: string
+                                description: Type of asset associated with this meter (e.g. load, battery, generator, poi)
+                                example: load
+                              id:
+                                type: string
+                                description: Primary key of the meter
+                                example: wpv31
+                              name:
+                                type: string
+                                description: Name of the meter
+                                example: Primary Meter
+                            example:
+                              asset_type: load
+                              id: wpv31
+                              name: Primary Meter
+                            required:
+                            - id
+                            - name
+                            - asset_type
+                            title: Meter
+                          description: Meters associated with this site
+                          example:
+                          - asset_type: load
+                            id: wpv31
+                            name: Primary Meter
+                          - asset_type: load
+                            id: wpv31
+                            name: Primary Meter
+                          - asset_type: load
+                            id: wpv31
+                            name: Primary Meter
+                        name:
+                          type: string
+                          description: Name of the site
+                          example: A cool site
+                      example:
+                        customer_location_id: site101
+                        id: xv1w4
+                        meters:
+                        - asset_type: load
+                          id: wpv31
+                          name: Primary Meter
+                        - asset_type: load
+                          id: wpv31
+                          name: Primary Meter
+                        name: A cool site
+                      required:
+                      - name
+                      - id
+                      - customer_location_id
+                      title: Site
+                    example:
+                    - customer_location_id: site101
+                      id: xv1w4
+                      meters:
+                      - asset_type: load
+                        id: wpv31
+                        name: Primary Meter
+                      - asset_type: load
+                        id: wpv31
+                        name: Primary Meter
+                      - asset_type: load
+                        id: wpv31
+                        name: Primary Meter
+                      - asset_type: load
+                        id: wpv31
+                        name: Primary Meter
+                      name: A cool site
+                    - customer_location_id: site101
+                      id: xv1w4
+                      meters:
+                      - asset_type: load
+                        id: wpv31
+                        name: Primary Meter
+                      - asset_type: load
+                        id: wpv31
+                        name: Primary Meter
+                      - asset_type: load
+                        id: wpv31
+                        name: Primary Meter
+                      - asset_type: load
+                        id: wpv31
+                        name: Primary Meter
+                      name: A cool site
+                example:
+                  page: 0
+                  perPage: 0
+                  sites:
+                  - customer_location_id: site101
+                    id: xv1w4
+                    meters:
+                    - asset_type: load
+                      id: wpv31
+                      name: Primary Meter
+                    - asset_type: generator
+                      id: yvve
+                      name: Generator
+                    name: A cool site
+                  - customer_location_id: site102
+                    id: yd4g
+                    meters:
+                    - asset_type: poi
+                      id: njj1
+                      name: The best meter
+                    name: The coolest site
+                  - customer_location_id: ''
+                    id: 40wl
+                    meters: []
+                    name: Just an ok site
+                  - customer_location_id: ''
+                    id: 6rnp
+                    meters:
+                    - asset_type: poi
+                      id: 2j3y
+                      name: The sites meter name
+                    name: A decent site
+                required:
+                - sites
+                - page
+                - perPage
+                title: GetSitesResponseBody
+              example:
+                page: 0
+                perPage: 0
+                sites:
+                - customer_location_id: site101
+                  id: xv1w4
+                  meters:
+                  - asset_type: load
+                    id: wpv31
+                    name: Primary Meter
+                  - asset_type: generator
+                    id: yvve
+                    name: Generator
+                  name: A cool site
+                - customer_location_id: site102
+                  id: yd4g
+                  meters:
+                  - asset_type: poi
+                    id: njj1
+                    name: The best meter
+                  name: The coolest site
+                - customer_location_id: ''
+                  id: 40wl
+                  meters: []
+                  name: Just an ok site
+                - customer_location_id: ''
+                  id: 6rnp
+                  meters:
+                  - asset_type: poi
+                    id: 2j3y
+                    name: The sites meter name
+                  name: A decent site
+        '400':
+          description: 'Bad Request: Bad Request response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`, `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '403':
+          description: 'Unauthorized: Forbidden response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`, `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '404':
+          description: 'Not Found: Not Found response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`, `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '413':
+          description: 'Content Too Large: Request Entity Too Large response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`, `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '429':
+          description: 'Too Many Requests: Too Many Requests response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`, `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '500':
+          description: 'Internal Server Error: Internal Server Error response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`, `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+      security:
+      - X-Voltus-API-Key: []
+components:
+  securitySchemes:
+    X-Voltus-API-Key:
+      type: apiKey
+      name: X-Voltus-API-Key
+      in: header

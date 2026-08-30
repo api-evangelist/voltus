@@ -1,0 +1,1234 @@
+openapi: 3.2.0
+info:
+  title: Voltus API Reference Dispatches API
+  description: "Welcome to the Voltus API Reference.\n\nThe live production API hostname is `api.voltus.co`.\n\n## Versioning\n\nWe use date-based versioning. `api.voltus.co` will always redirect to the latest version.\n\n**Current version: api.voltus.co/2022-04-15**\n\n<details>\n  <summary>Changelog</summary>\n\n- Renamed \"Facilities\" to \"Sites\n- Entity IDs are now strings instead of ints\n- New Authorization header `X-Voltus-API-Key`\n- Removed support for `Authorization: Bearer` header\n</details>\n\n### Previous versions:\n\n- api.voltus.co/2020-12-30\n\n## Authentication\n\nThe API uses [API key authentication](https://swagger.io/docs/specification/authentication/api-keys/). API keys are provided by your account manager. Each request must include an `X-Voltus-API-Key` header where the value is your API key. Code examples for each endpoint will demonstrate how this header can be added in various languages.\n\n## Errors\n\nExample error responses\n\n```json\n{\n  \"message\": \"A create webhook request must contain an 'events' field\",\n  \"type\": \"Bad Request\"\n}\n\n{\n  \"message\": \"Permission denied\",\n  \"type\": \"Unauthorized\"\n}\n```\n\nVoltus uses conventional HTTP response codes to indicate the success or failure of an API request. In general: Codes in the `2xx` range indicate success. Codes in the `4xx` range indicate an error that failed given the information provided (e.g., a required parameter was omitted, an api key has been revoked, etc.). Codes in the `5xx` range indicate an error with Voltus's servers (these are rare).\n\n### Attributes\n\n- `message` (string) A human-readable message providing more details about the error.\n\n- `type` (string) The error type. These types will always match the name of the name of the http status code that is used in the response. One of `Unauthorized`, `Bad Request`, `Content Too Large`, `Internal Server Error`, `Too Many Requests` or `Not Found`."
+  version: '2022-04-15'
+servers:
+- url: https://api.voltus.co
+security:
+- X-Voltus-API-Key: []
+tags:
+- name: Dispatches
+paths:
+  /2022-04-15/dispatches:
+    post:
+      tags:
+      - Dispatches
+      description: 'Creates a test dispatch.
+
+
+        Create a new dispatch object. Upon sending a successful request, a new dispatch object will be persisted. The new dispatch will be returned in the response to `GET /dispatches` for the appropriate time-frame, and will also be available at its ID-specific path. If you have a webhook registered for the `dispatch.create` event type, it will be triggered. This type of dispatch will not trigger any customer communications such as email, SMS, or phone calls.
+
+
+        If you plan to use this endpoint, you should use the `dispatch.test` field to distinguish between a Voltus-initiated dispatch and a dispatch created through this endpoint. Dispatches created through this endpoint will have `test=true`.'
+      operationId: voltus#post-dispatch
+      parameters:
+      - name: X-Voltus-API-Key
+        in: header
+        description: API key used to perform authorization
+        allowEmptyValue: true
+        required: true
+        schema:
+          type: string
+          description: API key used to perform authorization
+          example: API_KEY
+        example: API_KEY
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                end_time:
+                  type: string
+                  description: End time of the dispatch (RFC 3339). Must be after start_time, within the next 72 hours.
+                  example: '2024-12-22T06:04:02Z'
+                program_id:
+                  type: integer
+                  description: Optional program ID. If not specified, will default to test program. Sites must have active registrations in the program.
+                  example: 867
+                  format: int64
+                start_time:
+                  type: string
+                  description: Start time of the dispatch (RFC 3339). Must be in the future, within the next 72 hours.
+                  example: '2024-12-22T05:04:02Z'
+              example:
+                end_time: '2024-12-22T06:04:02Z'
+                program_id: 867
+                start_time: '2024-12-22T05:04:02Z'
+              required:
+              - start_time
+              - end_time
+              title: PostDispatchRequestBody
+            example:
+              end_time: '2024-12-22T06:04:02Z'
+              program_id: 867
+              start_time: '2024-12-22T05:04:02Z'
+      responses:
+        '200':
+          description: OK response.
+        '400':
+          description: 'Bad Request: Bad Request response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`, `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '403':
+          description: 'Unauthorized: Forbidden response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`, `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '404':
+          description: 'Not Found: Not Found response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`, `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '413':
+          description: 'Content Too Large: Request Entity Too Large response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`, `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '429':
+          description: 'Too Many Requests: Too Many Requests response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`, `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '500':
+          description: 'Internal Server Error: Internal Server Error response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`, `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+      security:
+      - X-Voltus-API-Key: []
+    get:
+      tags:
+      - Dispatches
+      description: 'Returns a list of dispatches.
+
+
+        By default, the list dispatches endpoint returns all dispatch events from the previous 24 hours. This endpoint is commonly used to implement a polling pattern to listen for new dispatch notifications.
+
+
+        If you would like to implement a polling pattern to check for new dispatches, we recommend the following approach:
+
+
+        1. Make requests to this endpoint every 30 seconds in a loop. You may make requests more quickly if you''d like, but if you need very fast response times, we recommend using [Webhooks](./webhooks) instead. Excessive polling requests made to this endpoint may result in a `429 - Too Many Requests` response.
+
+        2. When you make a request, check for new dispatches in the response body. Each dispatch has a unique `id` attribute that can be used for identification.
+
+        3. Check each new dispatch''s `start_time`, list of `sites`, and `test` value to see if, when, and how you need to respond.
+
+        4. If you need to respond, begin curtailment for the affected sites.
+
+        5. On subsequent requests, make sure you''re checking for any updates that have been made to the active dispatch. `end_time` could be populated or be updated, and in extremely rare cases, the dispatch may be cancelled. If the dispatch is cancelled, the `authorized` attribute will be set to `false`.
+
+        6. Once the dispatch `end_time` has passed, curtailment can stop as long as there are no other dispatches that require continued curtailment.
+
+
+        **NOTES**:
+
+
+        - Sites can be involved in multiple overlapping dispatches at the same time. Do not stop curtailment for a given site until all the active dispatches for that site have reached their end time (or the dispatch(es) have been canceled). If two events are scheduled at the same time and one is shorter than the other, the site must continue to curtail for the full duration of the second event, e.g. for Dispatch A from 9:00-10:00 and Dispatch B from 9:00-11:00, site must curtail from 9:00-11:00.
+
+        - Dispatches can be scheduled back-to-back, e.g. Dispatch A from 9:00-10:00 and Dispatch B from 10:00-11:00. If your system will be pre-curtailing (e.g. starting the load drop 5 min before start time to ensure performance), make sure that your system does not ignore the second dispatch, and continues to curtail through the end of the second event.
+
+        - A single dispatch can contain multiple sites. All sites listed must curtail during the dispatch time period.
+
+        - All dispatches will be returned in a single request. While the fields `page` and `per_page` have been reserved for future use, their values should be ignored.'
+      operationId: voltus#get-dispatches
+      parameters:
+      - name: X-Voltus-API-Key
+        in: header
+        description: API key used to perform authorization
+        allowEmptyValue: true
+        required: true
+        schema:
+          type: string
+          description: API key used to perform authorization
+          example: API_KEY
+        example: API_KEY
+      responses:
+        '200':
+          description: OK response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  dispatches:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        authorized:
+                          type: boolean
+                          description: The authorization status of the dispatch. If this value is false, a dispatch is cancelled, and curtailment can stop immediately.
+                          example: true
+                        creation_time:
+                          type: string
+                          description: Time the dispatch was created. Formatted as a RFC 3339 timestamp.
+                          example: '2024-02-02T08:00:00Z'
+                        end_time:
+                          type: string
+                          description: End time of the dispatch. This attribute will be omitted until an end time is determined. All dispatches will eventually have an end time unless they are cancelled. Formatted as a RFC 3339 timestamp.
+                          example: '2024-02-02T10:00:00Z'
+                        id:
+                          type: string
+                          description: Primary key of the dispatch.
+                          example: 5j94
+                        metadata:
+                          type: object
+                          description: Extra metadata on the dispatch, if available. May be omitted. You can ignore this field unless instructed otherwise by Voltus.
+                          example:
+                            dispatch_source: manual_test
+                          additionalProperties: true
+                        modification_number:
+                          type: integer
+                          description: Number of times this dispatch has been modified since creation.
+                          example: 0
+                          format: int64
+                        program:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              description: Unique integer identifier for program. Will not change.
+                              example: 867
+                              format: int64
+                            market:
+                              type: string
+                              description: The market the program is participating in
+                              example: CAISO
+                            name:
+                              type: string
+                              description: The program's name
+                              example: CAISO Operating Reserves
+                            program_type:
+                              type: string
+                              description: the type of program
+                              example: ancillary_services
+                              enum:
+                              - ancillary_services
+                              - capacity
+                              - energy
+                              - peak_saver
+                              - utility_interruptible_rate
+                              - utility_program
+                              - not_specified
+                            timezone:
+                              type: string
+                              description: The program's time zone (ignore to determine dispatch start and end times)
+                              example: US/Pacific
+                          example:
+                            id: 867
+                            market: CAISO
+                            name: CAISO Operating Reserves
+                            program_type: ancillary_services
+                            timezone: US/Pacific
+                          required:
+                          - id
+                          - name
+                          - timezone
+                          - market
+                          - program_type
+                          title: Program
+                        sites:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              commitment:
+                                type: number
+                                description: Expected electricity reduction in kW when measured against the site's registered baseline for this dispatch.
+                                example: 12
+                                format: float
+                              customer_location_id:
+                                type: string
+                                description: An identifier for this site provided by a customer. This can be any identifier supplied by the site owner, such as a store number.
+                                example: site101
+                              drop_by:
+                                description: Amount of power to reduce during dispatch (kW). Nullable. Deprecated.
+                                example: 12
+                                format: float
+                                type: number
+                                deprecated: true
+                              id:
+                                type: string
+                                description: Primary key of the site
+                                example: xv1w4
+                              name:
+                                type: string
+                                description: Name of the site
+                                example: A cool site
+                            example:
+                              commitment: 12
+                              customer_location_id: site101
+                              drop_by: 12
+                              id: xv1w4
+                              name: A cool site
+                            required:
+                            - name
+                            - id
+                            - customer_location_id
+                            title: DispatchSite
+                          description: The sites that must curtail as a result of this dispatch
+                          example:
+                          - commitment: 1248
+                            customer_location_id: site102
+                            drop_by: 1248
+                            id: yd4g
+                            name: The coolest site
+                          - commitment: 5.3
+                            customer_location_id: ''
+                            drop_by: 5.3
+                            id: 40wl
+                            name: Just an ok site
+                        start_time:
+                          type: string
+                          description: Start time of the dispatch. Formatted as a RFC 3339 timestamp.
+                          example: '2024-02-02T09:00:00Z'
+                        test:
+                          type: boolean
+                          description: Whether the dispatch is a test. If this value is false, this is real, non-test dispatch, and you should curtail the site(s). If this value is true, this is a test dispatch, and you do not need to curtail.
+                          example: false
+                      example:
+                        authorized: true
+                        creation_time: '2024-02-02T08:00:00Z'
+                        end_time: '2024-02-02T10:00:00Z'
+                        id: 5j94
+                        metadata:
+                          dispatch_source: manual_test
+                        modification_number: 0
+                        program:
+                          id: 867
+                          market: CAISO
+                          name: CAISO Operating Reserves
+                          program_type: ancillary_services
+                          timezone: US/Pacific
+                        sites:
+                        - commitment: 1248
+                          customer_location_id: site102
+                          drop_by: 1248
+                          id: yd4g
+                          name: The coolest site
+                        - commitment: 5.3
+                          customer_location_id: ''
+                          drop_by: 5.3
+                          id: 40wl
+                          name: Just an ok site
+                        start_time: '2024-02-02T09:00:00Z'
+                        test: false
+                      required:
+                      - id
+                      - authorized
+                      - test
+                      - start_time
+                      - creation_time
+                      - modification_number
+                      - program
+                      - sites
+                      title: Dispatch
+                    example:
+                    - authorized: true
+                      creation_time: '2024-02-02T08:00:00Z'
+                      end_time: '2024-02-02T10:00:00Z'
+                      id: 5j94
+                      metadata:
+                        dispatch_source: manual_test
+                      modification_number: 0
+                      program:
+                        id: 867
+                        market: CAISO
+                        name: CAISO Operating Reserves
+                        program_type: ancillary_services
+                        timezone: US/Pacific
+                      sites:
+                      - commitment: 1248
+                        customer_location_id: site102
+                        drop_by: 1248
+                        id: yd4g
+                        name: The coolest site
+                      - commitment: 5.3
+                        customer_location_id: ''
+                        drop_by: 5.3
+                        id: 40wl
+                        name: Just an ok site
+                      start_time: '2024-02-02T09:00:00Z'
+                      test: false
+                    - authorized: true
+                      creation_time: '2024-02-02T08:00:00Z'
+                      end_time: '2024-02-02T10:00:00Z'
+                      id: 5j94
+                      metadata:
+                        dispatch_source: manual_test
+                      modification_number: 0
+                      program:
+                        id: 867
+                        market: CAISO
+                        name: CAISO Operating Reserves
+                        program_type: ancillary_services
+                        timezone: US/Pacific
+                      sites:
+                      - commitment: 1248
+                        customer_location_id: site102
+                        drop_by: 1248
+                        id: yd4g
+                        name: The coolest site
+                      - commitment: 5.3
+                        customer_location_id: ''
+                        drop_by: 5.3
+                        id: 40wl
+                        name: Just an ok site
+                      start_time: '2024-02-02T09:00:00Z'
+                      test: false
+                  page:
+                    type: integer
+                    description: Page number. Reserved for future use, should ignore for now.
+                    example: 1
+                    format: int64
+                  perPage:
+                    type: integer
+                    description: Number of items per page. Reserved for future use, should ignore for now.
+                    example: 50
+                    format: int64
+                example:
+                  dispatches:
+                  - authorized: true
+                    creation_time: '2024-02-02T08:00:00Z'
+                    end_time: '2024-02-02T10:00:00Z'
+                    id: 5j94
+                    metadata:
+                      dispatch_source: manual_test
+                    modification_number: 0
+                    program:
+                      id: 867
+                      market: CAISO
+                      name: CAISO Operating Reserves
+                      program_type: ancillary_services
+                      timezone: US/Pacific
+                    sites:
+                    - commitment: 1248
+                      customer_location_id: site102
+                      drop_by: 1248
+                      id: yd4g
+                      name: The coolest site
+                    - commitment: 5.3
+                      customer_location_id: ''
+                      drop_by: 5.3
+                      id: 40wl
+                      name: Just an ok site
+                    start_time: '2024-02-02T09:00:00Z'
+                    test: false
+                  - authorized: true
+                    creation_time: '2024-02-02T09:00:00Z'
+                    id: zg1p
+                    modification_number: 0
+                    program:
+                      id: 1092
+                      market: ERCOT
+                      name: ERCOT - Non-Spin
+                      program_type: ancillary_services
+                      timezone: US/Central
+                    sites:
+                    - commitment: null
+                      customer_location_id: site101
+                      drop_by: null
+                      id: xv1w4
+                      name: A cool site
+                    - commitment: null
+                      customer_location_id: site102
+                      drop_by: null
+                      id: yd4g
+                      name: The coolest site
+                    start_time: '2024-02-02T10:00:00Z'
+                    test: false
+                  - authorized: true
+                    creation_time: '2024-01-15T20:00:00Z'
+                    end_time: '2024-01-15T22:00:00Z'
+                    id: ez4p
+                    modification_number: 0
+                    program:
+                      id: 700
+                      market: ''
+                      name: Voltus Communications Test
+                      program_type: capacity
+                      timezone: US/Eastern
+                    sites:
+                    - commitment: 0
+                      customer_location_id: site101
+                      drop_by: 0
+                      id: xv1w4
+                      name: A cool site
+                    - commitment: 0
+                      customer_location_id: site102
+                      drop_by: 0
+                      id: yd4g
+                      name: The coolest site
+                    - commitment: 0
+                      customer_location_id: ''
+                      drop_by: 0
+                      id: 40wl
+                      name: Just an ok site
+                    - commitment: 0
+                      customer_location_id: ''
+                      drop_by: 0
+                      id: 6rnp
+                      name: A decent site
+                    start_time: '2024-01-15T21:00:00Z'
+                    test: true
+                  page: 0
+                  perPage: 0
+                required:
+                - dispatches
+                - page
+                - perPage
+                title: GetDispatchesResponseBody
+              example:
+                dispatches:
+                - authorized: true
+                  creation_time: '2024-02-02T08:00:00Z'
+                  end_time: '2024-02-02T10:00:00Z'
+                  id: 5j94
+                  metadata:
+                    dispatch_source: manual_test
+                  modification_number: 0
+                  program:
+                    id: 867
+                    market: CAISO
+                    name: CAISO Operating Reserves
+                    program_type: ancillary_services
+                    timezone: US/Pacific
+                  sites:
+                  - commitment: 1248
+                    customer_location_id: site102
+                    drop_by: 1248
+                    id: yd4g
+                    name: The coolest site
+                  - commitment: 5.3
+                    customer_location_id: ''
+                    drop_by: 5.3
+                    id: 40wl
+                    name: Just an ok site
+                  start_time: '2024-02-02T09:00:00Z'
+                  test: false
+                - authorized: true
+                  creation_time: '2024-02-02T09:00:00Z'
+                  id: zg1p
+                  modification_number: 0
+                  program:
+                    id: 1092
+                    market: ERCOT
+                    name: ERCOT - Non-Spin
+                    program_type: ancillary_services
+                    timezone: US/Central
+                  sites:
+                  - commitment: null
+                    customer_location_id: site101
+                    drop_by: null
+                    id: xv1w4
+                    name: A cool site
+                  - commitment: null
+                    customer_location_id: site102
+                    drop_by: null
+                    id: yd4g
+                    name: The coolest site
+                  start_time: '2024-02-02T10:00:00Z'
+                  test: false
+                - authorized: true
+                  creation_time: '2024-01-15T20:00:00Z'
+                  end_time: '2024-01-15T22:00:00Z'
+                  id: ez4p
+                  modification_number: 0
+                  program:
+                    id: 700
+                    market: ''
+                    name: Voltus Communications Test
+                    program_type: capacity
+                    timezone: US/Eastern
+                  sites:
+                  - commitment: 0
+                    customer_location_id: site101
+                    drop_by: 0
+                    id: xv1w4
+                    name: A cool site
+                  - commitment: 0
+                    customer_location_id: site102
+                    drop_by: 0
+                    id: yd4g
+                    name: The coolest site
+                  - commitment: 0
+                    customer_location_id: ''
+                    drop_by: 0
+                    id: 40wl
+                    name: Just an ok site
+                  - commitment: 0
+                    customer_location_id: ''
+                    drop_by: 0
+                    id: 6rnp
+                    name: A decent site
+                  start_time: '2024-01-15T21:00:00Z'
+                  test: true
+                page: 0
+                perPage: 0
+        '400':
+          description: 'Bad Request: Bad Request response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`, `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '403':
+          description: 'Unauthorized: Forbidden response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`, `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '404':
+          description: 'Not Found: Not Found response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`, `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '413':
+          description: 'Content Too Large: Request Entity Too Large response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`, `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '429':
+          description: 'Too Many Requests: Too Many Requests response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`, `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '500':
+          description: 'Internal Server Error: Internal Server Error response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`, `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+      security:
+      - X-Voltus-API-Key: []
+  /2022-04-15/dispatches/{id}:
+    get:
+      tags:
+      - Dispatches
+      description: 'Retrieves the dispatch with the given ID.
+
+
+        Can be used to explicitly check for the status of an individual dispatch.'
+      operationId: voltus#get-dispatch
+      parameters:
+      - name: id
+        in: path
+        description: The dispatch ID
+        required: true
+        schema:
+          type: string
+          description: The dispatch ID
+          example: 12345678asdfghjk
+        example: 12345678asdfghjk
+      - name: X-Voltus-API-Key
+        in: header
+        description: API key used to perform authorization
+        allowEmptyValue: true
+        required: true
+        schema:
+          type: string
+          description: API key used to perform authorization
+          example: API_KEY
+        example: API_KEY
+      responses:
+        '200':
+          description: OK response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  authorized:
+                    type: boolean
+                    description: The authorization status of the dispatch. If this value is false, a dispatch is cancelled, and curtailment can stop immediately.
+                    example: true
+                  creation_time:
+                    type: string
+                    description: Time the dispatch was created. Formatted as a RFC 3339 timestamp.
+                    example: '2024-02-02T08:00:00Z'
+                  end_time:
+                    type: string
+                    description: End time of the dispatch. This attribute will be omitted until an end time is determined. All dispatches will eventually have an end time unless they are cancelled. Formatted as a RFC 3339 timestamp.
+                    example: '2024-02-02T10:00:00Z'
+                  id:
+                    type: string
+                    description: Primary key of the dispatch.
+                    example: 5j94
+                  metadata:
+                    type: object
+                    description: Extra metadata on the dispatch, if available. May be omitted. You can ignore this field unless instructed otherwise by Voltus.
+                    example:
+                      dispatch_source: manual_test
+                    additionalProperties: true
+                  modification_number:
+                    type: integer
+                    description: Number of times this dispatch has been modified since creation.
+                    example: 0
+                    format: int64
+                  program:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        description: Unique integer identifier for program. Will not change.
+                        example: 867
+                        format: int64
+                      market:
+                        type: string
+                        description: The market the program is participating in
+                        example: CAISO
+                      name:
+                        type: string
+                        description: The program's name
+                        example: CAISO Operating Reserves
+                      program_type:
+                        type: string
+                        description: the type of program
+                        example: ancillary_services
+                        enum:
+                        - ancillary_services
+                        - capacity
+                        - energy
+                        - peak_saver
+                        - utility_interruptible_rate
+                        - utility_program
+                        - not_specified
+                      timezone:
+                        type: string
+                        description: The program's time zone (ignore to determine dispatch start and end times)
+                        example: US/Pacific
+                    example:
+                      id: 867
+                      market: CAISO
+                      name: CAISO Operating Reserves
+                      program_type: ancillary_services
+                      timezone: US/Pacific
+                    required:
+                    - id
+                    - name
+                    - timezone
+                    - market
+                    - program_type
+                    title: Program
+                  sites:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        commitment:
+                          type: number
+                          description: Expected electricity reduction in kW when measured against the site's registered baseline for this dispatch.
+                          example: 12
+                          format: float
+                        customer_location_id:
+                          type: string
+                          description: An identifier for this site provided by a customer. This can be any identifier supplied by the site owner, such as a store number.
+                          example: site101
+                        drop_by:
+                          description: Amount of power to reduce during dispatch (kW). Nullable. Deprecated.
+                          example: 12
+                          format: float
+                          type: number
+                          deprecated: true
+                        id:
+                          type: string
+                          description: Primary key of the site
+                          example: xv1w4
+                        name:
+                          type: string
+                          description: Name of the site
+                          example: A cool site
+                      example:
+                        commitment: 12
+                        customer_location_id: site101
+                        drop_by: 12
+                        id: xv1w4
+                        name: A cool site
+                      required:
+                      - name
+                      - id
+                      - customer_location_id
+                      title: DispatchSite
+                    description: The sites that must curtail as a result of this dispatch
+                    example:
+                    - commitment: 1248
+                      customer_location_id: site102
+                      drop_by: 1248
+                      id: yd4g
+                      name: The coolest site
+                    - commitment: 5.3
+                      customer_location_id: ''
+                      drop_by: 5.3
+                      id: 40wl
+                      name: Just an ok site
+                  start_time:
+                    type: string
+                    description: Start time of the dispatch. Formatted as a RFC 3339 timestamp.
+                    example: '2024-02-02T09:00:00Z'
+                  test:
+                    type: boolean
+                    description: Whether the dispatch is a test. If this value is false, this is real, non-test dispatch, and you should curtail the site(s). If this value is true, this is a test dispatch, and you do not need to curtail.
+                    example: false
+                example:
+                  authorized: true
+                  creation_time: '2024-02-02T08:00:00Z'
+                  end_time: '2024-02-02T10:00:00Z'
+                  id: 5j94
+                  metadata:
+                    dispatch_source: manual_test
+                  modification_number: 0
+                  program:
+                    id: 867
+                    market: CAISO
+                    name: CAISO Operating Reserves
+                    program_type: ancillary_services
+                    timezone: US/Pacific
+                  sites:
+                  - commitment: 1248
+                    customer_location_id: site102
+                    drop_by: 1248
+                    id: yd4g
+                    name: The coolest site
+                  - commitment: 5.3
+                    customer_location_id: ''
+                    drop_by: 5.3
+                    id: 40wl
+                    name: Just an ok site
+                  start_time: '2024-02-02T09:00:00Z'
+                  test: false
+                required:
+                - id
+                - authorized
+                - test
+                - start_time
+                - creation_time
+                - modification_number
+                - program
+                - sites
+                title: Dispatch
+              example:
+                authorized: true
+                creation_time: '2024-02-02T08:00:00Z'
+                end_time: '2024-02-02T10:00:00Z'
+                id: 5j94
+                metadata:
+                  dispatch_source: manual_test
+                modification_number: 0
+                program:
+                  id: 867
+                  market: CAISO
+                  name: CAISO Operating Reserves
+                  program_type: ancillary_services
+                  timezone: US/Pacific
+                sites:
+                - commitment: 1248
+                  customer_location_id: site102
+                  drop_by: 1248
+                  id: yd4g
+                  name: The coolest site
+                - commitment: 5.3
+                  customer_location_id: ''
+                  drop_by: 5.3
+                  id: 40wl
+                  name: Just an ok site
+                start_time: '2024-02-02T09:00:00Z'
+                test: false
+        '400':
+          description: 'Bad Request: Bad Request response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`, `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '403':
+          description: 'Unauthorized: Forbidden response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`, `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '404':
+          description: 'Not Found: Not Found response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`, `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '413':
+          description: 'Content Too Large: Request Entity Too Large response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`, `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '429':
+          description: 'Too Many Requests: Too Many Requests response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`, `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '500':
+          description: 'Internal Server Error: Internal Server Error response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`, `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+      security:
+      - X-Voltus-API-Key: []
+components:
+  securitySchemes:
+    X-Voltus-API-Key:
+      type: apiKey
+      name: X-Voltus-API-Key
+      in: header

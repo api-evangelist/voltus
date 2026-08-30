@@ -1,0 +1,770 @@
+openapi: 3.2.0
+info:
+  title: Voltus API Reference Webhooks API
+  description: "Welcome to the Voltus API Reference.\n\nThe live production API hostname is `api.voltus.co`.\n\n## Versioning\n\nWe use date-based versioning. `api.voltus.co` will always redirect to the latest version.\n\n**Current version: api.voltus.co/2022-04-15**\n\n<details>\n  <summary>Changelog</summary>\n\n- Renamed \"Facilities\" to \"Sites\n- Entity IDs are now strings instead of ints\n- New Authorization header `X-Voltus-API-Key`\n- Removed support for `Authorization: Bearer` header\n</details>\n\n### Previous versions:\n\n- api.voltus.co/2020-12-30\n\n## Authentication\n\nThe API uses [API key authentication](https://swagger.io/docs/specification/authentication/api-keys/). API keys are provided by your account manager. Each request must include an `X-Voltus-API-Key` header where the value is your API key. Code examples for each endpoint will demonstrate how this header can be added in various languages.\n\n## Errors\n\nExample error responses\n\n```json\n{\n  \"message\": \"A create webhook request must contain an 'events' field\",\n  \"type\": \"Bad Request\"\n}\n\n{\n  \"message\": \"Permission denied\",\n  \"type\": \"Unauthorized\"\n}\n```\n\nVoltus uses conventional HTTP response codes to indicate the success or failure of an API request. In general: Codes in the `2xx` range indicate success. Codes in the `4xx` range indicate an error that failed given the information provided (e.g., a required parameter was omitted, an api key has been revoked, etc.). Codes in the `5xx` range indicate an error with Voltus's servers (these are rare).\n\n### Attributes\n\n- `message` (string) A human-readable message providing more details about the error.\n\n- `type` (string) The error type. These types will always match the name of the name of the http status code that is used in the response. One of `Unauthorized`, `Bad Request`, `Content Too Large`, `Internal Server Error`, `Too Many Requests` or `Not Found`."
+  version: '2022-04-15'
+servers:
+- url: https://api.voltus.co
+security:
+- X-Voltus-API-Key: []
+tags:
+- name: Webhooks
+paths:
+  /2022-04-15/webhooks:
+    get:
+      tags:
+      - Webhooks
+      description: 'Returns a list of all webhooks that have been created.
+
+
+        All webhooks will be returned in a single request. The values of `page` and `per_page` have been reserved for future use, but should be ignored at present.'
+      operationId: voltus#get-webhooks
+      parameters:
+      - name: X-Voltus-API-Key
+        in: header
+        description: API key used to perform authorization
+        allowEmptyValue: true
+        required: true
+        schema:
+          type: string
+          description: API key used to perform authorization
+          example: API_KEY
+        example: API_KEY
+      responses:
+        '200':
+          description: OK response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  page:
+                    type: integer
+                    description: Page number. Reserved for future use, should ignore for now.
+                    example: 1
+                    format: int64
+                  perPage:
+                    type: integer
+                    description: Number of items per page. Reserved for future use, should ignore for now.
+                    example: 50
+                    format: int64
+                  webhooks:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        events:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              name:
+                                type: string
+                                description: Name of the event
+                                example: dispatch.create
+                            example:
+                              name: dispatch.create
+                            required:
+                            - name
+                            title: WebhookEvent
+                          description: List of events that will be posted to this webhook. Currently only `dispatch.create` and `dispatch.update` are supported.
+                          example:
+                          - name: dispatch.create
+                          - name: dispatch.update
+                        id:
+                          type: string
+                          description: Unique identifier for this webhook
+                          example: dsft58ga
+                        url:
+                          type: string
+                          description: URL that this webhook will send requests to
+                          example: https://example.com/listeners/voltus
+                      example:
+                        events:
+                        - name: dispatch.create
+                        - name: dispatch.update
+                        id: dsft58ga
+                        url: https://example.com/listeners/voltus
+                      required:
+                      - url
+                      - events
+                      - id
+                      title: Webhook
+                    example:
+                    - events:
+                      - name: dispatch.create
+                      - name: dispatch.update
+                      id: dsft58ga
+                      url: https://example.com/listeners/voltus
+                    - events:
+                      - name: dispatch.create
+                      - name: dispatch.update
+                      id: dsft58ga
+                      url: https://example.com/listeners/voltus
+                    - events:
+                      - name: dispatch.create
+                      - name: dispatch.update
+                      id: dsft58ga
+                      url: https://example.com/listeners/voltus
+                example:
+                  page: 0
+                  perPage: 0
+                  webhooks: []
+                required:
+                - webhooks
+                - page
+                - perPage
+                title: GetWebhooksResponseBody
+              example:
+                page: 0
+                perPage: 0
+                webhooks: []
+        '400':
+          description: 'Bad Request: Bad Request response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`, `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '403':
+          description: 'Unauthorized: Forbidden response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`, `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '404':
+          description: 'Not Found: Not Found response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`, `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '413':
+          description: 'Content Too Large: Request Entity Too Large response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`, `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '429':
+          description: 'Too Many Requests: Too Many Requests response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`, `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '500':
+          description: 'Internal Server Error: Internal Server Error response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`, `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+      security:
+      - X-Voltus-API-Key: []
+    post:
+      tags:
+      - Webhooks
+      description: "Create a webhook by providing the events you'd like to listen for, and the URL where you'd like to receive notifications. When a webhook is created, we will send a test request to the provided URL with this payload:\n\n```json\n{\n  \"event\": {\n    \"name\": \"\"\n  },\n  \"resource\": \"\"\n}\n```\n\nYour handler should respond with a 2xx status code. If it does not succeed, the webhook creation request will fail."
+      operationId: voltus#post-webhook
+      parameters:
+      - name: X-Voltus-API-Key
+        in: header
+        description: API key used to perform authorization
+        allowEmptyValue: true
+        required: true
+        schema:
+          type: string
+          description: API key used to perform authorization
+          example: API_KEY
+        example: API_KEY
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                events:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                        description: Name of the event
+                        example: dispatch.create
+                    example:
+                      name: dispatch.create
+                    required:
+                    - name
+                    title: WebhookEvent
+                  description: List of events that will be posted to this webhook. Currently only `dispatch.create` and `dispatch.update` are supported.
+                  example:
+                  - name: dispatch.create
+                  - name: dispatch.update
+                url:
+                  type: string
+                  description: URL that this webhook will send requests to
+                  example: https://example.com/listeners/voltus
+              example:
+                events:
+                - name: dispatch.create
+                - name: dispatch.update
+                url: https://example.com/listeners/voltus
+              required:
+              - url
+              - events
+              title: PostWebhookRequestBody
+            example:
+              events:
+              - name: dispatch.create
+              - name: dispatch.update
+              url: https://example.com/listeners/voltus
+      responses:
+        '200':
+          description: OK response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  events:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          description: Name of the event
+                          example: dispatch.create
+                      example:
+                        name: dispatch.create
+                      required:
+                      - name
+                      title: WebhookEvent
+                    description: List of events that will be posted to this webhook. Currently only `dispatch.create` and `dispatch.update` are supported.
+                    example:
+                    - name: dispatch.create
+                    - name: dispatch.update
+                  id:
+                    type: string
+                    description: Unique identifier for this webhook
+                    example: dsft58ga
+                  url:
+                    type: string
+                    description: URL that this webhook will send requests to
+                    example: https://example.com/listeners/voltus
+                example:
+                  events:
+                  - name: dispatch.create
+                  - name: dispatch.update
+                  id: dsft58ga
+                  url: https://example.com/listeners/voltus
+                required:
+                - url
+                - events
+                - id
+                title: Webhook
+              example:
+                events:
+                - name: dispatch.create
+                - name: dispatch.update
+                id: dsft58ga
+                url: https://example.com/listeners/voltus
+        '400':
+          description: 'Bad Request: Bad Request response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`, `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '403':
+          description: 'Unauthorized: Forbidden response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`, `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '404':
+          description: 'Not Found: Not Found response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`, `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '413':
+          description: 'Content Too Large: Request Entity Too Large response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`, `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '429':
+          description: 'Too Many Requests: Too Many Requests response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`, `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '500':
+          description: 'Internal Server Error: Internal Server Error response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`, `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+      security:
+      - X-Voltus-API-Key: []
+  /2022-04-15/webhooks/{id}:
+    delete:
+      tags:
+      - Webhooks
+      description: Permanently deletes a webhook. It cannot be undone.
+      operationId: voltus#delete-webhook
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier for this webhook
+        required: true
+        schema:
+          type: string
+          description: Unique identifier for this webhook
+          example: dsft58ga
+        example: dsft58ga
+      - name: X-Voltus-API-Key
+        in: header
+        description: API key used to perform authorization
+        allowEmptyValue: true
+        required: true
+        schema:
+          type: string
+          description: API key used to perform authorization
+          example: API_KEY
+        example: API_KEY
+      responses:
+        '200':
+          description: OK response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  events:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          description: Name of the event
+                          example: dispatch.create
+                      example:
+                        name: dispatch.create
+                      required:
+                      - name
+                      title: WebhookEvent
+                    description: List of events that will be posted to this webhook. Currently only `dispatch.create` and `dispatch.update` are supported.
+                    example:
+                    - name: dispatch.create
+                    - name: dispatch.update
+                  id:
+                    type: string
+                    description: Unique identifier for this webhook
+                    example: dsft58ga
+                  url:
+                    type: string
+                    description: URL that this webhook will send requests to
+                    example: https://example.com/listeners/voltus
+                example:
+                  events:
+                  - name: dispatch.create
+                  - name: dispatch.update
+                  id: dsft58ga
+                  url: https://example.com/listeners/voltus
+                required:
+                - url
+                - events
+                - id
+                title: Webhook
+              example:
+                events:
+                - name: dispatch.create
+                - name: dispatch.update
+                id: dsft58ga
+                url: https://example.com/listeners/voltus
+        '400':
+          description: 'Bad Request: Bad Request response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`, `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '403':
+          description: 'Unauthorized: Forbidden response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`, `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '404':
+          description: 'Not Found: Not Found response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`, `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '413':
+          description: 'Content Too Large: Request Entity Too Large response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`, `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '429':
+          description: 'Too Many Requests: Too Many Requests response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`, `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+        '500':
+          description: 'Internal Server Error: Internal Server Error response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A human-readable message providing more details about the error.
+                    example: Do not pass go, do not collect $100.
+                  type:
+                    type: string
+                    description: The error type. One of `Unauthorized`, `Bad Request`, `Content Too Large`, `Internal Server Error`, `Too Many Requests` or `Not Found`.
+                    example: Too Many Requests
+                example:
+                  message: Do not pass go, do not collect $100.
+                  type: Too Many Requests
+                required:
+                - message
+                - type
+                title: Error
+              example:
+                message: Do not pass go, do not collect $100.
+                type: Too Many Requests
+      security:
+      - X-Voltus-API-Key: []
+components:
+  securitySchemes:
+    X-Voltus-API-Key:
+      type: apiKey
+      name: X-Voltus-API-Key
+      in: header
