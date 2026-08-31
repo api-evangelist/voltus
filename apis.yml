@@ -285,6 +285,8 @@ apis:
   humanURL: https://api.voltus.co/docs/openapi/dispatches
   baseURL: https://api.voltus.co/2022-04-15
   tags:
+  - Webhook
+  tags_raw:
   - Webhooks
   properties:
   - type: OpenAPI
