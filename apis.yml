@@ -2,33 +2,25 @@ aid: voltus
 url: https://raw.githubusercontent.com/api-evangelist/voltus/refs/heads/main/apis.yml
 name: Voltus
 kind: company
-description: >-
-  Voltus is a United States virtual power plant (VPP) operator and distributed
-  energy resource (DER) technology platform, headquartered in San Francisco,
-  California, that aggregates commercial, industrial, residential and
-  transportation loads and batteries into wholesale electricity markets across
-  all of North America's organized markets (AESO, CAISO, ERCOT, IESO, ISO-NE,
-  MISO, NYISO, PJM, SPP). It sits in the demand-response and flexibility layer
-  of the energy value chain: it is not a utility and not a metering data holder,
-  so no Green Button, Consumer Data Right or smart-meter data mandate applies to
-  it — mandate regime is honestly none. Its API posture is unusually good for
-  the sector and unusually split. Voltus runs a genuine public developer portal
-  at api.voltus.co/docs (Docusaurus, no login) with concepts, tutorials, an
-  OpenAPI-generated reference and a changelog, plus a fully anonymous sandbox at
-  sandbox.voltus.co that answers real HTTP requests with the documented public
-  key "X-Voltus-API-Key: secret" — a developer can call it before signing
-  anything. Production, however, is partner-only: api.voltus.co/2022-04-15
-  returns 401 Permission denied to the sandbox key, and real access requires a
-  commercial partnership plus a signed Letter of Authorization per site. Site
-  telemetry and dispatch control are exposed to partners over that account-scoped
-  REST API and over OpenADR 2.0a Simple HTTP PULL with mutual TLS; Voltus
-  publishes no open grid or market data of its own, so consumer/site energy data
-  is available under contract while market data is closed. No downloadable
-  OpenAPI or Swagger document is served — /openapi.json, /swagger.json and
-  /openapi3.yaml all 404 — but the portal is built with the Docusaurus OpenAPI
-  plugin, and the real operation objects (parameters, request bodies, response
-  schemas, examples) were recovered verbatim from the published build and
-  assembled into openapi/voltus-openapi.yml: 10 operations across 8 paths.
+description: 'Voltus is a United States virtual power plant (VPP) operator and distributed energy resource
+  (DER) technology platform, headquartered in San Francisco, California, that aggregates commercial, industrial,
+  residential and transportation loads and batteries into wholesale electricity markets across all of
+  North America''s organized markets (AESO, CAISO, ERCOT, IESO, ISO-NE, MISO, NYISO, PJM, SPP). It sits
+  in the demand-response and flexibility layer of the energy value chain: it is not a utility and not
+  a metering data holder, so no Green Button, Consumer Data Right or smart-meter data mandate applies
+  to it — mandate regime is honestly none. Its API posture is unusually good for the sector and unusually
+  split. Voltus runs a genuine public developer portal at api.voltus.co/docs (Docusaurus, no login) with
+  concepts, tutorials, an OpenAPI-generated reference and a changelog, plus a fully anonymous sandbox
+  at sandbox.voltus.co that answers real HTTP requests with the documented public key "X-Voltus-API-Key:
+  secret" — a developer can call it before signing anything. Production, however, is partner-only: api.voltus.co/2022-04-15
+  returns 401 Permission denied to the sandbox key, and real access requires a commercial partnership
+  plus a signed Letter of Authorization per site. Site telemetry and dispatch control are exposed to partners
+  over that account-scoped REST API and over OpenADR 2.0a Simple HTTP PULL with mutual TLS; Voltus publishes
+  no open grid or market data of its own, so consumer/site energy data is available under contract while
+  market data is closed. No downloadable OpenAPI or Swagger document is served — /openapi.json, /swagger.json
+  and /openapi3.yaml all 404 — but the portal is built with the Docusaurus OpenAPI plugin, and the real
+  operation objects (parameters, request bodies, response schemas, examples) were recovered verbatim from
+  the published build and assembled into openapi/voltus-openapi.yml: 10 operations across 8 paths.'
 deliveryModel:
   model: saas
   open_source: false
@@ -71,19 +63,18 @@ tags:
 - OpenADR
 - Telemetry
 created: '2026-07-27'
-modified: '2026-07-27'
+modified: '2026-09-16'
 specificationVersion: '0.23'
 apis:
 - aid: voltus:voltus-openadr-vtn
   name: Voltus OpenADR 2.0a VTN
-  description: >-
-    Standards-based alternative to the REST dispatch integration. Voltus states it "supports OpenADR2.0a
-    via Simple HTTP (PULL)" and that "Voltus provides a VTN, and our partners run one or more VENs". Partners
-    poll https://openadr.voltus.co/vtn/YOUR_VEN_ID/OpenADR2/Simple/EiEvent (recommended once per minute)
-    and reply with an oadrCreatedEvent acknowledgement. Authentication is mutual TLS — the partner submits
-    a Certificate Signing Request to Voltus and presents the returned client certificate. The host is
-    not anonymously reachable (connection refused on a bare HTTPS GET), which is consistent with an mTLS-only
-    endpoint.
+  description: Standards-based alternative to the REST dispatch integration. Voltus states it "supports
+    OpenADR2.0a via Simple HTTP (PULL)" and that "Voltus provides a VTN, and our partners run one or more
+    VENs". Partners poll https://openadr.voltus.co/vtn/YOUR_VEN_ID/OpenADR2/Simple/EiEvent (recommended
+    once per minute) and reply with an oadrCreatedEvent acknowledgement. Authentication is mutual TLS
+    — the partner submits a Certificate Signing Request to Voltus and presents the returned client certificate.
+    The host is not anonymously reachable (connection refused on a bare HTTPS GET), which is consistent
+    with an mTLS-only endpoint.
   humanURL: https://api.voltus.co/docs/concepts/openadr
   baseURL: https://openadr.voltus.co
   tags:
@@ -372,7 +363,10 @@ common:
   url: skills/voltus-webhook-dispatch-listener.md
 - type: X-MCPServerCandidate
   url: mcp/voltus-mcp.yml
-  note: 'Renamed from MCPServer 2026-09-03 (roadmap#247): the manifest self-describes as status: candidate — a tool list derived from the published API contracts, not an existing server. The scorer already read the manifest and reported mcp_server correctly; the MCPServer type was crediting the artifact-type surfaces with a server that does not exist.'
+  note: 'Renamed from MCPServer 2026-09-03 (roadmap#247): the manifest self-describes as status: candidate
+    — a tool list derived from the published API contracts, not an existing server. The scorer already
+    read the manifest and reported mcp_server correctly; the MCPServer type was crediting the artifact-type
+    surfaces with a server that does not exist.'
 - type: AgenticAccess
   url: agentic-access/voltus-agentic-access.yml
 - type: DomainSecurity
@@ -410,7 +404,7 @@ common:
 - type: LinkedIn
   url: https://www.linkedin.com/company/voltus-inc./
 - type: OpenAPI
-  url: openapi/voltus-openapi.yml
+  url: openapi/_original/voltus-openapi.yml
   name: Voltus API (harvested from the developer portal build)
 - type: Overlay
   url: overlays/voltus-openapi-overlay.yaml
