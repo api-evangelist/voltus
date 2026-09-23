@@ -1,7 +1,7 @@
 openapi: 3.2.0
 info:
   title: Voltus API Reference Sites API
-  description: "Welcome to the Voltus API Reference.\n\nThe live production API hostname is `api.voltus.co`.\n\n## Versioning\n\nWe use date-based versioning. `api.voltus.co` will always redirect to the latest version.\n\n**Current version: api.voltus.co/2022-04-15**\n\n<details>\n  <summary>Changelog</summary>\n\n- Renamed \"Facilities\" to \"Sites\n- Entity IDs are now strings instead of ints\n- New Authorization header `X-Voltus-API-Key`\n- Removed support for `Authorization: Bearer` header\n</details>\n\n### Previous versions:\n\n- api.voltus.co/2020-12-30\n\n## Authentication\n\nThe API uses [API key authentication](https://swagger.io/docs/specification/authentication/api-keys/). API keys are provided by your account manager. Each request must include an `X-Voltus-API-Key` header where the value is your API key. Code examples for each endpoint will demonstrate how this header can be added in various languages.\n\n## Errors\n\nExample error responses\n\n```json\n{\n  \"message\": \"A create webhook request must contain an 'events' field\",\n  \"type\": \"Bad Request\"\n}\n\n{\n  \"message\": \"Permission denied\",\n  \"type\": \"Unauthorized\"\n}\n```\n\nVoltus uses conventional HTTP response codes to indicate the success or failure of an API request. In general: Codes in the `2xx` range indicate success. Codes in the `4xx` range indicate an error that failed given the information provided (e.g., a required parameter was omitted, an api key has been revoked, etc.). Codes in the `5xx` range indicate an error with Voltus's servers (these are rare).\n\n### Attributes\n\n- `message` (string) A human-readable message providing more details about the error.\n\n- `type` (string) The error type. These types will always match the name of the name of the http status code that is used in the response. One of `Unauthorized`, `Bad Request`, `Content Too Large`, `Internal Server Error`, `Too Many Requests` or `Not Found`."
+  description: Welcome to the Voltus API Reference.
   version: '2022-04-15'
 servers:
 - url: https://api.voltus.co
@@ -378,6 +378,8 @@ paths:
                 type: Too Many Requests
       security:
       - X-Voltus-API-Key: []
+      summary: Voltus#get sites
+      x-summary-source: derived
 components:
   securitySchemes:
     X-Voltus-API-Key:

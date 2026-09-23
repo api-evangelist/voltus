@@ -1,0 +1,25 @@
+# Front Door AI Index — voltus — 2026-09-17
+# AI vocabulary counted on the provider's root page. Generated; do not edit.
+# `score` is null unless ownership is `own` — see front_door_ai.py.
+front_door_ai:
+  slug: voltus
+  lexicon_version: '1.0'
+  probed_at: '2026-09-17'
+  host: www.voltus.co
+  final_host: www.voltus.co
+  ownership: own
+  owner: voltus
+  shares_host_with: null
+  inherited_from: null
+  verdict: scored
+  score: 6
+  host_score: 6
+  density: 3.6
+  words: 1666
+  tiers:
+    agentic: 0
+    core: 6
+    model: 0
+  ambiguous: 0
+  top_terms:
+    AI: 6

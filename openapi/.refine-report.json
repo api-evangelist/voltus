@@ -1,0 +1,26 @@
+{
+  "provider": "voltus",
+  "sources": [
+    "_original/voltus-openapi.yml"
+  ],
+  "outputs": [
+    "voltus-dispatches-api-openapi.yml",
+    "voltus-sites-api-openapi.yml",
+    "voltus-telemetry-api-openapi.yml",
+    "voltus-webhooks-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "voltus-openapi.yml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "voltus-dispatches-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "voltus-sites-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "voltus-telemetry-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "voltus-webhooks-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
+}
