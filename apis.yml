@@ -23,15 +23,19 @@ description: 'Voltus is a United States virtual power plant (VPP) operator and d
   the published build and assembled into openapi/voltus-openapi.yml: 10 operations across 8 paths.'
 deliveryModel:
   model: saas
-  open_source: false
+  license_evidence:
+    not_product:
+    - voltusdev/voltus-api-examples
+  open_source: unknown
   commercial: true
   callable_host: true
   label: Hosted service · you call their endpoint
-  confidence: high
+  confidence: low
   source:
   - openapi
   - pricing
-  generated: '2026-08-28'
+  - repository-not-product
+  generated: '2026-09-25'
   method: derived
 accessModel:
   pricing: unknown
